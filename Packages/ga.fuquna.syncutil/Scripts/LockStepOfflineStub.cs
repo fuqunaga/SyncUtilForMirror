@@ -2,8 +2,6 @@
 using UnityEngine;
 using Mirror;
 
-#pragma warning disable 0618
-
 namespace SyncUtil
 {
     /// <summary>

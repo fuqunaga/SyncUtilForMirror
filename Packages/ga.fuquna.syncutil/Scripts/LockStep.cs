@@ -6,8 +6,6 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-#pragma warning disable 0618
-
 namespace SyncUtil
 {
     public interface ILockStep

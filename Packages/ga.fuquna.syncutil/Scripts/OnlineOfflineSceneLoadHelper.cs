@@ -11,8 +11,6 @@ using UnityEngine.Assertions;
 using Mirror;
 using UnityEngine.SceneManagement;
 
-#pragma warning disable 0618
-
 namespace SyncUtil
 {
     [ExecuteAlways]

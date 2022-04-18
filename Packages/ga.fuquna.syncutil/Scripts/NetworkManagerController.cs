@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using Mirror;
 
-#pragma warning disable 0618
-
 namespace SyncUtil
 {
     [RequireComponent(typeof(SyncNetworkManager))]

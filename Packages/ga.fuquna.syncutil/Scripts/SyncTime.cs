@@ -38,7 +38,6 @@ namespace SyncUtil
 			// when a client starts
             SyncNetworkManager.singleton.onStartClient += () =>
             {
-				// if it is a slave
                 if (SyncNet.isFollower)
                 {
 					// register a network handler function that caches the last time msg recieved
@@ -53,6 +52,11 @@ namespace SyncUtil
 					// start coroutine that will proces recieved network message
                     StopAllCoroutines();
                     StartCoroutine(UpdateTimeClient());
+                }
+                // Mirrors disconnect in case of unknown messages, so register to avoid them.
+                else
+                {
+                    NetworkClient.RegisterHandler<SyncTimeMessage>(_ => { });
                 }
             };
             // in case the server restarts, when the client next connects the server, make sure the client's last message is reset to null, 

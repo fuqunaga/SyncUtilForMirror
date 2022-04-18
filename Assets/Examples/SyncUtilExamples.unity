@@ -257,7 +257,7 @@ MonoBehaviour:
   autoStartServerBuild: 1
   serverTickRate: 30
   offlineScene: 
-  onlineScene: Assets/Examples/SyncParam/SyncParam.unity
+  onlineScene: Assets/Empty.unity
   transport: {fileID: 645329946}
   networkAddress: localhost
   maxConnections: 4
@@ -363,7 +363,8 @@ MonoBehaviour:
   - {fileID: 102900000, guid: 5d7c27864394aa34cb6800d4165785f7, type: 3}
   - {fileID: 102900000, guid: c4f9706a825e8cc4ba8322101f897d1e, type: 3}
   - {fileID: 102900000, guid: f11f3e84c154cd14ba2e06b6d9b41562, type: 3}
-  _idx: 0
+  - {fileID: 102900000, guid: e67277435bc70af49bbd71ee0d83b187, type: 3}
+  _idx: 8
   _onlineSceneNames:
   - SyncParam
   - SyncBehaviourEnable,SyncGameObjectActive
@@ -373,6 +374,7 @@ MonoBehaviour:
   - LockStep
   - LockStepGPU
   - ClientVisibility
+  - Empty
 --- !u!114 &645329946
 MonoBehaviour:
   m_ObjectHideFlags: 0

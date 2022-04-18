@@ -90,6 +90,11 @@ namespace SyncUtil
                     });
 
                 }
+                // Mirrors disconnect in case of unknown messages, so register to avoid them.
+                else
+                {
+                    NetworkClient.RegisterHandler<LatencyMessage>(_ => { });
+                }
             };
         }
 
@@ -108,10 +113,10 @@ namespace SyncUtil
 #if INCLUDE_UPDATE
                 if (_conectionLatencyPool.Any())
                 {
-                    _conectionLatencyPool.ToList().ForEach(pair =>
+                    foreach(var pair in _conectionLatencyPool)
                     {
                         UpdateTable(pair.Key, pair.Value);
-                    });
+                    }
                     _conectionLatencyPool.Clear();
                 }
 #endif

@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine.Networking;
-
-#pragma warning disable CS0618
+using Mirror;
+using UnityEngine;
 
 namespace SyncUtil
 {
@@ -13,6 +13,12 @@ namespace SyncUtil
     {
         public List<string> invisibleClientName;
 
+#if true
+        private void Start()
+        {
+            Debug.LogError($"{nameof(ClientInvisibility)} does not work on Mirror.");
+        }
+#else
         public override bool OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
         {
             var manager = ClientNameManager.Instance;
@@ -36,5 +42,6 @@ namespace SyncUtil
 
             return true;
         }
+#endif
     }
 }

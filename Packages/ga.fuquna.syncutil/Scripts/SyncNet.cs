@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable 0618
 
@@ -25,9 +25,6 @@ namespace SyncUtil
         public static bool isFollower => !isServerOrStandAlone;
 
         public static bool isActive { get { var nm = NetworkManager.singleton; return (nm != null) && nm.isNetworkActive; } }
-
-        public static NetworkClient client { get { var nm = NetworkManager.singleton; return (nm == null) ? null : nm.client; } }
-
 
         public static void Spawn(GameObject go)
         {

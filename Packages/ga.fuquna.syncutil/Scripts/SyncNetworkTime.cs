@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable 0618
 
@@ -13,7 +13,7 @@ namespace SyncUtil
         #endregion
 
         #region type define
-        public class NetworkTimeMessage : MessageBase
+        public struct NetworkTimeMessage : NetworkMessage
         {
             public double time;
         }
@@ -32,17 +32,17 @@ namespace SyncUtil
 
             networkManager.onServerConnect += (conn) =>
             {
-                NetworkServer.SendToClient(conn.connectionId, CustomMsgType.NetworkTime, new NetworkTimeMessage() { time = realTime });
+                NetworkServer.SendToReady(conn.identity, new NetworkTimeMessage() { time = realTime });
             };
 
 
-            networkManager.onStartClient += (client) =>
+            networkManager.onStartClient += () =>
             {
                 if (SyncNet.isFollower)
                 {
-                    client.RegisterHandler(CustomMsgType.NetworkTime, (msg) =>
+                    NetworkClient.RegisterHandler<NetworkTimeMessage>((msg) =>
                     {
-                        _offset = msg.ReadMessage<NetworkTimeMessage>().time - realTime;
+                        _offset = msg.time - realTime;
                     });
                 }
             };

@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
+﻿using Mirror;
+using UnityEngine;
 
 #pragma warning disable 0618
 
@@ -8,7 +8,7 @@ namespace SyncUtil.Example
     [RequireComponent(typeof(LockStep), typeof(LifeGame))]
     public class LockStepGPUExample : LockStepExampleBase
     {
-        public class Msg : MessageBase
+        public class Msg : NetworkMessage
         {
             public LifeGame.StepData data;
         }
@@ -41,7 +41,7 @@ namespace SyncUtil.Example
             {
                 if (_stepEnable)
                 {
-                    var msg = reader.ReadMessage<Msg>();
+                    var msg = reader.Read<Msg>();
                     _lifeGame.Step(msg.data);
                 }
                 return _stepEnable;

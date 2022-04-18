@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable 0618
 
@@ -14,7 +14,7 @@ namespace SyncUtil
         #endregion
 
         #region type define
-        public class SyncTimeMessage : MessageBase
+        public struct SyncTimeMessage : NetworkMessage
         {
             public float time;
             public float timeScale;
@@ -28,7 +28,7 @@ namespace SyncUtil
 
 
         float _clientTime;
-        SyncTimeMessage _lastMsg;
+        SyncTimeMessage? _lastMsg;
 
         public void Start()
         {
@@ -38,16 +38,15 @@ namespace SyncUtil
 				return;
 			}
 			// when a client starts
-            SyncNetworkManager.singleton.onStartClient += (client) =>
+            SyncNetworkManager.singleton.onStartClient += () =>
             {
 				// if it is a slave
                 if (SyncNet.isFollower)
                 {
 					// register a network handler function that caches the last time msg recieved
-                    client.RegisterHandler(CustomMsgType.Time, (netMsg) =>
+                    NetworkClient.RegisterHandler<SyncTimeMessage>((msg) =>
                     {
-                        var msg = netMsg.ReadMessage<SyncTimeMessage>();
-                        if (_lastMsg == null || msg.time > _lastMsg.time)
+                        if (_lastMsg == null || msg.time > _lastMsg.Value.time)
                         {
                             _lastMsg = msg;
                         }
@@ -70,7 +69,7 @@ namespace SyncUtil
         {
             if (SyncNet.isServer)
             {
-                NetworkServer.SendToAll(CustomMsgType.Time, new SyncTimeMessage() { time = time, timeScale = Time.timeScale });
+                NetworkServer.SendToAll(new SyncTimeMessage() { time = time, timeScale = Time.timeScale });
             }
         }
 
@@ -84,10 +83,10 @@ namespace SyncUtil
             {
                 yield return waitForEndOfFrame;  // フレームの最後で_time更新
 
-                if (_lastMsg != null)
+                if (_lastMsg is {} lastMsg)
                 {
-                    _clientTime = _lastMsg.time;
-                    Time.timeScale = _lastMsg.timeScale;
+                    _clientTime = lastMsg.time;
+                    Time.timeScale = lastMsg.timeScale;
                 }
             }
         }

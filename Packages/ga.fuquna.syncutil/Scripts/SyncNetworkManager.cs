@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable 0618
 
@@ -17,15 +17,15 @@ namespace SyncUtil
             onStartServer?.Invoke();
         }
 
-        public event Action<NetworkConnection> onServerConnect;
-        public override void OnServerConnect(NetworkConnection conn)
+        public event Action<NetworkConnectionToClient> onServerConnect;
+        public override void OnServerConnect(NetworkConnectionToClient conn)
         {
             base.OnServerConnect(conn);
             onServerConnect?.Invoke(conn);
         }
 
-        public event Action<NetworkConnection> onServerDisconnect;
-        public override void OnServerDisconnect(NetworkConnection conn)
+        public event Action<NetworkConnectionToClient> onServerDisconnect;
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             base.OnServerDisconnect(conn);
             onServerDisconnect?.Invoke(conn);
@@ -36,11 +36,11 @@ namespace SyncUtil
 
         #region Client side
 
-        public event Action<NetworkClient> onStartClient;
-        public override void OnStartClient(NetworkClient client)
+        public event Action onStartClient;
+        public override void OnStartClient()
         {
-            base.OnStartClient(client);
-            onStartClient?.Invoke(client);
+            base.OnStartClient();
+            onStartClient?.Invoke();
         }
 
         public event Action<NetworkConnection> onClientConnect;
@@ -51,11 +51,11 @@ namespace SyncUtil
         }
 
 
-        public event Action<NetworkConnection, int> onClientError;
-        public override void OnClientError(NetworkConnection conn, int errorCode)
+        public event Action<Exception> onClientError;
+        public override void OnClientError(Exception exception)
         {
-            base.OnClientError(conn, errorCode);
-            onClientError?.Invoke(conn, errorCode);
+            base.OnClientError(exception);
+            onClientError?.Invoke(exception);
         }
 
         public event Action<NetworkConnection> onClientDicconnect;
@@ -84,13 +84,13 @@ namespace SyncUtil
             base.OnStartServer();
         }
 
-        public override void OnServerConnect(NetworkConnection conn)
+        public override void OnServerConnect(NetworkConnectionToClient conn)
         {
             if (enableLogServer) Log($"Server connection ID: {conn.connectionId}  has connected to the server");
             base.OnServerConnect(conn);
         }
 
-        public override void OnServerDisconnect(NetworkConnection conn)
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             if (enableLogServer) Log($"Server Disconeect  connection ID {conn.connectionId}");
             base.OnServerDisconnect(conn);
@@ -101,10 +101,10 @@ namespace SyncUtil
 
         #region Client side
 
-        public override void OnStartClient(NetworkClient client)
+        public override void OnStartClient()
         {
             if (enableLogClient) Log("Client networking logic is starting");
-            base.OnStartClient(client);
+            base.OnStartClient();
         }
 
         public override void OnClientConnect(NetworkConnection conn)
@@ -114,10 +114,10 @@ namespace SyncUtil
         }
 
 
-        public override void OnClientError(NetworkConnection conn, int errorCode)
+        public override void OnClientError(Exception exception)
         {
-            if (enableLogClient) LogError($"Client Error: connection ID: {conn.connectionId}  error: {NetworkErrorToString(errorCode)}");
-            base.OnClientError(conn, errorCode);
+            if (enableLogClient) LogError($"Client Error: {exception.Message}");
+            base.OnClientError(exception);
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)
@@ -137,12 +137,6 @@ namespace SyncUtil
         protected virtual void LogError(string log)
         {
             Debug.LogError($"{DateTime.Now} {log}");
-        }
-
-
-        string NetworkErrorToString(int networkErrorID)
-        {
-            return Enum.GetName(typeof(NetworkError), networkErrorID) ?? $"unknown error code ({networkErrorID})";
         }
     }
 }

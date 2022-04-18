@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable CS0618
 
@@ -22,7 +22,7 @@ namespace SyncUtil
     {
         #region Type Define
 
-        public class Message : MessageBase
+        public struct Message : NetworkMessage
         {
             public string name;
         }
@@ -47,7 +47,7 @@ namespace SyncUtil
         {
             if (SyncNet.isServer)
             {
-                NetworkServer.RegisterHandler(CustomMsgType.ConnectionIdentity, OnReceiveConnectionIdentity);
+                NetworkServer.RegisterHandler<Message>(OnReceiveConnectionIdentity, false);
 
                 var manager = SyncNetworkManager.singleton;
                 manager.onServerDisconnect += (conn) => nameDic.Remove(conn);
@@ -55,10 +55,8 @@ namespace SyncUtil
 
             if (SyncNet.isClient)
             {
-                var client = SyncNet.client;
-
                 var message = new Message() { name = Name };
-                client.Send(CustomMsgType.ConnectionIdentity, message);
+                NetworkClient.Send(message);
             }
         }
 
@@ -66,10 +64,9 @@ namespace SyncUtil
         #region Server
 
 
-        void OnReceiveConnectionIdentity(NetworkMessage netMsg)
+        void OnReceiveConnectionIdentity(NetworkConnectionToClient conn, Message msg)
         {
-            var msg = netMsg.ReadMessage<Message>();
-            nameDic[netMsg.conn] = msg.name;
+            nameDic[conn] = msg.name;
         }
 
         public string GetClientName(NetworkConnection conn)

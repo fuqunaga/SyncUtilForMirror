@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
-using UnityEngine.Networking;
 
 #pragma warning disable CS0618
 

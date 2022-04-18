@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
+﻿using Mirror;
+using UnityEngine;
 
 #pragma warning disable 0618
 
@@ -8,7 +8,7 @@ namespace SyncUtil.Example
     [RequireComponent(typeof(ILockStep))]
     public class LockStepExample : LockStepExampleBase
     {
-        public class Msg : MessageBase
+        public struct Msg : NetworkMessage
         {
             public Vector3 force;
         }
@@ -43,7 +43,7 @@ namespace SyncUtil.Example
             {
                 if (_stepEnable)
                 {
-                    var msg = reader.ReadMessage<Msg>();
+                    var msg = reader.Read<Msg>();
                     Step(msg.force);
                 }
                 return _stepEnable;

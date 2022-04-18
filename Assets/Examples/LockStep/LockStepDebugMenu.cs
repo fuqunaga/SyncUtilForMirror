@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
+﻿using Mirror;
+using UnityEngine;
 
 #pragma warning disable 0618
 

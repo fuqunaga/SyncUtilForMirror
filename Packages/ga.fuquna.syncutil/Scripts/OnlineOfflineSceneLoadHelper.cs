@@ -8,7 +8,7 @@ using UnityEditor.SceneManagement;
 
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Networking;
+using Mirror;
 using UnityEngine.SceneManagement;
 
 #pragma warning disable 0618

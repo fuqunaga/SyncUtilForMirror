@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable 0618
 
@@ -27,7 +27,7 @@ namespace SyncUtil
         #endregion
 
         #region type define
-        public class LatencyMessage : MessageBase
+        public struct LatencyMessage : NetworkMessage
         {
             public float serverTime;
         }
@@ -54,7 +54,7 @@ namespace SyncUtil
 
 #if INCLUDE_UPDATE
         Dictionary<int, LatencyMessage> _conectionLatencyPool = new Dictionary<int, LatencyMessage>();
-        LatencyMessage _lastMsg;
+        LatencyMessage? _lastMsg;
 #endif
 
         protected float time => Time.realtimeSinceStartup;
@@ -63,10 +63,10 @@ namespace SyncUtil
         {
             SyncNetworkManager.singleton.onStartServer += () =>
             {
-                NetworkServer.RegisterHandler(CustomMsgType.Latency, (nmsg) =>
+                NetworkServer.RegisterHandler<LatencyMessage>((conn, msg) =>
                 {
 #if INCLUDE_UPDATE
-                    _conectionLatencyPool[nmsg.conn.connectionId] = nmsg.ReadMessage<LatencyMessage>();
+                    _conectionLatencyPool[conn.connectionId] = msg;
 #else
                     UpdateTable(nmsg.conn.connectionId, nmsg.ReadMessage<LatencyMessage>());
 #endif
@@ -78,14 +78,14 @@ namespace SyncUtil
                 _conectionLatencyTable.Remove(conn.connectionId);
             };
 
-            SyncNetworkManager.singleton.onStartClient += (client) =>
+            SyncNetworkManager.singleton.onStartClient += () =>
             {
                 if (SyncNet.isFollower)
                 {
-                    client.RegisterHandler(CustomMsgType.Latency, (msg) =>
+                    NetworkClient.RegisterHandler<LatencyMessage>((msg) =>
                     {
 #if INCLUDE_UPDATE
-                        _lastMsg = msg.ReadMessage<LatencyMessage>();
+                        _lastMsg = msg;
 #else
                         client.Send(CustomMsgType.Latency, msg.ReadMessage<LatencyMessage>());
 #endif
@@ -99,8 +99,12 @@ namespace SyncUtil
         {
             if (SyncNet.isServer)
             {
-                _conectionLatencyTable.Values.ToList().ForEach(d => d._recieved = false);
-                NetworkServer.SendToAll(CustomMsgType.Latency, new LatencyMessage() { serverTime = time });
+                foreach(var d in _conectionLatencyTable.Values)
+                {
+                    d._recieved = false;
+                };
+                
+                NetworkServer.SendToAll(new LatencyMessage() { serverTime = time });
 
 
 #if INCLUDE_UPDATE
@@ -118,9 +122,9 @@ namespace SyncUtil
 #if INCLUDE_UPDATE
             if (SyncNet.isFollower)
             {
-                if (_lastMsg != null && SyncNet.client.isConnected)
+                if (_lastMsg != null && NetworkClient.isConnected)
                 {
-                    SyncNet.client.Send(CustomMsgType.Latency, _lastMsg);
+                    NetworkClient.Send(_lastMsg.Value);
                     _lastMsg = null;
                 }
             }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable 0618
 
@@ -35,14 +35,14 @@ namespace SyncUtil
             void SetCallback(Action<int, int> callback);
         }
 
-        public class SyncListKeyBool    : SyncListStruct<KeyBool>,    ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
-        public class SyncListKeyInt     : SyncListStruct<KeyInt>,     ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
-        public class SyncListKeyUInt    : SyncListStruct<KeyUInt>,    ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
-        public class SyncListKeyFloat   : SyncListStruct<KeyFloat>,   ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
-        public class SyncListKeyString  : SyncListStruct<KeyString>,  ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
-        public class SyncListKeyVector2 : SyncListStruct<KeyVector2>, ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
-        public class SyncListKeyVector3 : SyncListStruct<KeyVector3>, ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
-        public class SyncListKeyVector4 : SyncListStruct<KeyVector4>, ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyBool    : SyncList<KeyBool>,    ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyInt     : SyncList<KeyInt>,     ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyUInt    : SyncList<KeyUInt>,    ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyFloat   : SyncList<KeyFloat>,   ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyString  : SyncList<KeyString>,  ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyVector2 : SyncList<KeyVector2>, ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyVector3 : SyncList<KeyVector3>, ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
+        public class SyncListKeyVector4 : SyncList<KeyVector4>, ISyncListKeyObj { public void Add(string key, object obj) { this._Add(key, obj); } public KeyObj Get(int idx) { return this._Get(idx); } public void Set(int idx, object obj) { this._Set(idx, obj); } public void SetCallback(Action<int, int> callback){ this._SetCallback(callback); } }
 
         public class TypeAndIdx
         {
@@ -99,7 +99,7 @@ namespace SyncUtil
         {
             base.OnStartClient();
 
-            _syncListKeyBool.Callback += (op, idx) => { triggerdKey.Add(_syncListKeyBool.Get(idx).key); };
+            _syncListKeyBool.Callback += (op, idx, _, _) => { triggerdKey.Add(_syncListKeyBool.Get(idx).key); };
             typeToSyncList.Values.ToList().ForEach(list =>
             {
                 list.SetCallback((op, idx) => {
@@ -165,7 +165,7 @@ namespace SyncUtil
     }
 
 
-    public static class SyncListStructExtenion
+    public static class SyncListExtenion
     {
         public class KVField
         {
@@ -198,13 +198,13 @@ namespace SyncUtil
             return (T)ret;
         }
 
-        public static void _Add<T>(this SyncListStruct<T> sl, string key, object obj)
+        public static void _Add<T>(this SyncList<T> sl, string key, object obj)
             where T : struct
         {
             sl.Add(CreateInstance<T>(key, obj));
         }
 
-        public static void _Set<T>(this SyncListStruct<T> sl, int idx, object obj)
+        public static void _Set<T>(this SyncList<T> sl, int idx, object obj)
             where T : struct
         {
             var kvField = GetField(typeof(T));
@@ -215,7 +215,7 @@ namespace SyncUtil
             }
         }
 
-        public static SyncParamManager.KeyObj _Get<T>(this SyncListStruct<T> sl, int idx)
+        public static SyncParamManager.KeyObj _Get<T>(this SyncList<T> sl, int idx)
             where T : struct
         {
             var kvField = GetField(typeof(T));
@@ -226,10 +226,10 @@ namespace SyncUtil
             };
         }
 
-        public static void _SetCallback<T>(this SyncListStruct<T> sl, Action<int, int> callback)
+        public static void _SetCallback<T>(this SyncList<T> sl, Action<int, int> callback)
             where T : struct
         {
-            sl.Callback = (op,idx) => callback((int)op, idx); 
+            sl.Callback += (op,idx, _, _) => callback((int)op, idx); 
         }
     }
 }

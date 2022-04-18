@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.Networking;
+using Mirror;
 
 #pragma warning disable 0618
 
@@ -16,10 +16,10 @@ namespace SyncUtil
 
         public int stepCount;
 
-        protected Func<MessageBase> _getDataFunc;
+        protected Func<NetworkMessage> _getDataFunc;
         protected Func<int, NetworkReader, bool> _stepFunc;
 
-        protected Func<MessageBase> _getInitDataFunc;
+        protected Func<NetworkMessage> _getInitDataFunc;
         protected Func<NetworkReader, bool> _initFunc;
 
 
@@ -40,7 +40,7 @@ namespace SyncUtil
                         var initMsg = _getInitDataFunc();
                         var w = new NetworkWriter();
                         w.Write(initMsg);
-                        _initFunc(new NetworkReader(w));
+                        _initFunc(new NetworkReader(w.ToArraySegment()));
                     }
 
                 }
@@ -49,7 +49,7 @@ namespace SyncUtil
 
                 var writer = new NetworkWriter();
                 writer.Write(msg);
-                if (_stepFunc(stepCount, new NetworkReader(writer)))
+                if (_stepFunc(stepCount, new NetworkReader(writer.ToArraySegment())))
                 {
                     stepCount++;
                 }
@@ -61,9 +61,9 @@ namespace SyncUtil
 
         #region  Override
 
-        public Func<MessageBase> getDataFunc { set { _getDataFunc = value; } }
+        public Func<NetworkMessage> getDataFunc { set { _getDataFunc = value; } }
         public Func<int, NetworkReader, bool> stepFunc { set { _stepFunc = value; } }
-        public Func<MessageBase> getInitDataFunc { set { _getInitDataFunc = value; } }
+        public Func<NetworkMessage> getInitDataFunc { set { _getInitDataFunc = value; } }
         public Func<NetworkReader, bool> initFunc { set { _initFunc = value; } }
 
         public Func<bool> onMissingCatchUpServer { set { } }

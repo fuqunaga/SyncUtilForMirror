@@ -86,7 +86,7 @@ namespace SyncUtil
 
         public virtual void DebugMenu()
         {
-            enabled = GUILayout.Toggle(enabled, "LatencyChckerLine");
+            enabled = GUILayout.Toggle(enabled, "LatencyCheckerLine");
 
             if (enabled)
             {

@@ -257,13 +257,13 @@ MonoBehaviour:
   autoStartServerBuild: 1
   serverTickRate: 30
   offlineScene: 
-  onlineScene: Assets/Empty.unity
+  onlineScene: Assets/Examples/SyncParam/SyncParam.unity
   transport: {fileID: 645329946}
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 0}
-  autoCreatePlayer: 0
+  playerPrefab: {fileID: 928666372154862623, guid: fbc1262045219e94c846940ca952a14d, type: 3}
+  autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 1087970129871348, guid: 922b63f130b1bf44a85995243a02ef26, type: 3}
@@ -271,7 +271,8 @@ MonoBehaviour:
   - {fileID: 1475985329153236, guid: 2f5309d8516a3a7498fd8bcab44e154a, type: 3}
   - {fileID: 4821599465430878823, guid: ac8ddd79c5e3dda49b018efa57e9ab5a, type: 3}
   - {fileID: 568494151280685619, guid: 83e0a5bdf6020bc4497d1f429dc1c895, type: 3}
-  enableLogServer: 0
+  - {fileID: 1506407616398718, guid: fb059f27c16c79545a74652269b3d2ff, type: 3}
+  enableLogServer: 1
   enableLogClient: 1
 --- !u!4 &645329940
 Transform:
@@ -363,8 +364,7 @@ MonoBehaviour:
   - {fileID: 102900000, guid: 5d7c27864394aa34cb6800d4165785f7, type: 3}
   - {fileID: 102900000, guid: c4f9706a825e8cc4ba8322101f897d1e, type: 3}
   - {fileID: 102900000, guid: f11f3e84c154cd14ba2e06b6d9b41562, type: 3}
-  - {fileID: 102900000, guid: e67277435bc70af49bbd71ee0d83b187, type: 3}
-  _idx: 8
+  _idx: 0
   _onlineSceneNames:
   - SyncParam
   - SyncBehaviourEnable,SyncGameObjectActive
@@ -374,7 +374,6 @@ MonoBehaviour:
   - LockStep
   - LockStepGPU
   - ClientVisibility
-  - Empty
 --- !u!114 &645329946
 MonoBehaviour:
   m_ObjectHideFlags: 0

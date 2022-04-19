@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -187,12 +188,23 @@ namespace SyncUtil
         }
 
 
-        NetworkWriter _writer = new NetworkWriter();
+        NetworkWriter _writer = new();
+
+        private static Dictionary<Type, MethodInfo> _writeMethodTable = new();
+        private static object[] _miArgs = new object[1];
 
         byte[] MsgToByte(NetworkMessage msg)
         {
+            var type = msg.GetType();
+            if (!_writeMethodTable.TryGetValue(type, out var mi))
+            {
+                var miNonGeneric = typeof(NetworkWriter).GetMethod(nameof(NetworkWriter.Write));
+                _writeMethodTable[type] = mi = miNonGeneric.MakeGenericMethod(type); 
+            }
+            
             _writer.Position = 0;
-            _writer.Write(msg);
+            _miArgs[0] = msg;
+            mi.Invoke(_writer, _miArgs);
             return _writer.ToArray();
         }
 

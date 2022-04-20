@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-#pragma warning disable CS0618
-
 namespace SyncUtil
 {
     /// <summary>

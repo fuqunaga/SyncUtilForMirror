@@ -331,8 +331,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefabs:
-  - {fileID: 4821599465430878846, guid: ac8ddd79c5e3dda49b018efa57e9ab5a, type: 3}
-  - {fileID: -5298880156956427436, guid: 83e0a5bdf6020bc4497d1f429dc1c895, type: 3}
+  - {fileID: 8958777024710989957, guid: ac8ddd79c5e3dda49b018efa57e9ab5a, type: 3}
+  - {fileID: 9129707909643086245, guid: 83e0a5bdf6020bc4497d1f429dc1c895, type: 3}
   screenRect:
     serializedVersion: 2
     x: 0
@@ -364,6 +364,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2030014753}
   - component: {fileID: 2030014752}
+  - component: {fileID: 2030014754}
   m_Layer: 0
   m_Name: ClientNameManager
   m_TagString: Untagged
@@ -399,3 +400,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2030014754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030014751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6ffa075110b48444b38b9d016ccd868, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

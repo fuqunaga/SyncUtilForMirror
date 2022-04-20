@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-#pragma warning disable CS0618
-
 namespace SyncUtil.Example
 {
     public class ClientInvisibilityMenu : MonoBehaviour

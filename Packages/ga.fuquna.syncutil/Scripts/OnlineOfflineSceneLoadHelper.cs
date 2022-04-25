@@ -61,24 +61,35 @@ namespace SyncUtil
 
         void Start()
         {
-            if (!Application.isPlaying)
-            {
-                var sceneNameToPath = EditorBuildSettings.scenes.ToDictionary(s => Path.GetFileNameWithoutExtension(s.path), s => s.path);
+            if (Application.isPlaying) return;
+            
+            var sceneNameToPath = EditorBuildSettings
+                .scenes
+                .ToDictionary(s => Path.GetFileNameWithoutExtension(s.path), s => s.path);
 
-                var nm = FindObjectOfType<NetworkManager>();
-                Assert.IsNotNull(nm);
+            var nm = FindObjectOfType<NetworkManager>();
+            Assert.IsNotNull(nm);
 
 
-                new[] {
-                _autoLoadOnline ? nm.onlineScene : "",
-                _autoLoadOffline ? nm.offlineScene : ""
-            }
-                .Where(sceneName => !string.IsNullOrEmpty(sceneName))
-                .ToList()
-                .ForEach(sceneName =>
+            var sceneNames = new[]
                 {
-                    EditorSceneManager.OpenScene(sceneNameToPath[sceneName], OpenSceneMode.Additive);
-                });
+                    _autoLoadOnline ? nm.onlineScene : "",
+                    _autoLoadOffline ? nm.offlineScene : ""
+                }
+                .Where(sceneName => !string.IsNullOrEmpty(sceneName));
+
+            foreach (var sceneName in sceneNames)
+            {
+                sceneNameToPath.TryGetValue(sceneName, out var path);
+                
+                if (path == null)
+                {
+                    Debug.LogWarning($"{sceneName} is not register to BuildSettings.");
+                }
+                else
+                {
+                    EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);    
+                }
             }
         }
 #endif

@@ -3,10 +3,10 @@ using Mirror;
 
 namespace SyncUtil
 {
-    public class SyncNet
+    public static class SyncNet
     {
         /// <summary>
-        /// UNETのクライアントである判定になるように偽装する
+        /// クライアントである判定になるように偽装する
         /// あくまでSyncNetの判定のみに作用するのでちゃんとしたクライアントとしては動作せず注意が必要
         /// </summary>
         public static bool isDummyFollower { get; set; }
@@ -37,6 +37,6 @@ namespace SyncUtil
 
 
         public static float time => SyncTime.Instance.time;
-        public static double networkTime => SyncNetworkTime.Instance.time;
+        public static double networkTime => NetworkTime.time;
     }
 }

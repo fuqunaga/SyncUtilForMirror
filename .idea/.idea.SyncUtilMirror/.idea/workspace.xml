@@ -2,13 +2,48 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="40385a01-1958-4982-ae7a-d8ced87727e7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/ConsistencyChecker.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/ConsistencyChecker.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/ILockStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/ILockStep.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/LockStep.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/Message.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/Message/NetworkMessageExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/Message/NetworkMessageExtensions.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SyncUtilMirror/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SyncUtilMirror/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Examples/LockStep/LockStepExample.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Examples/LockStep/LockStepExample.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Examples/LockStep/LockStepGPUExample.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Examples/LockStep/LockStepGPUExample.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/Clientinvisibility/ClientNameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/Clientinvisibility/ClientNameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LatencyChecker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LatencyChecker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/LockStep.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStepHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/LockStepHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStepHelper.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/LockStepHelper.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStepOfflineStub.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/LockStepOfflineStub.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStepOfflineStub.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/LockStep/LockStepOfflineStub.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncNet.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncNet.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncNetworkManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncNetworkManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncNetworkTime.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncNetworkTime.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncTime.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/ga.fuquna.syncutil/Scripts/SyncTime.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/ca/52553617/MethodBase.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -59,7 +94,7 @@
       <option name="presentableId" value="Default" />
       <updated>1652076324807</updated>
       <workItem from="1652076341893" duration="3000" />
-      <workItem from="1652076670741" duration="320000" />
+      <workItem from="1652076670741" duration="5319000" />
     </task>
     <servers />
   </component>

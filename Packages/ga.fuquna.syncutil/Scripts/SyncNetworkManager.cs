@@ -41,11 +41,11 @@ namespace SyncUtil
             onStartClient?.Invoke();
         }
 
-        public event Action<NetworkConnection> onClientConnect;
-        public override void OnClientConnect(NetworkConnection conn)
+        public event Action onClientConnect;
+        public override void OnClientConnect()
         {
-            base.OnClientConnect(conn);
-            onClientConnect?.Invoke(conn);
+            base.OnClientConnect();
+            onClientConnect?.Invoke();
         }
 
 
@@ -56,11 +56,11 @@ namespace SyncUtil
             onClientError?.Invoke(exception);
         }
 
-        public event Action<NetworkConnection> onClientDicconnect;
-        public override void OnClientDisconnect(NetworkConnection conn)
+        public event Action onClientDisconnect;
+        public override void OnClientDisconnect()
         {
-            base.OnClientDisconnect(conn);
-            onClientDicconnect?.Invoke(conn);
+            base.OnClientDisconnect();
+            onClientDisconnect?.Invoke();
         }
 
         #endregion
@@ -69,7 +69,7 @@ namespace SyncUtil
     [Serializable]
     public class SyncNetworkManager : NetworkManagerWithHookAction
     {
-        public static new SyncNetworkManager singleton => NetworkManager.singleton as SyncNetworkManager;
+        public static SyncNetworkManager Singleton => singleton as SyncNetworkManager;
 
         public bool enableLogServer = false;
         public bool enableLogClient = true;
@@ -105,10 +105,10 @@ namespace SyncUtil
             base.OnStartClient();
         }
 
-        public override void OnClientConnect(NetworkConnection conn)
+        public override void OnClientConnect()
         {
-            if (enableLogClient) Log($"Client connection ID: {conn.connectionId}  has connected to the server");
-            base.OnClientConnect(conn);
+            if (enableLogClient) Log($"Client connection ID: {NetworkClient.connection.connectionId}  has connected to the server");
+            base.OnClientConnect();
         }
 
 
@@ -118,10 +118,10 @@ namespace SyncUtil
             base.OnClientError(exception);
         }
 
-        public override void OnClientDisconnect(NetworkConnection conn)
+        public override void OnClientDisconnect()
         {
-            if (enableLogClient) Log($"Client Disconeect  connection ID {conn.connectionId}");
-            base.OnClientDisconnect(conn);
+            if (enableLogClient) Log($"Client Disconnect  connection ID {NetworkClient.connection.connectionId}");
+            base.OnClientDisconnect();
         }
 
         #endregion

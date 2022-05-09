@@ -59,7 +59,7 @@ namespace SyncUtil
 
         public void Start()
         {
-            SyncNetworkManager.singleton.onStartServer += () =>
+            SyncNetworkManager.Singleton.onStartServer += () =>
             {
                 NetworkServer.RegisterHandler<LatencyMessage>((conn, msg) =>
                 {
@@ -71,12 +71,12 @@ namespace SyncUtil
                 });
             };
 
-            SyncNetworkManager.singleton.onServerDisconnect += (conn) =>
+            SyncNetworkManager.Singleton.onServerDisconnect += (conn) =>
             {
                 _conectionLatencyTable.Remove(conn.connectionId);
             };
 
-            SyncNetworkManager.singleton.onStartClient += () =>
+            SyncNetworkManager.Singleton.onStartClient += () =>
             {
                 if (SyncNet.isFollower)
                 {

@@ -91,7 +91,7 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "ga.fuquna.syncutil": {
+    "ga.fuquna.syncutilmirror": {
       "version": "file:ga.fuquna.syncutil",
       "depth": 0,
       "source": "embedded",

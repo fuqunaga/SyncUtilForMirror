@@ -30,13 +30,13 @@ namespace SyncUtil
 
         public void Start()
         {
-			if(SyncNetworkManager.singleton == null)
+			if(SyncNetworkManager.Singleton == null)
 			{
 				Debug.LogWarning("SyncNetworkManager is not in scene");
 				return;
 			}
 			// when a client starts
-            SyncNetworkManager.singleton.onStartClient += () =>
+            SyncNetworkManager.Singleton.onStartClient += () =>
             {
                 if (SyncNet.isFollower)
                 {
@@ -61,7 +61,7 @@ namespace SyncUtil
             };
             // in case the server restarts, when the client next connects the server, make sure the client's last message is reset to null, 
             // otherwise in a rare case when the server app restarts, the server's lastMsg.time will be less than the client's lastMsg.time and time chnages on the server will not sync properly on the client.
-            SyncNetworkManager.singleton.onClientConnect += (networkConn) =>
+            SyncNetworkManager.Singleton.onClientConnect += () =>
             {
                 _lastMsg = null;
             };

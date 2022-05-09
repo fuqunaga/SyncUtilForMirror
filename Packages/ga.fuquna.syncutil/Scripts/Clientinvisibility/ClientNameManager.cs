@@ -47,7 +47,7 @@ namespace SyncUtil
             {
                 NetworkServer.RegisterHandler<Message>(OnReceiveConnectionIdentity, false);
 
-                var manager = SyncNetworkManager.singleton;
+                var manager = SyncNetworkManager.Singleton;
                 manager.onServerDisconnect += (conn) => nameDic.Remove(conn);
             }
 

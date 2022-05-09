@@ -29,7 +29,7 @@ namespace SyncUtil.Example
         void InitLockStepCallbacks()
         {
             var lockStep = GetComponent<LockStep>();
-            lockStep.getDataFunc = () =>
+            lockStep.GetDataFunc = () =>
             {
                 return new Msg()
                 {
@@ -37,7 +37,7 @@ namespace SyncUtil.Example
                 };
             };
 
-            lockStep.stepFunc = (stepCount, reader) =>
+            lockStep.StepFunc = (stepCount, reader) =>
             {
                 if (_stepEnable)
                 {
@@ -47,14 +47,14 @@ namespace SyncUtil.Example
                 return _stepEnable;
             };
 
-            lockStep.onMissingCatchUpServer = () =>
+            lockStep.OnMissingCatchUpServer = () =>
             {
                 Debug.Log("OnMissingCatchUp at Server. NetworkManager.StopHost() will be called.");
                 return true;
             };
-            lockStep.onMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
+            lockStep.OnMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
 
-            lockStep.getHashFunc = () => LockStepHelper.GenerateBufferHash<LifeGame.Data>(_lifeGame.readBufs);
+            lockStep.GetHashFunc = () => LockStepHelper.GenerateBufferHash<LifeGame.Data>(_lifeGame.readBufs);
         }
     }
 }

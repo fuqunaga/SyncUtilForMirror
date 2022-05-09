@@ -31,7 +31,7 @@ namespace SyncUtil.Example
         void IniteLockStepCallbacks()
         {
             var lockStep = GetComponent<ILockStep>();
-            lockStep.getDataFunc = () =>
+            lockStep.GetDataFunc = () =>
             {
                 return new Msg()
                 {
@@ -39,7 +39,7 @@ namespace SyncUtil.Example
                 };
             };
 
-            lockStep.stepFunc = (stepCount, reader) =>
+            lockStep.StepFunc = (stepCount, reader) =>
             {
                 if (_stepEnable)
                 {
@@ -49,14 +49,14 @@ namespace SyncUtil.Example
                 return _stepEnable;
             };
 
-            lockStep.onMissingCatchUpServer = () =>
+            lockStep.OnMissingCatchUpServer = () =>
             {
                 Debug.Log("OnMissingCatchUp at Server. NetworkManager.Shutdown() will be called.");
                 return true;
             };
-            lockStep.onMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
+            lockStep.OnMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
 
-            lockStep.getHashFunc = () =>
+            lockStep.GetHashFunc = () =>
             {
                 return _sphere.transform.position.ToString(".00000");
             };

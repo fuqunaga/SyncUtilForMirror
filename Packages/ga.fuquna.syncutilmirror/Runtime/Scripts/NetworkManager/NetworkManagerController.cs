@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using kcp2k;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -29,11 +30,13 @@ namespace SyncUtil
 
 
         SyncNetworkManager _networkManager;
+        private KcpTransport _kcp;
 
 
         public virtual void Start()
         {
             _networkManager = GetComponent<SyncNetworkManager>();
+            _kcp = GetComponent<KcpTransport>();
 
             if (Boot != BootType.Manual) StartNetwork(Boot);
         }
@@ -130,12 +133,18 @@ namespace SyncUtil
         protected virtual void OnGUINetworkSetting() { }
         protected virtual void OnNetworkStartByManual() { }
 
-
-
         protected void UpdateManager()
         {
             _networkManager.networkAddress = NetworkAddress;
-            // _networkManager.networkPort = _networkPort;
+            UpdateNetworkPort(NetworkPort);
+        }
+
+        protected virtual void UpdateNetworkPort(int port)
+        {
+            if (_kcp != null)
+            {
+                _kcp.Port = (ushort)port;
+            }
         }
 
         GUIUtil.Fold _fold;

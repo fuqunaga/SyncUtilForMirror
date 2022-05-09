@@ -18,7 +18,7 @@ namespace SyncUtil
 
 		public static Vector4 GetVector4Time()
 		{
-			var time = (float)SyncNet.networkTime;
+			var time = (float)SyncNet.NetworkTime;
 			return new Vector4(time / 20f, time, time * 2f, time * 3f);
 		}
     }

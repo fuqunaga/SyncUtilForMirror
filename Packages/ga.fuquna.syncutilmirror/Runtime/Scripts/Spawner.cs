@@ -32,7 +32,7 @@ namespace SyncUtil
         {
             if (Application.isPlaying)
             {
-                if (SyncNet.isServer)
+                if (SyncNet.IsServer)
                 {
                     StartCoroutine(DelaySpawn());
                 }

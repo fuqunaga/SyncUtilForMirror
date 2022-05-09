@@ -40,12 +40,12 @@ namespace SyncUtil
 #endif
             if(mgr != null)
             {
-                if (SyncNet.isServer)
+                if (SyncNet.IsServer)
                 {
                     mgr.UpdateParam(key, Get(_target));
                 }
 
-                if (SyncNet.isFollower)
+                if (SyncNet.IsFollower)
                 {
                     var obj = mgr.GetParam(key, _mode == Mode.Trigger);
                     if (obj != null)

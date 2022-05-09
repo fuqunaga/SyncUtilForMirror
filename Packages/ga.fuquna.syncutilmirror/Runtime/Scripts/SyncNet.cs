@@ -9,34 +9,34 @@ namespace SyncUtil
         /// クライアントである判定になるように偽装する
         /// あくまでSyncNetの判定のみに作用するのでちゃんとしたクライアントとしては動作せず注意が必要
         /// </summary>
-        public static bool isDummyFollower { get; set; }
+        public static bool IsDummyFollower { get; set; }
 
-        public static bool isServer => NetworkServer.active && !isDummyFollower;
-        public static bool isClient => NetworkClient.active || isDummyFollower;
-        public static bool isHost => isServer && isClient;
-        public static bool isStandAlone => !isServer && !isClient;
+        public static bool IsServer => NetworkServer.active && !IsDummyFollower;
+        public static bool IsClient => NetworkClient.active || IsDummyFollower;
+        public static bool IsHost => IsServer && IsClient;
+        public static bool IsStandAlone => !IsServer && !IsClient;
 
-        public static bool isServerOrStandAlone => isServer || !isClient;
+        public static bool IsServerOrStandAlone => IsServer || !IsClient;
 
         // Not Server but Client.
         // warn Host: isServer == isClient == true
-        public static bool isFollower => !isServerOrStandAlone;
+        public static bool IsFollower => !IsServerOrStandAlone;
 
-        public static bool isActive { get { var nm = NetworkManager.singleton; return (nm != null) && nm.isNetworkActive; } }
+        public static bool IsActive { get { var nm = NetworkManager.singleton; return (nm != null) && nm.isNetworkActive; } }
 
         public static void Spawn(GameObject go)
         {
-            if (isServer) NetworkServer.Spawn(go);
+            if (IsServer) NetworkServer.Spawn(go);
         }
 
         public static void Destroy(GameObject go)
         {
-            if (isServer) NetworkServer.Destroy(go);
-            if (isServerOrStandAlone) Object.Destroy(go);
+            if (IsServer) NetworkServer.Destroy(go);
+            if (IsServerOrStandAlone) Object.Destroy(go);
         }
 
 
-        public static float time => SyncTime.Instance.time;
-        public static double networkTime => NetworkTime.time;
+        public static float Time => SyncTime.Instance.Time;
+        public static double NetworkTime => Mirror.NetworkTime.time;
     }
 }

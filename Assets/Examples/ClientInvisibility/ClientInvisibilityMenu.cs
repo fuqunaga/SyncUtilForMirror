@@ -11,7 +11,7 @@ namespace SyncUtil.Example
 
         void OnGUI()
         {
-            if (SyncNet.isServerOrStandAlone)
+            if (SyncNet.IsServerOrStandAlone)
             {
                 using var area = new GUILayout.AreaScope(screenRect, GetType().ToString(), "box");
 

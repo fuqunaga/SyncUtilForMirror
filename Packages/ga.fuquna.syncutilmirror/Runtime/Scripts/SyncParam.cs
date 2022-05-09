@@ -30,7 +30,7 @@ namespace SyncUtil
             var mgr = SyncParamManager.instance;
             if (mgr != null)
             {
-                if (SyncNet.isServer)
+                if (SyncNet.IsServer)
                 {
                     fields.ForEach(field =>
                     {
@@ -38,7 +38,7 @@ namespace SyncUtil
                     });
                 }
 
-                if (SyncNet.isFollower)
+                if (SyncNet.IsFollower)
                 {
                     fields.ForEach(field =>
                     {

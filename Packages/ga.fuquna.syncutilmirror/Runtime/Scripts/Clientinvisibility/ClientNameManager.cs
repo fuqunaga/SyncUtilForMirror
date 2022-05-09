@@ -43,7 +43,7 @@ namespace SyncUtil
 
         protected virtual void Start()
         {
-            if (SyncNet.isServer)
+            if (SyncNet.IsServer)
             {
                 NetworkServer.RegisterHandler<Message>(OnReceiveConnectionIdentity, false);
 
@@ -51,7 +51,7 @@ namespace SyncUtil
                 manager.onServerDisconnect += (conn) => nameDic.Remove(conn);
             }
 
-            if (SyncNet.isClient)
+            if (SyncNet.IsClient)
             {
                 var message = new Message() { name = Name };
                 NetworkClient.Send(message);

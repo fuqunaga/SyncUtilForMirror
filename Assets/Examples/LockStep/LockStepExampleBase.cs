@@ -27,7 +27,7 @@ namespace SyncUtil.Example
 
         protected virtual void DebugMenu()
         {
-            if (SyncNet.isClient)
+            if (SyncNet.IsClient)
             {
                 using (var h = new GUILayout.HorizontalScope())
                 {

@@ -10,7 +10,7 @@ namespace SyncUtil
     {
         public void Awake()
         {
-            var active = SyncNet.isServerOrStandAlone;
+            var active = SyncNet.IsServerOrStandAlone;
 
             for (var i = 0; i < transform.childCount; ++i)
             {

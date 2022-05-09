@@ -26,7 +26,7 @@ namespace SyncUtil
 
         void UpdateParams()
         {
-            _preRendering.enabled = _enable && SyncNet.isServerOrStandAlone;
+            _preRendering.enabled = _enable && SyncNet.IsServerOrStandAlone;
 
             var data = _preRendering.data;
             if (_autoDelay)

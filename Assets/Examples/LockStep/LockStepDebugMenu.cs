@@ -26,7 +26,7 @@ namespace SyncUtil.Example
 
         void _DebugMenu()
         {
-            if (SyncNet.isServer)
+            if (SyncNet.IsServer)
             {
                 DebugMenu(_lockStep);
             }

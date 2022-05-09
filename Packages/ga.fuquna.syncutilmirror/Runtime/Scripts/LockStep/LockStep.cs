@@ -100,12 +100,12 @@ namespace SyncUtil
 
         protected virtual void Update()
         {
-            if (SyncNet.isServer)
+            if (SyncNet.IsServer)
             {
                 SendLockStep();
             }
 
-            if (SyncNet.isClient)
+            if (SyncNet.IsClient)
             {
                 Step();
             }

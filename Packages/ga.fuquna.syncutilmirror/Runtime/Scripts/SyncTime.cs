@@ -4,25 +4,33 @@ using Mirror;
 
 namespace SyncUtil
 {
+    /// <summary>
+    /// Serverの Time.time と Time.timeScale を Client でも追従する
+    /// 通信ラグがあるので Server のほうが先行している
+    /// 厳密ではないが粗く StandAlone と動作、コードを変えたくない場合の用途で使う
+    /// ほぼ同時刻が欲しい場合は NetworkTime.time を推奨
+    /// </summary>
     public class SyncTime : MonoBehaviour
     {
-        #region singleton
-        protected static SyncTime _instance;
-        public static SyncTime Instance { get { return _instance ?? (_instance = (FindObjectOfType<SyncTime>() ?? (new GameObject("SyncTimeManager", typeof(SyncTime))).GetComponent<SyncTime>())); } }
+        #region Singleton
+        
+        protected static SyncTime instance;
+        public static SyncTime Instance => instance ? instance : (instance = (FindObjectOfType<SyncTime>() ?? (new GameObject("SyncTimeManager", typeof(SyncTime))).GetComponent<SyncTime>()));
+
         #endregion
 
-        #region type define
+
+        #region Type Define
+        
         public struct SyncTimeMessage : NetworkMessage
         {
             public float time;
             public float timeScale;
         }
+        
         #endregion
 
-        public float time
-        {
-            get { return SyncNet.isServerOrStandAlone ? Time.time : _clientTime; }
-        }
+        public float Time => SyncNet.IsServerOrStandAlone ? UnityEngine.Time.time : _clientTime;
 
 
         float _clientTime;
@@ -38,9 +46,9 @@ namespace SyncUtil
 			// when a client starts
             SyncNetworkManager.Singleton.onStartClient += () =>
             {
-                if (SyncNet.isFollower)
+                if (SyncNet.IsFollower)
                 {
-					// register a network handler function that caches the last time msg recieved
+					// register a network handler function that caches the last time msg received
                     NetworkClient.RegisterHandler<SyncTimeMessage>((msg) =>
                     {
                         if (_lastMsg == null || msg.time > _lastMsg.Value.time)
@@ -49,7 +57,7 @@ namespace SyncUtil
                         }
                     });
 
-					// start coroutine that will proces recieved network message
+					// start coroutine that will process received network message
                     StopAllCoroutines();
                     StartCoroutine(UpdateTimeClient());
                 }
@@ -69,17 +77,16 @@ namespace SyncUtil
 
         public void Update()
         {
-            if (SyncNet.isServer)
+            if (SyncNet.IsServer)
             {
-                NetworkServer.SendToAll(new SyncTimeMessage() { time = time, timeScale = Time.timeScale });
+                NetworkServer.SendToAll(new SyncTimeMessage() { time = Time, timeScale = UnityEngine.Time.timeScale });
             }
         }
-
        
 
         IEnumerator UpdateTimeClient()
         {
-            WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
+            var waitForEndOfFrame = new WaitForEndOfFrame();
 
             while (true)
             {
@@ -88,7 +95,7 @@ namespace SyncUtil
                 if (_lastMsg is {} lastMsg)
                 {
                     _clientTime = lastMsg.time;
-                    Time.timeScale = lastMsg.timeScale;
+                    UnityEngine.Time.timeScale = lastMsg.timeScale;
                 }
             }
         }

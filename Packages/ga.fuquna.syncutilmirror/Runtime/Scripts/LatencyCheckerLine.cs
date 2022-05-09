@@ -57,8 +57,8 @@ namespace SyncUtil
         {
             datas.ForEach(data =>
             {
-                if (_timeEnable) DrawLine(data, SyncNet.time, _timeStride, _timeColor);
-                if (_networkTimeEnable) DrawLine(data, (float)SyncNet.networkTime, _networkTimeStride, _networkTimeColor);
+                if (_timeEnable) DrawLine(data, SyncNet.Time, _timeStride, _timeColor);
+                if (_networkTimeEnable) DrawLine(data, (float)SyncNet.NetworkTime, _networkTimeStride, _networkTimeColor);
             });
         }
 

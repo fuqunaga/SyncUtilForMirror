@@ -78,7 +78,7 @@ namespace SyncUtil
 
             SyncNetworkManager.Singleton.onStartClient += () =>
             {
-                if (SyncNet.isFollower)
+                if (SyncNet.IsFollower)
                 {
                     NetworkClient.RegisterHandler<LatencyMessage>((msg) =>
                     {
@@ -100,7 +100,7 @@ namespace SyncUtil
 
         public void Update()
         {
-            if (SyncNet.isServer)
+            if (SyncNet.IsServer)
             {
                 foreach(var d in _conectionLatencyTable.Values)
                 {
@@ -123,7 +123,7 @@ namespace SyncUtil
             }
 
 #if INCLUDE_UPDATE
-            if (SyncNet.isFollower)
+            if (SyncNet.IsFollower)
             {
                 if (_lastMsg != null && NetworkClient.isConnected)
                 {

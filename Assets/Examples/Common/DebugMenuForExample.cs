@@ -22,7 +22,7 @@ namespace SyncUtil.Example
 
         private void OnGUI()
         {
-            if (SyncNet.isActive)
+            if (SyncNet.IsActive)
             {
                 _networkManagerController.DebugMenu();
 

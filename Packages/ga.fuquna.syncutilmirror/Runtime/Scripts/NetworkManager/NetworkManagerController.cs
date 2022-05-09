@@ -153,8 +153,8 @@ namespace SyncUtil
             using (new GUILayout.HorizontalScope())
             {
                 GUILayout.Label("NetworkManagerController");
-                GUILayout.Label(SyncNet.isHost ? "Host" : (SyncNet.isServer ? "Server" : (SyncNet.isClient ? "Client" : "StandAlone")));
-                if (SyncNet.isActive)
+                GUILayout.Label(SyncNet.IsHost ? "Host" : (SyncNet.IsServer ? "Server" : (SyncNet.IsClient ? "Client" : "StandAlone")));
+                if (SyncNet.IsActive)
                 {
                     if (GUILayout.Button("Disconnect"))
                     {
@@ -172,8 +172,8 @@ namespace SyncUtil
                 {
                     _fold = new GUIUtil.Fold("Time Debug", () =>
                     {
-                        GUILayout.Label($"SyncTime: {SyncNet.time:0.000}");
-                        //GUILayout.Label(string.Format("Network.time Synced/Orig: {0:0.000} / {1:0.000}", SyncNet.networkTime, Network.time));
+                        GUILayout.Label($"SyncNet.Time: {SyncNet.Time:0.000}");
+                        GUILayout.Label($"SyncNet.networkTime {SyncNet.NetworkTime:0.000}");
 
                         foreach(var pair in LatencyChecker.Instance._conectionLatencyTable)
                         {

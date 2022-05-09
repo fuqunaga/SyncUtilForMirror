@@ -1,21 +1,12 @@
 # SyncUtil
-Sync Utilities For UNET  
+Sync Utilities For [Mirror](https://github.com/vis2k/Mirror)  
   
 
 ## Install Dependencies
- - [UNet(Multplayer HLAPI)](https://docs.unity3d.com/Manual/UNetUsingHLAPI.html) via PakcageManager.
+ - [Mirror via AssetStore](https://assetstore.unity.com/packages/tools/network/mirror-129321)
 
 ## Install
 
-Download a `.unitypackage` file from [Release page](https://github.com/fuqunaga/SyncUtil/releases).
-
-or
-
-Using Pacakge Manager:  
-Add following line to the `dependencies` section in the `Packages/manifest.json`.
-```
-"ga.fuquna.syncutil": "https://github.com/fuqunaga/SyncUtil.git"
-```
 
 ## How to run Examples
 
@@ -54,6 +45,6 @@ dynamic delay rendering according to network latency
 
 
 # Reference
+ - https://github.com/fuqunaga/SyncUtilUNET
  - https://github.com/fuqunaga/PrefsGUISyncUNET
- - https://github.com/nobnak/SyncTransform  
- - https://github.com/nobnak/Gist/blob/master/PreRendering.cs
+ - 

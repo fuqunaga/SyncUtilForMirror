@@ -92,7 +92,7 @@
       }
     },
     "ga.fuquna.syncutilmirror": {
-      "version": "file:ga.fuquna.syncutil",
+      "version": "file:ga.fuquna.syncutilmirror",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

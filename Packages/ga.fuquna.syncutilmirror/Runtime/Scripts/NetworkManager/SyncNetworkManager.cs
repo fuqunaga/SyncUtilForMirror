@@ -1,71 +1,11 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using Mirror;
+using UnityEditor;
 
 namespace SyncUtil
 {
-    public class NetworkManagerWithHookAction : NetworkManager
-    {
-        #region Server side
-
-        public event Action onStartServer;
-        public override void OnStartServer()
-        {
-            base.OnStartServer();
-            onStartServer?.Invoke();
-        }
-
-        public event Action<NetworkConnectionToClient> onServerConnect;
-        public override void OnServerConnect(NetworkConnectionToClient conn)
-        {
-            base.OnServerConnect(conn);
-            onServerConnect?.Invoke(conn);
-        }
-
-        public event Action<NetworkConnectionToClient> onServerDisconnect;
-        public override void OnServerDisconnect(NetworkConnectionToClient conn)
-        {
-            base.OnServerDisconnect(conn);
-            onServerDisconnect?.Invoke(conn);
-        }
-
-        #endregion
-
-
-        #region Client side
-
-        public event Action onStartClient;
-        public override void OnStartClient()
-        {
-            base.OnStartClient();
-            onStartClient?.Invoke();
-        }
-
-        public event Action onClientConnect;
-        public override void OnClientConnect()
-        {
-            base.OnClientConnect();
-            onClientConnect?.Invoke();
-        }
-
-
-        public event Action<Exception> onClientError;
-        public override void OnClientError(Exception exception)
-        {
-            base.OnClientError(exception);
-            onClientError?.Invoke(exception);
-        }
-
-        public event Action onClientDisconnect;
-        public override void OnClientDisconnect()
-        {
-            base.OnClientDisconnect();
-            onClientDisconnect?.Invoke();
-        }
-
-        #endregion
-    }
-
     [Serializable]
     public class SyncNetworkManager : NetworkManagerWithHookAction
     {
@@ -73,6 +13,62 @@ namespace SyncUtil
 
         public bool enableLogServer = false;
         public bool enableLogClient = true;
+
+        
+        
+        #region Unity
+
+#if UNITY_EDITOR
+        
+        [HideInInspector] public bool checkPlayerPrefab = true;
+        
+        public override void OnValidate()
+        {
+            base.OnValidate();
+
+            if (playerPrefab == null && checkPlayerPrefab)
+            {
+                var response = EditorUtility.DisplayDialogComplex(
+                    nameof(SyncNetworkManager),
+                    "Mirror requires a PlayerPrefab to spawn objects.\nDo you want to set the SyncUtil's default PlayerPrefab?",
+                    "Ok",
+                    "Cancel",
+                    "Don't ask again"
+                );
+
+                switch (response)
+                {
+                    case 0:
+                        var guids = AssetDatabase.FindAssets("EmptyPlayer", new[] {"Packages/ga.fuquna.syncutilmirror"});
+                
+                        foreach (var path in guids.Select(AssetDatabase.GUIDToAssetPath))
+                        {
+                            var go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                            if (go != null)
+                            {
+                                playerPrefab = go;
+                                break;
+                            }
+                        }
+
+                        EditorGUIUtility.PingObject(this);
+
+                        break;
+                    
+                    case 2:
+                        checkPlayerPrefab = false;
+                        break;
+                    
+                    default:
+                        break;
+                }
+            }
+        }
+
+#endif
+
+        #endregion
+        
 
         #region Server side
 

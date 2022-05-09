@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
-using Mirror;
 
 namespace SyncUtil
 {
     [RequireComponent(typeof(SyncNetworkManager))]
     public class NetworkManagerController : MonoBehaviour
     {
-        #region TypeDefine
+        #region Type Define
+        
         public enum BootType
         {
             Manual,
@@ -18,13 +18,14 @@ namespace SyncUtil
             Client,
             Server
         }
+        
         #endregion
 
-        public virtual string _networkAddress { get; } = "localhost";
-        public virtual int _networkPort { get; } = 7777;
-        public virtual BootType _bootType { get; } = BootType.Manual;
-        public virtual bool _autoConnect { get; } = true;
-        public virtual float _autoConnectInterval { get; } = 10f;
+        public virtual string NetworkAddress { get; } = "localhost";
+        public virtual int NetworkPort { get; } = 7777;
+        public virtual BootType Boot { get; } = BootType.Manual;
+        public virtual bool AutoConnect { get; } = true;
+        public virtual float AutoConnectInterval { get; } = 10f;
 
 
         SyncNetworkManager _networkManager;
@@ -33,9 +34,8 @@ namespace SyncUtil
         public virtual void Start()
         {
             _networkManager = GetComponent<SyncNetworkManager>();
-            Assert.IsTrue(_networkManager);
 
-            if (_bootType != BootType.Manual) StartNetwork(_bootType);
+            if (Boot != BootType.Manual) StartNetwork(Boot);
         }
 
         void StartNetwork(BootType bootType)
@@ -43,14 +43,13 @@ namespace SyncUtil
             Assert.IsFalse(bootType == BootType.Manual);
             StopAllCoroutines();
 
-            IEnumerator routine = null;
-            var mgr = _networkManager;
-            switch (bootType)
+            IEnumerator routine = bootType switch
             {
-                case BootType.Host: routine = StartConnectLoop(() => NetworkClient.active, () => mgr.StartHost()); break;
-                case BootType.Client: routine = StartConnectLoop(() => NetworkClient.active, StartClient); break;
-                case BootType.Server: routine = StartConnectLoop(() => NetworkServer.active, () => mgr.StartServer()); break;
-            }
+                BootType.Host => StartConnectLoop(() => NetworkClient.active, () => _networkManager.StartHost()),
+                BootType.Client => StartConnectLoop(() => NetworkClient.active, StartClient),
+                BootType.Server => StartConnectLoop(() => NetworkServer.active, () => _networkManager.StartServer()),
+                _ => null
+            };
 
             StartCoroutine(routine);
         }
@@ -73,7 +72,6 @@ namespace SyncUtil
         {
             while (true)
             {
-                //yield return new WaitForEndOfFrame(); // Wait for set NetworkManager callback at Start()
                 yield return new WaitForSeconds(0.1f);
 
                 UpdateManager();
@@ -81,9 +79,9 @@ namespace SyncUtil
                 {
                     startFunc();
                 }
-                yield return new WaitUntil(() => _autoConnect);
+                yield return new WaitUntil(() => AutoConnect);
                 yield return new WaitWhile(isActiveFunc);
-                yield return new WaitForSeconds(_autoConnectInterval);
+                yield return new WaitForSeconds(AutoConnectInterval);
             }
         }
 
@@ -136,14 +134,14 @@ namespace SyncUtil
 
         protected void UpdateManager()
         {
-            _networkManager.networkAddress = _networkAddress;
+            _networkManager.networkAddress = NetworkAddress;
             // _networkManager.networkPort = _networkPort;
         }
 
         GUIUtil.Fold _fold;
         public void DebugMenu()
         {
-            using (var h = new GUILayout.HorizontalScope())
+            using (new GUILayout.HorizontalScope())
             {
                 GUILayout.Label("NetworkManagerController");
                 GUILayout.Label(SyncNet.isHost ? "Host" : (SyncNet.isServer ? "Server" : (SyncNet.isClient ? "Client" : "StandAlone")));
@@ -165,14 +163,14 @@ namespace SyncUtil
                 {
                     _fold = new GUIUtil.Fold("Time Debug", () =>
                     {
-                        GUILayout.Label(string.Format("SyncTime: {0:0.000}", SyncNet.time));
+                        GUILayout.Label($"SyncTime: {SyncNet.time:0.000}");
                         //GUILayout.Label(string.Format("Network.time Synced/Orig: {0:0.000} / {1:0.000}", SyncNet.networkTime, Network.time));
 
-                        LatencyChecker.Instance._conectionLatencyTable.ToList().ForEach(pair =>
+                        foreach(var pair in LatencyChecker.Instance._conectionLatencyTable)
                         {
                             var data = pair.Value;
                             GUILayout.Label(string.Format("ConnId: {0}  Latency: {1:0.000} Average:{2:0.000} " + (data._recieved ? "✔" : ""), pair.Key, data.Last, data.average));
-                        });
+                        }
                     });
                 }
 

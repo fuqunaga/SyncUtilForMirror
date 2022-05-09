@@ -11,11 +11,11 @@ namespace SyncUtil.Example
         public bool autoConnect = true;
         public float autoConnectInterval = 10f;
 
-        public override string _networkAddress { get { return networkAddress; } }
-        public override int _networkPort { get { return networkPort; } }
-        public override BootType _bootType { get { return bootType; } }
-        public override bool _autoConnect { get { return autoConnect; } }
-        public override float _autoConnectInterval { get { return autoConnectInterval; } }
+        public override string NetworkAddress { get { return networkAddress; } }
+        public override int NetworkPort { get { return networkPort; } }
+        public override BootType Boot { get { return bootType; } }
+        public override bool AutoConnect { get { return autoConnect; } }
+        public override float AutoConnectInterval { get { return autoConnectInterval; } }
 
         SceneSelectorForExample _sceneSelector;
 

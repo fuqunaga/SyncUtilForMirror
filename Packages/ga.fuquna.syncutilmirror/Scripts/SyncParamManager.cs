@@ -55,14 +55,14 @@ namespace SyncUtil
         #endregion
 
         #region sync
-        SyncListKeyBool _syncListKeyBool = new SyncListKeyBool();
-        SyncListKeyInt _syncListKeyInt = new SyncListKeyInt();
-        SyncListKeyUInt _syncListKeyUInt = new SyncListKeyUInt();
-        SyncListKeyFloat _syncListKeyFloat = new SyncListKeyFloat();
-        SyncListKeyString _syncListKeyString = new SyncListKeyString();
-        SyncListKeyVector2 _syncListKeyVector2 = new SyncListKeyVector2();
-        SyncListKeyVector3 _syncListKeyVector3 = new SyncListKeyVector3();
-        SyncListKeyVector4 _syncListKeyVector4 = new SyncListKeyVector4();
+        readonly SyncListKeyBool _syncListKeyBool = new SyncListKeyBool();
+        readonly SyncListKeyInt _syncListKeyInt = new SyncListKeyInt();
+        readonly SyncListKeyUInt _syncListKeyUInt = new SyncListKeyUInt();
+        readonly SyncListKeyFloat _syncListKeyFloat = new SyncListKeyFloat();
+        readonly SyncListKeyString _syncListKeyString = new SyncListKeyString();
+        readonly SyncListKeyVector2 _syncListKeyVector2 = new SyncListKeyVector2();
+        readonly SyncListKeyVector3 _syncListKeyVector3 = new SyncListKeyVector3();
+        readonly SyncListKeyVector4 _syncListKeyVector4 = new SyncListKeyVector4();
         #endregion
 
         Dictionary<Type, ISyncListKeyObj> typeToSyncList;

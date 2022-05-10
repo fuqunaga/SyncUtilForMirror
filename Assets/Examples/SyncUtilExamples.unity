@@ -256,7 +256,7 @@ MonoBehaviour:
   autoStartServerBuild: 0
   serverTickRate: 30
   offlineScene: 
-  onlineScene: Assets/Examples/SyncParam/SyncParam.unity
+  onlineScene: SyncParam
   transport: {fileID: 645329946}
   networkAddress: localhost
   maxConnections: 4

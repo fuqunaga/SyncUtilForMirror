@@ -10,7 +10,8 @@ namespace SyncUtil
 {
     public class SyncParamManager : NetworkBehaviour
     {
-        #region type define
+        #region Type Define
+        
         public struct KeyObj { public string key; public object _value; }
 
 
@@ -85,6 +86,8 @@ namespace SyncUtil
                 { typeof(Vector3), _syncListKeyVector3 },
                 { typeof(Vector4), _syncListKeyVector4 }
             };
+
+            syncInterval = 0f;
         }
 
         public override void OnStartServer()

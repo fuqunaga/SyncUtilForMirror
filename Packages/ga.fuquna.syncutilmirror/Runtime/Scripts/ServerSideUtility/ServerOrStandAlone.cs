@@ -3,8 +3,7 @@
 namespace SyncUtil
 {
     /// <summary>
-    /// Client
-    ///  childrens will be deactivated
+    /// Children are inactive at the client
     /// </summary>
     public class ServerOrStandAlone : MonoBehaviour
     {

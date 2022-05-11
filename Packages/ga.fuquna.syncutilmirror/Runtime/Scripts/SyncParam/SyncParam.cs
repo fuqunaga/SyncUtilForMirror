@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,50 +10,46 @@ namespace SyncUtil
     {
         public enum Mode
         {
-            Sync,
-            Trigger
+            Sync,    // The client value is always overwritten by the server value
+            Trigger　// The client value is only overwritten when server values change
         }
 
         [FormerlySerializedAs("_target")]
         public Object target;
 
         [FormerlySerializedAs("_fields")]
-        public List<FieldData> fields = new();
+        public List<FieldBinder.FieldData> fields = new();
+
+        private List<FieldBinder> _fieldBinders;
+        
 
         public void Start()
         {
-            foreach(var field in fields)
+            _fieldBinders = fields.Select(data => FieldBinder.Create(data, target)).ToList();
+        }
+
+        [ClientCallback]
+        private void Update()
+        {
+            if (SyncNet.IsFollower)
             {
-                field.Init(target);
+                foreach (var field in _fieldBinders)
+                {
+                    field.ReceiveParam();
+                }
             }
         }
 
+        [ServerCallback]
         void LateUpdate()
         {
-            var mgr = SyncParamManager.instance;
-            if (mgr != null)
+            if (SyncNet.IsServer)
             {
-                if (SyncNet.IsServer)
+                foreach (var field in _fieldBinders)
                 {
-                    foreach(var field in fields)
-                    {
-                        mgr.UpdateParam(field.Key, field.GetValue(target));
-                    }
-                }
-
-                if (SyncNet.IsFollower)
-                {
-                    foreach(var field in fields)
-                    {
-                        var obj = mgr.GetParam(field.Key, field.mode == Mode.Trigger);
-                        if (obj != null)
-                        {
-                            field.SetValue(target, obj);
-                        }
-                    }
+                    field.SendParam();
                 }
             }
         }
-
     }
 }

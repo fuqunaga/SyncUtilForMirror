@@ -51,7 +51,7 @@ namespace SyncUtil.Example
 
         public void DebugMenu()
         {
-            GUILayout.Label("SyncParamExample");
+            GUILayout.Label(name);
             GUIUtil.Indent(() =>
             {
                 enumVal = GUIUtil.Field(enumVal, nameof(enumVal));

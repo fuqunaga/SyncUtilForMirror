@@ -5,14 +5,16 @@ namespace SyncUtil.Example
 {
     public class DebugMenuForExample : MonoBehaviour
     {
-        #region singleton
+        #region Singleton
+        
         static DebugMenuForExample _instance;
         public static DebugMenuForExample Instance => (_instance != null ? _instance : (_instance = FindObjectOfType<DebugMenuForExample>()));
+        
         #endregion
 
         NetworkManagerController _networkManagerController;
 
-        public Action onGUI;
+        public event Action onGUI;
 
 
         void Start()

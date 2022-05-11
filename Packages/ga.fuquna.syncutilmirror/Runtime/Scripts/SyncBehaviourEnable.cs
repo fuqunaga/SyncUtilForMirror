@@ -27,7 +27,7 @@ namespace SyncUtil
 
         void Update()
         {
-            var mgr = SyncParamManager.instance;
+            var mgr = SyncParamManager.Instance;
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
@@ -42,15 +42,16 @@ namespace SyncUtil
             {
                 if (SyncNet.IsServer)
                 {
-                    mgr.UpdateParam(key, Get(_target));
+                    mgr.SetParam(key, Get(_target));
                 }
 
                 if (SyncNet.IsFollower)
                 {
-                    var obj = mgr.GetParam(key, _mode == Mode.Trigger);
-                    if (obj != null)
+                    // var obj = mgr.GetParam(key, _mode == Mode.Trigger);
+                    // if (obj != null)
+                    if ( mgr.TryGetParamTriggered<bool>(key, out var enable))
                     {
-                        Set(_target, (bool)obj);
+                        Set(_target, enable);
                     }
                 }
             }

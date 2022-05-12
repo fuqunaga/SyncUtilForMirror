@@ -98,8 +98,8 @@
       "dependencies": {},
       "hash": "f45424822189ebd875d864a17d7f03b72eafbff7"
     },
-    "ga.fuquna.syncutilmirror": {
-      "version": "file:ga.fuquna.syncutilmirror",
+    "ga.fuquna.syncutilformirror": {
+      "version": "file:ga.fuquna.syncutilformirror",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 846240380}
   - component: {fileID: 846240379}
   m_Layer: 0
-  m_Name: PreRrenderingDebugMenu
+  m_Name: LatencyCheckerLineDebugMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -274,8 +274,6 @@ GameObject:
   - component: {fileID: 1069460481}
   - component: {fileID: 1069460487}
   - component: {fileID: 1069460486}
-  - component: {fileID: 1069460489}
-  - component: {fileID: 1069460488}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -373,36 +371,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60586b2a1bcd83e4aaba15bdf84613a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeColor: {r: 1, g: 1, b: 1, a: 1}
-  _networkTimeColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
---- !u!114 &1069460488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069460480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 964c987207d158b49892fa918dd0cb4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isEnable: 1
-  autoDelay: 1
-  autoDelayOffset: 0
---- !u!114 &1069460489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1069460480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e81718694c7ee664a9881e3f31b2a467, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data:
-    passthrough: 0
-    delay: 0.1
-    maxFramesPerSec: 60
+  timeColor: {r: 1, g: 1, b: 1, a: 1}
+  networkTimeColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}

@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Examples/InstanceRandom/InstanceRandom.unity
     guid: 32e288e16873fec4cb5ec41a0123946f
   - enabled: 1
-    path: Assets/Examples/PreRendering,LatencyChecker/PreRendering.unity
+    path: Assets/Examples/LatencyCheckerLine/LatencyCheckerLine.unity
     guid: 69d81700c7826b948ad6e0d7f95623c0
   - enabled: 1
     path: Assets/Examples/LockStep/LockStep.unity

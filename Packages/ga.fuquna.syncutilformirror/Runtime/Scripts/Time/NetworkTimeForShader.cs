@@ -1,19 +1,19 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SyncUtil
 {
-
-    /// <summary>
+	/// <summary>
     /// Unity's _Time style shader property
     /// </summary>
     public class NetworkTimeForShader : MonoBehaviour
     {
-        public string _propertyName = "g_Time";
+        [FormerlySerializedAs("_propertyName")] 
+        public string propertyName = "g_Time";
 
         public void Update()
         {
-           
-            Shader.SetGlobalVector(_propertyName, GetVector4Time() );
+            Shader.SetGlobalVector(propertyName, GetVector4Time() );
         }
 
 		public static Vector4 GetVector4Time()

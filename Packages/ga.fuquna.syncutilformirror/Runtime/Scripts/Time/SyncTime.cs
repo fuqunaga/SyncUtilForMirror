@@ -7,7 +7,7 @@ namespace SyncUtil
     /// <summary>
     /// Serverの Time.time と Time.timeScale を Client でも追従する
     /// 通信ラグがあるので Server のほうが先行している
-    /// 厳密ではないが粗く StandAlone と動作、コードを変えたくない場合の用途で使う
+    /// 厳密ではないが粗くStandAloneとコードを変えたくない場合の用途で使う
     /// ほぼ同時刻が欲しい場合は NetworkTime.time を推奨
     /// </summary>
     public class SyncTime : MonoBehaviour

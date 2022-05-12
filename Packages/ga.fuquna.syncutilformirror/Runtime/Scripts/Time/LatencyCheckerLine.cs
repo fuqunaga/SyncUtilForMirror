@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Serialization;
 
 
 namespace SyncUtil
 {
     /// <summary>
-    /// パラメータを直線で表し、複数PCでの差異を視覚的に比べる表示
+    /// SyncNet.Time, SyncNet.NetworkTime を直線の位置で表し、複数PCでの差異を視覚的に比べる表示
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public class LatencyCheckerLine : MonoBehaviour
     {
-        public Color _timeColor = Color.white;
-        public Color _networkTimeColor = Color.gray;
+        [FormerlySerializedAs("_timeColor")]
+        public Color timeColor = Color.white;
+        
+        [FormerlySerializedAs("_networkTimeColor")] 
+        public Color networkTimeColor = Color.gray;
 
         public enum Mode
         {
@@ -26,14 +30,13 @@ namespace SyncUtil
             public bool enable;
             public Mode mode;
 
-            protected DebugDraw _debugDraw;
+            private DebugDraw _debugDraw;
 
-            public string name { get { return camera.name; } }
-            public DebugDraw debugDraw { get { return _debugDraw ?? (_debugDraw = (camera.GetComponent<DebugDraw>() ?? camera.gameObject.AddComponent<DebugDraw>())); } }
+            public string Name => camera.name;
+            public DebugDraw DebugDraw => _debugDraw ??= (camera.GetComponent<DebugDraw>() ?? camera.gameObject.AddComponent<DebugDraw>());
         }
 
-        protected List<CameraData> _datas = new List<CameraData>();
-        public List<CameraData> Datas { get { return _datas; } }
+        public List<CameraData> DataList { get; } = new();
 
         float _width = 5f;
         bool _networkTimeEnable = true;
@@ -44,28 +47,16 @@ namespace SyncUtil
 
         protected virtual void Start()
         {
-            _datas.Add(new CameraData() { camera = GetComponent<Camera>() });
+            DataList.Add(new CameraData() { camera = GetComponent<Camera>() });
         }
 
         public void OnPreRender()
         {
-            var datas = _datas.Where(data => data.enable).ToList();
-            OnPreRenderDatas(datas);
-        }
-
-        protected virtual void OnPreRenderDatas(List<CameraData> datas)
-        {
-            datas.ForEach(data =>
+            foreach(var data in DataList.Where(data => data.enable))
             {
-                if (_timeEnable) DrawLine(data, SyncNet.Time, _timeStride, _timeColor);
-                if (_networkTimeEnable) DrawLine(data, (float)SyncNet.NetworkTime, _networkTimeStride, _networkTimeColor);
-            });
-        }
-
-
-        protected void DrawLine(CameraData data, Vector3 val, float stride, params Color[] col)
-        {
-            for (var i = 0; i < 3; ++i) DrawLine(data, val[i], stride, col[i]);
+                if (_timeEnable) DrawLine(data, SyncNet.Time, _timeStride, timeColor);
+                if (_networkTimeEnable) DrawLine(data, (float)SyncNet.NetworkTime, _networkTimeStride, networkTimeColor);
+            }
         }
 
         protected void DrawLine(CameraData data, float val, float stride, Color col)
@@ -79,11 +70,13 @@ namespace SyncUtil
 
                 lb[idx] = rt[idx] = rate;
 
-                data.debugDraw.LineOn2D(lb, rt, col, _width);
+                data.DebugDraw.LineOn2D(lb, rt, col, _width);
             }
         }
 
 
+        
+        
         public virtual void DebugMenu()
         {
             enabled = GUILayout.Toggle(enabled, "LatencyCheckerLine");
@@ -94,28 +87,37 @@ namespace SyncUtil
                 {
                     _width = GUIUtil.Slider(_width, 0f, 20f, "width");
 
-                    using (var h = new GUILayout.HorizontalScope())
+                    using (new GUILayout.HorizontalScope())
                     {
                         _timeEnable = GUILayout.Toggle(_timeEnable, "Time");
+                        using(new GUIUtil.ColorScope(timeColor))
+                        {
+                            GUILayout.Label("■");
+                        }
                         _timeStride = GUIUtil.Slider(_timeStride, 0.1f, 10f, "Stride");
                     }
 
-                    using (var h = new GUILayout.HorizontalScope())
+                    using (new GUILayout.HorizontalScope())
                     {
                         _networkTimeEnable = GUILayout.Toggle(_networkTimeEnable, "NetworkTime");
+                        using(new GUIUtil.ColorScope(networkTimeColor))
+                        {
+                            GUILayout.Label("■");
+                        }
+
                         _networkTimeStride = GUIUtil.Slider(_networkTimeStride, 0.1f, 10f, "Stride");
                     }
 
                     DebugMenuInternal();
 
-                    _datas.ForEach(data =>
+                    foreach(var data in DataList)
                     {
-                        using (var h = new GUILayout.HorizontalScope())
+                        using (new GUILayout.HorizontalScope())
                         {
-                            data.enable = GUILayout.Toggle(data.enable, data.name);
+                            data.enable = GUILayout.Toggle(data.enable, data.Name);
                             data.mode = GUIUtil.Field(data.mode);
                         }
-                    });
+                    }
                 });
             }
         }

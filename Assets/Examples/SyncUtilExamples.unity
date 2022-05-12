@@ -302,6 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451166a1ca9b8e446acfb45af4dcb4f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  clientHeartBeat: {fileID: 0}
   networkAddress: localhost
   networkPort: 7777
   bootType: 0
@@ -358,7 +359,7 @@ MonoBehaviour:
   - SyncBehaviourEnable,SyncGameObjectActive
   - Spawner,ServerOrStandAlone
   - InstanceRandom
-  - PreRendering
+  - LatencyCheckerLineSample
   - LockStep
   - LockStepGPU
   - ClientVisibility

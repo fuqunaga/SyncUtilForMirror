@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using kcp2k;
 using Mirror;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 
 namespace SyncUtil
 {
@@ -29,14 +32,17 @@ namespace SyncUtil
         public virtual float AutoConnectInterval { get; } = 10f;
 
 
+        public ClientHeartBeat clientHeartBeat;
+        
         SyncNetworkManager _networkManager;
         private KcpTransport _kcp;
-
+        
 
         public virtual void Start()
         {
             _networkManager = GetComponent<SyncNetworkManager>();
             _kcp = GetComponent<KcpTransport>();
+            clientHeartBeat ??= GetComponent<ClientHeartBeat>();
 
             if (Boot != BootType.Manual) StartNetwork(Boot);
         }
@@ -175,10 +181,21 @@ namespace SyncUtil
                         GUILayout.Label($"SyncNet.Time: {SyncNet.Time:0.000}");
                         GUILayout.Label($"SyncNet.networkTime {SyncNet.NetworkTime:0.000}");
 
-                        foreach(var pair in LatencyChecker.Instance._conectionLatencyTable)
+
+                        if (SyncNet.IsServer && clientHeartBeat != null)
                         {
-                            var data = pair.Value;
-                            GUILayout.Label(string.Format("ConnId: {0}  Latency: {1:0.000} Average:{2:0.000} " + (data._recieved ? "✔" : ""), pair.Key, data.Last, data.average));
+                            foreach (var connectionId in NetworkServer.connections.Keys)
+                            {
+                                var info = clientHeartBeat.GetHeartBeatInfoCurrentFrameReceived(connectionId);
+                                if (info != null)
+                                {
+                                    var messages = info.messages;
+                                    var rtt = messages.LastOrDefault().rtt;
+                                    var rttAverage = messages.Average(m => m.rtt);
+                                    var received = info.ReceivedFrameCount == Time.frameCount;
+                                    GUILayout.Label($"ConnId: {connectionId}  rtt: {rtt:0.000} rttAverage: {rttAverage:0.000}" + (received ? "✔" : ""));
+                                }
+                            }
                         }
                     });
                 }

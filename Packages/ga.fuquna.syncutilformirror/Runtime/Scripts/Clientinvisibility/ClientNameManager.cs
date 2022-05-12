@@ -30,14 +30,14 @@ namespace SyncUtil
 
         #region Static
 
-        static ClientNameManagerBase instance;
+        static ClientNameManagerBase _instance;
 
-        public static ClientNameManagerBase Instance => instance != null ? instance : instance = FindObjectOfType<ClientNameManagerBase>();
+        public static ClientNameManagerBase Instance => _instance != null ? _instance : _instance = FindObjectOfType<ClientNameManagerBase>();
 
         #endregion
 
 
-        Dictionary<NetworkConnection, string> nameDic = new Dictionary<NetworkConnection, string>();
+        readonly Dictionary<NetworkConnection, string> _nameDic = new();
 
         protected abstract string Name { get; }
 
@@ -48,7 +48,7 @@ namespace SyncUtil
                 NetworkServer.RegisterHandler<Message>(OnReceiveConnectionIdentity, false);
 
                 var manager = SyncNetworkManager.Singleton;
-                manager.onServerDisconnect += (conn) => nameDic.Remove(conn);
+                manager.onServerDisconnect += (conn) => _nameDic.Remove(conn);
             }
 
             if (SyncNet.IsClient)
@@ -64,12 +64,12 @@ namespace SyncUtil
 
         void OnReceiveConnectionIdentity(NetworkConnectionToClient conn, Message msg)
         {
-            nameDic[conn] = msg.name;
+            _nameDic[conn] = msg.name;
         }
 
         public string GetClientName(NetworkConnection conn)
         {
-            nameDic.TryGetValue(conn, out var ret);
+            _nameDic.TryGetValue(conn, out var ret);
             return ret;
         }
 

@@ -13,7 +13,7 @@ namespace SyncUtil.Example
             ps.Clear();
 
             var instanceRandom = GetComponent<IInstanceRandom>();
-            ps.randomSeed = (uint)instanceRandom.rand.RandInt();
+            ps.randomSeed = (uint)instanceRandom.Rand.RandInt();
 
             ps.Play();
         }

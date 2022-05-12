@@ -7,8 +7,7 @@ namespace SyncUtil
     /// </summary>
     public class CustomRandom
     {
-
-        System.Func<float> _randFunc;
+        readonly System.Func<float> _randFunc;
 
         public CustomRandom(int seed)
         {

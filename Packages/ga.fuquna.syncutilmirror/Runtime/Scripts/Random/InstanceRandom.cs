@@ -3,12 +3,9 @@ using Mirror;
 
 namespace SyncUtil
 {
-    public interface IInstanceRandom
-    {
-        CustomRandom rand { get; }
-    }
-
-
+    /// <summary>
+    /// Random, which returns the same value on server and client
+    /// </summary>
     public class InstanceRandom : NetworkBehaviour, IInstanceRandom
     {
         [SyncVar]
@@ -20,6 +17,6 @@ namespace SyncUtil
         }
 
         CustomRandom _rand;
-        public CustomRandom rand { get { return (_rand ?? (_rand = new CustomRandom(seed))); } }
+        public CustomRandom Rand => _rand ??= new CustomRandom(seed);
     }
 }

@@ -12,6 +12,6 @@ namespace SyncUtil
         }
 
         CustomRandom _rand;
-        public CustomRandom rand { get { return (_rand ?? (_rand = new CustomRandom(seed))); } }
+        public CustomRandom Rand => _rand ??= new CustomRandom(seed);
     }
 }

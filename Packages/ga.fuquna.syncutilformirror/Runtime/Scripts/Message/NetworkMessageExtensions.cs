@@ -7,8 +7,6 @@ namespace SyncUtil
 {
     public static class NetworkMessageExtensions
     {
-        private static readonly NetworkWriter Writer = new();
-
         private static readonly Dictionary<Type, MethodInfo> WriteMethodTable = new();
         private static readonly object[] MiArgs = new object[1];
         
@@ -17,15 +15,16 @@ namespace SyncUtil
             var type = msg.GetType();
             if (!WriteMethodTable.TryGetValue(type, out var mi))
             {
-                var miNonGeneric = typeof(NetworkWriter).GetMethod(nameof(NetworkWriter.Write));
+                var miNonGeneric = typeof(NetworkWriterPooled).GetMethod(nameof(NetworkWriterPooled.Write));
                 WriteMethodTable[type] = mi = miNonGeneric.MakeGenericMethod(type); 
             }
+
+            using var writer = NetworkWriterPool.Get();
             
-            Writer.Position = 0;
             MiArgs[0] = msg;
-            mi.Invoke(Writer, MiArgs);
+            mi.Invoke(writer, MiArgs);
             
-            return Writer.ToArray();
+            return writer.ToArray();
         }
     }
 }

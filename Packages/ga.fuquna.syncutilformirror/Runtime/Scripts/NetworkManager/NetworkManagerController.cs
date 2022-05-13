@@ -178,22 +178,18 @@ namespace SyncUtil
                 {
                     _fold = new GUIUtil.Fold("Time Debug", () =>
                     {
-                        GUILayout.Label($"SyncNet.Time: {SyncNet.Time:0.000}");
-                        GUILayout.Label($"SyncNet.networkTime {SyncNet.NetworkTime:0.000}");
+                        GUILayout.Label($"{nameof(SyncNet)}.{nameof(SyncNet.Time)}: {SyncNet.Time:0.000}");
+                        GUILayout.Label($"{nameof(SyncNet)}.{nameof(SyncNet.NetworkTime)}: {SyncNet.NetworkTime:0.000}");
 
 
                         if (SyncNet.IsServer && clientHeartBeat != null)
                         {
                             foreach (var connectionId in NetworkServer.connections.Keys)
                             {
-                                var info = clientHeartBeat.GetHeartBeatInfoCurrentFrameReceived(connectionId);
+                                var info = clientHeartBeat.GetHeartBeatInfo(connectionId);
                                 if (info != null)
                                 {
-                                    var messages = info.messages;
-                                    var rtt = messages.LastOrDefault().rtt;
-                                    var rttAverage = messages.Average(m => m.rtt);
-                                    var received = info.ReceivedFrameCount == Time.frameCount;
-                                    GUILayout.Label($"ConnId: {connectionId}  rtt: {rtt:0.000} rttAverage: {rttAverage:0.000}" + (received ? "✔" : ""));
+                                    GUILayout.Label($"ConnId: {connectionId}  {info}");
                                 }
                             }
                         }

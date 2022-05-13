@@ -35,6 +35,16 @@ namespace SyncUtil
                     messages.Dequeue();
                 }
             }
+
+            public double Rtt => messages.LastOrDefault().rtt;
+            public double RttAverage => messages.Any() ? messages.Average(m => m.rtt) : 0;
+            public bool IsReceivedAtCurrentFrame => ReceivedFrameCount == Time.frameCount;
+            
+            
+            public override string ToString()
+            {
+                return $"rtt:{Rtt:0.000} rttAverage:{RttAverage:0.000} " + (IsReceivedAtCurrentFrame ? "✔" : "");
+            }
         }
 
         
@@ -80,7 +90,7 @@ namespace SyncUtil
 
         #endregion
 
-        public HeartBeatInfo GetHeartBeatInfoCurrentFrameReceived(int connectionId)
+        public HeartBeatInfo GetHeartBeatInfo(int connectionId)
         {
             _connectionIdToInfo.TryGetValue(connectionId, out var info);
             return info;

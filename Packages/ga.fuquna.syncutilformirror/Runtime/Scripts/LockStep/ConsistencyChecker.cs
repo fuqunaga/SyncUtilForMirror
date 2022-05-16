@@ -12,19 +12,10 @@ namespace SyncUtil
     {
         #region Type Define
         
-        public enum Consistency
-        {
-            NotCheckYet,
-            Checking,
-            Match,
-            NotMatch,
-            TimeOut
-        }
-        
         public class ConsistencyData
         {
             public int stepCount;
-            public Consistency consistency;
+            public LockStepConsistency consistency;
         }
 
                 
@@ -46,7 +37,7 @@ namespace SyncUtil
         readonly ConsistencyData _lastConsistency = new()
         {
             stepCount = -1,
-            consistency = Consistency.NotCheckYet
+            consistency = LockStepConsistency.NotCheckYet
         };
 
         public Dictionary<int, string> ConnectionIdToHash { get; } = new();
@@ -73,7 +64,7 @@ namespace SyncUtil
             ConnectionIdToHash.Clear();
             
             _lastConsistency.stepCount = targetStepCount;
-            _lastConsistency.consistency = Consistency.Checking;
+            _lastConsistency.consistency = LockStepConsistency.Checking;
 
             NetworkServer.SendToAll(new RequestHashMessage() {value = targetStepCount});
             var time = Time.time;
@@ -83,11 +74,11 @@ namespace SyncUtil
 
             if (IsCompleteConnectionIdToHash)
             {
-                _lastConsistency.consistency = (ConnectionIdToHash.Values.Distinct().Count() == 1) ? Consistency.Match : Consistency.NotMatch;
+                _lastConsistency.consistency = (ConnectionIdToHash.Values.Distinct().Count() == 1) ? LockStepConsistency.Match : LockStepConsistency.NotMatch;
             }
             else
             {
-                _lastConsistency.consistency = Consistency.TimeOut;
+                _lastConsistency.consistency = LockStepConsistency.TimeOut;
             }
         }
         #endregion

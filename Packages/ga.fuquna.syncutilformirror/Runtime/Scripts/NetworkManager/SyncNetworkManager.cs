@@ -7,6 +7,7 @@ using UnityEditor;
 namespace SyncUtil
 {
     [Serializable]
+    [ExecuteAlways]
     public class SyncNetworkManager : NetworkManagerWithHookAction
     {
         public static SyncNetworkManager Singleton => singleton as SyncNetworkManager;
@@ -22,15 +23,19 @@ namespace SyncUtil
         
         [HideInInspector] public bool checkPlayerPrefab = true;
         
-        public override void OnValidate()
+        public override void Start()
         {
-            base.OnValidate();
+            base.Start();
 
             if (playerPrefab == null && checkPlayerPrefab)
             {
+                EditorGUIUtility.PingObject(this);
+                
+                Debug.Log(playerPrefab.Equals(null));
+                
                 var response = EditorUtility.DisplayDialogComplex(
-                    nameof(SyncNetworkManager),
-                    "Mirror requires a PlayerPrefab to spawn objects.\nDo you want to set the SyncUtil's default PlayerPrefab?",
+                    $"{nameof(SyncNetworkManager)} scene:[{gameObject.scene.name}]",
+                    "Mirror requires a PlayerPrefab to spawn objects.\n\nDo you want to set the SyncUtil's default PlayerPrefab to the SyncNetworkManager\nand turn on AutoCreatePlayer?",
                     "Ok",
                     "Cancel",
                     "Don't ask again"
@@ -39,7 +44,7 @@ namespace SyncUtil
                 switch (response)
                 {
                     case 0:
-                        var guids = AssetDatabase.FindAssets("EmptyPlayer", new[] {"Packages/ga.fuquna.syncutilmirror"});
+                        var guids = AssetDatabase.FindAssets("EmptyPlayer", new[] {"Packages/ga.fuquna.syncutilformirror"});
                 
                         foreach (var path in guids.Select(AssetDatabase.GUIDToAssetPath))
                         {
@@ -47,19 +52,14 @@ namespace SyncUtil
                             if (go != null)
                             {
                                 playerPrefab = go;
+                                autoCreatePlayer = true;
                                 break;
                             }
                         }
-
-                        EditorGUIUtility.PingObject(this);
-
                         break;
                     
                     case 2:
                         checkPlayerPrefab = false;
-                        break;
-                    
-                    default:
                         break;
                 }
             }

@@ -344,7 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 148f6fea792e4c94287a9a281f527cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _onlineScenes:
+  onlineScenes:
   - {fileID: 102900000, guid: e6b021ddd1437804d884f68c8f1ff0f6, type: 3}
   - {fileID: 102900000, guid: bb61093fc25965247973d8306acc5f7b, type: 3}
   - {fileID: 102900000, guid: 2d6f7bda8f5661545bd19ad02e978a1e, type: 3}
@@ -353,13 +353,13 @@ MonoBehaviour:
   - {fileID: 102900000, guid: 5d7c27864394aa34cb6800d4165785f7, type: 3}
   - {fileID: 102900000, guid: c4f9706a825e8cc4ba8322101f897d1e, type: 3}
   - {fileID: 102900000, guid: f11f3e84c154cd14ba2e06b6d9b41562, type: 3}
-  _idx: 0
-  _onlineSceneNames:
+  idx: 0
+  onlineSceneNames:
   - SyncParam
   - SyncBehaviourEnable,SyncGameObjectActive
   - Spawner,ServerOrStandAlone
   - InstanceRandom
-  - LatencyCheckerLineSample
+  - LatencyCheckerLine
   - LockStep
   - LockStepGPU
   - ClientVisibility

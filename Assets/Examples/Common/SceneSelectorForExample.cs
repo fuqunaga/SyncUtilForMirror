@@ -2,49 +2,50 @@
 using System.Linq;
 using Mirror;
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-#pragma warning disable 0618
-
 namespace SyncUtil.Example
 {
-    [ExecuteAlways]
     public class SceneSelectorForExample : MonoBehaviour
     {
-#if UNITY_EDITOR
-        public List<SceneAsset> _onlineScenes = new List<SceneAsset>();
+        [FormerlySerializedAs("_onlineScenes")]
+        public List<SceneAsset> onlineScenes = new();
 
-        private void OnValidate()
-        {
-            _onlineSceneNames = _onlineScenes.Where(s => s != null).Select(s => s.name).ToArray();
-            UpdateOnlineScene();
-        }
-#endif
+        [FormerlySerializedAs("_idx")]
+        public int idx;
 
-        public int _idx;
-
+        [FormerlySerializedAs("_onlineSceneNames")]
         [HideInInspector]
-        public string[] _onlineSceneNames;
+        public string[] onlineSceneNames;
 
         private void Start()
         {
             UpdateOnlineScene();
         }
-
-
+        
+        private void OnValidate()
+        {
+            var next = onlineScenes.Where(s => s != null).Select(s => s.name).ToArray();
+            if (!next.SequenceEqual(onlineSceneNames))
+            {
+                onlineSceneNames = next;
+                UpdateOnlineScene();
+            }
+        }
 
         public void DebugMenu()
         {
-            using (var h = new GUILayout.HorizontalScope())
+            using (new GUILayout.HorizontalScope())
             {
                 GUILayout.Label("Scene: ");
 
-                var newIdx = GUILayout.SelectionGrid(_idx, _onlineSceneNames, 1);
-                if (newIdx != _idx)
+                var newIdx = GUILayout.SelectionGrid(idx, onlineSceneNames, 1);
+                if (newIdx != idx)
                 {
-                    _idx = newIdx;
+                    idx = newIdx;
                     UpdateOnlineScene();
                 }
             }
@@ -52,10 +53,10 @@ namespace SyncUtil.Example
 
         void UpdateOnlineScene()
         {
-            if (_onlineSceneNames != null && _onlineSceneNames.Any())
+            if (onlineSceneNames != null && onlineSceneNames.Any())
             {
                 var nm = FindObjectOfType<NetworkManager>();
-                nm.onlineScene = _onlineSceneNames[Mathf.Min(_onlineSceneNames.Length - 1, _idx)];
+                nm.onlineScene = onlineSceneNames[Mathf.Min(onlineSceneNames.Length - 1, idx)];
             }
         }
     }

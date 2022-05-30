@@ -22,16 +22,18 @@ namespace SyncUtil
 #if UNITY_EDITOR
         
         [HideInInspector] public bool checkPlayerPrefab = true;
-        
-        public override void Start()
+        private bool _firstValidation = true;
+
+        public override void OnValidate()
         {
-            base.Start();
+            base.OnValidate();
+
+            if (!_firstValidation) return;
+            _firstValidation = false;
 
             if (playerPrefab == null && checkPlayerPrefab)
             {
                 EditorGUIUtility.PingObject(this);
-                
-                Debug.Log(playerPrefab.Equals(null));
                 
                 var response = EditorUtility.DisplayDialogComplex(
                     $"{nameof(SyncNetworkManager)} scene:[{gameObject.scene.name}]",

@@ -17,7 +17,9 @@ namespace SyncUtil
         private readonly SyncDictionary<string, byte[]> _syncDictionary = new();
         private HashSet<string> _triggeredKey;
 
-
+        public IEnumerable<string> SyncedParamNames => _syncDictionary.Keys;
+       
+        
         #region Unity
 
         public void Awake()

@@ -1,0 +1,20 @@
+{
+    "name": "SyncUtilForMirror.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:30817c1a0e6d646d99c048fc403f5979",
+        "GUID:1c7c33eb5480dd24c9e29a8250c1a775",
+        "GUID:0c599517e120c84418b47d9914a37ad6"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

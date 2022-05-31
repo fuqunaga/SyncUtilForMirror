@@ -1,5 +1,5 @@
 {
-    "name": "SyncUtil",
+    "name": "SyncUtil For Mirror",
     "rootNamespace": "",
     "references": [
         "Mirror"

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Mirror;
 using UnityEngine;
@@ -11,8 +12,10 @@ namespace SyncUtil.Example
 {
     public class SceneSelectorForExample : MonoBehaviour
     {
+#if UNITY_EDITOR
         [FormerlySerializedAs("_onlineScenes")]
         public List<SceneAsset> onlineScenes = new();
+#endif
 
         [FormerlySerializedAs("_idx")]
         public int idx;
@@ -26,6 +29,7 @@ namespace SyncUtil.Example
             UpdateOnlineScene();
         }
         
+#if UNITY_EDITOR
         private void OnValidate()
         {
             var next = onlineScenes.Where(s => s != null).Select(s => s.name).ToArray();
@@ -35,6 +39,7 @@ namespace SyncUtil.Example
                 UpdateOnlineScene();
             }
         }
+#endif
 
         public void DebugMenu()
         {

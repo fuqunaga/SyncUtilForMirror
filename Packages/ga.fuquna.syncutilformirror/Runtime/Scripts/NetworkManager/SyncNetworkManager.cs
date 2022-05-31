@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
+using System.Diagnostics;
 using System.Linq;
-using UnityEngine;
 using Mirror;
 using UnityEditor;
+using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace SyncUtil
 {
@@ -16,24 +19,32 @@ namespace SyncUtil
         public bool enableLogClient = true;
 
         
-        
-        #region Unity
-
 #if UNITY_EDITOR
-        
         [HideInInspector] public bool checkPlayerPrefab = true;
-        private bool _firstValidation = true;
 
-        public override void OnValidate()
+
+        public override void Start()
         {
-            base.OnValidate();
+            base.Start();
+            CheckPlayerPrefab();
+        }
 
-            if (!_firstValidation) return;
-            _firstValidation = false;
 
+        void CheckPlayerPrefab()
+        {
+            if (Application.isPlaying) return;
+            
+            StartCoroutine(CheckPlayerPrefabCoroutine());
+        }
+        
+        IEnumerator CheckPlayerPrefabCoroutine()
+        {
             if (playerPrefab == null && checkPlayerPrefab)
             {
-                EditorGUIUtility.PingObject(this);
+                // EditorGUIUtility.PingObject(this);
+                Selection.activeObject = this;
+
+                yield return null;
                 
                 var response = EditorUtility.DisplayDialogComplex(
                     $"{nameof(SyncNetworkManager)} scene:[{gameObject.scene.name}]",
@@ -55,6 +66,8 @@ namespace SyncUtil
                             {
                                 playerPrefab = go;
                                 autoCreatePlayer = true;
+                                
+                                EditorUtility.SetDirty(this);
                                 break;
                             }
                         }
@@ -66,10 +79,7 @@ namespace SyncUtil
                 }
             }
         }
-
 #endif
-
-        #endregion
         
 
         #region Server side

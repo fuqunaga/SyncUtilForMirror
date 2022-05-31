@@ -15,7 +15,7 @@ namespace SyncUtil
 
         
         private readonly SyncDictionary<string, byte[]> _syncDictionary = new();
-        private readonly HashSet<string> _triggeredKey = new();
+        private HashSet<string> _triggeredKey;
 
 
         #region Unity
@@ -28,6 +28,7 @@ namespace SyncUtil
         public override void OnStartClient()
         {
             base.OnStartClient();
+            _triggeredKey = new(_syncDictionary.Keys);
             _syncDictionary.Callback += (_, key, _) =>  _triggeredKey.Add(key);
         }
 
@@ -90,7 +91,7 @@ namespace SyncUtil
 
         public bool TryGetParamTriggered<T>(string key, out T value)
         {
-            if (_triggeredKey.Remove(key))
+            if (_triggeredKey?.Remove(key) ?? false)
             {
                 return TryGetParam(key, out value);
             }

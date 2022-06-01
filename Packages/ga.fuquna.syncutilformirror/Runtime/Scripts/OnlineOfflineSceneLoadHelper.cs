@@ -1,15 +1,13 @@
-﻿using System.IO;
-using System.Linq;
-
+﻿using System.Linq;
+using Mirror;
+using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
-
-using UnityEngine;
-using UnityEngine.Assertions;
-using Mirror;
-using UnityEngine.SceneManagement;
 
 namespace SyncUtil
 {
@@ -17,13 +15,23 @@ namespace SyncUtil
     public class OnlineOfflineSceneLoadHelper : MonoBehaviour
     {
 #if UNITY_EDITOR
-        public bool _autoUnloadOnline = true;
-        public bool _autoUnloadOffline = true;
-        public bool _autoLoadOnline = true;
-        public bool _autoLoadOffline = true;
+        [FormerlySerializedAs("_autoUnloadOnline")]
+        public bool autoUnloadOnline = true;
+
+        [FormerlySerializedAs("_autoUnloadOffline")]
+        public bool autoUnloadOffline = true;
+
+        [FormerlySerializedAs("_autoLoadOnline")]
+        public bool autoLoadOnline = true;
+
+        [FormerlySerializedAs("_autoLoadOffline")]
+        public bool autoLoadOffline = true;
 
         static OnlineOfflineSceneLoadHelper _instance;
-        static OnlineOfflineSceneLoadHelper Instance { get { return (_instance != null) ? _instance : (_instance = FindObjectOfType<OnlineOfflineSceneLoadHelper>()); } }
+
+        static OnlineOfflineSceneLoadHelper Instance => (_instance != null)
+            ? _instance
+            : (_instance = FindObjectOfType<OnlineOfflineSceneLoadHelper>());
 
         [InitializeOnLoadMethod]
         public static void Init()
@@ -44,55 +52,45 @@ namespace SyncUtil
             var nm = FindObjectOfType<NetworkManager>(); // singleton maybe not ready.
             Assert.IsNotNull(nm);
 
-            Enumerable.Range(0, SceneManager.sceneCount)
-            .Select(i => SceneManager.GetSceneAt(i))
-            .Where(s => (_autoUnloadOnline && (s.name == nm.onlineScene)) || (_autoUnloadOffline && (s.name == nm.offlineScene)))
-            .Where(s => s.isLoaded)
-            .ToList()
-            .ForEach(scene =>
+            var scenes = Enumerable.Range(0, SceneManager.sceneCount)
+                .Select(SceneManager.GetSceneAt)
+                .Where(s => (autoUnloadOnline && (s.name == nm.onlineScene)) ||
+                            (autoUnloadOffline && (s.name == nm.offlineScene)))
+                .Where(s => s.isLoaded);
+
+
+            foreach (var scene in scenes)
             {
-                if ( scene.isDirty )
+                if (scene.isDirty)
                 {
                     EditorSceneManager.SaveScene(scene);
                 }
+
                 SceneManager.UnloadSceneAsync(scene);
-            });
+            }
         }
 
         void Start()
         {
             if (Application.isPlaying) return;
-            
-            var sceneNameToPath = EditorBuildSettings
-                .scenes
-                .ToDictionary(s => Path.GetFileNameWithoutExtension(s.path), s => s.path);
-
             var nm = FindObjectOfType<NetworkManager>();
             Assert.IsNotNull(nm);
 
 
-            var sceneNames = new[]
-                {
-                    _autoLoadOnline ? nm.onlineScene : "",
-                    _autoLoadOffline ? nm.offlineScene : ""
-                }
-                .Where(sceneName => !string.IsNullOrEmpty(sceneName));
+            Debug.Log(string.Join("\n", EditorBuildSettings.scenes.Select(s => s.path)));
 
-            foreach (var sceneName in sceneNames)
+            var scenePaths = new[]
+                {
+                    autoLoadOnline ? nm.onlineScene : "",
+                    autoLoadOffline ? nm.offlineScene : ""
+                }
+                .Where(path => !string.IsNullOrEmpty(path));
+
+            foreach (var scenePath in scenePaths)
             {
-                sceneNameToPath.TryGetValue(sceneName, out var path);
-                
-                if (path == null)
-                {
-                    Debug.LogWarning($"{sceneName} is not register to BuildSettings.");
-                }
-                else
-                {
-                    EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);    
-                }
+                EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Additive);
             }
         }
 #endif
     }
-
 }

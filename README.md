@@ -1,26 +1,37 @@
-# SyncUtil
-Sync Utilities For UNET  
+# SyncUtil For Mirror
+Sync Utilities For [Mirror](https://github.com/vis2k/Mirror)  
   
 
-## Install Dependencies
- - [UNet(Multplayer HLAPI)](https://docs.unity3d.com/Manual/UNetUsingHLAPI.html) via PakcageManager.
+## Install Dependency
+ - [Mirror via AssetStore](https://assetstore.unity.com/packages/tools/network/mirror-129321)
 
-## Install
+## Installation
 
-Download a `.unitypackage` file from [Release page](https://github.com/fuqunaga/SyncUtil/releases).
+**Edit > ProjectSettings... > Package Manager > Scoped Registries**
 
-or
+Enter the following and click the Save button.
 
-Using Pacakge Manager:  
-Add following line to the `dependencies` section in the `Packages/manifest.json`.
 ```
-"ga.fuquna.syncutil": "https://github.com/fuqunaga/SyncUtil.git"
+"name": "fuqunaga",
+"url": "https://registry.npmjs.com",
+"scopes": [ "ga.fuquna" ]
 ```
+![](Documentation~/2022-04-12-17-29-38.png)
+
+
+**Window > Package Manager**
+
+Select `MyRegistries` in `Packages:`
+
+![](Documentation~/2022-04-12-17-40-26.png)
+
+Select `SyncUtil For Mirror` and click the Install button
+<!-- ![](Documentation~/2022-04-12-18-04-29.png) -->
 
 ## How to run Examples
 
 1. Add all scene files(*.unity) to `Scenes In Build` of Build Settings.
-1. Open and run SyncUtilExamples scene. this is a example scene launcher.
+1. Open and run SyncUtilExamples scene. this is an example scene launcher.
 
 ## Syncing Parameters
 
@@ -35,11 +46,11 @@ Add following line to the `dependencies` section in the `Packages/manifest.json`
 
 ## Spawner, ServerOrStandAlone
 [![](http://img.youtube.com/vi/_fBlCKlia4A/0.jpg)](https://www.youtube.com/watch?v=_fBlCKlia4A)  
-auto regist spawnable prefab  
+auto register spawnable prefab  
   
 [![](http://img.youtube.com/vi/2qMK0PuPIHY/0.jpg)](https://www.youtube.com/watch?v=2qMK0PuPIHY)  
 Spawner: spawn prefabs  
-ServerOrStandAlone: disable children on client  
+ServerOrStandAlone: disable children on the client  
   
 ## Scene Load Helper
 [![](http://img.youtube.com/vi/RQmx5Dr5_MQ/0.jpg)](https://www.youtube.com/watch?v=RQmx5Dr5_MQ)  
@@ -53,7 +64,5 @@ dynamic delay rendering according to network latency
 [![](http://img.youtube.com/vi/NmddY56bRPk/0.jpg)](https://www.youtube.com/watch?v=NmddY56bRPk)  
 
 
-# Reference
- - https://github.com/fuqunaga/PrefsGUISyncUNET
- - https://github.com/nobnak/SyncTransform  
- - https://github.com/nobnak/Gist/blob/master/PreRendering.cs
+# References
+ - https://github.com/fuqunaga/PrefsGUISyncForMirror

@@ -34,25 +34,17 @@ namespace SyncUtil
         }
 #endif
 
-        private void Start()
+        IEnumerator Start()
         {
-            if (Application.isPlaying)
+            if (Application.isPlaying) 
             {
-                if (SyncNet.IsServer)
+                yield return new WaitUntil(() => NetworkServer.active);
+                
+                foreach(var prefab in prefabs)
                 {
-                    StartCoroutine(DelaySpawn());
+                    var go = Instantiate(prefab.gameObject, transform, true);
+                    SyncNet.Spawn(go);
                 }
-            }
-        }
-
-        IEnumerator DelaySpawn()
-        {
-            yield return new WaitUntil(() => NetworkServer.active);
-
-            foreach(var prefab in prefabs)
-            {
-                var go = Instantiate(prefab.gameObject, transform, true);
-                SyncNet.Spawn(go);
             }
         }
     }

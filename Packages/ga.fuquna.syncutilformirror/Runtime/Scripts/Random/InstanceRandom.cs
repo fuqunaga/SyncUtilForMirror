@@ -11,6 +11,7 @@ namespace SyncUtil
         [SyncVar]
         protected int seed;
 
+        [ServerCallback]
         public void Awake()
         {
             seed = Random.Range(int.MinValue, int.MaxValue);

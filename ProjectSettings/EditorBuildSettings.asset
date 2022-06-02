@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Examples/SyncUtilExamples.unity
+    path: Assets/Scenes/SyncUtilExamples.unity
     guid: d89fce6642b50274a86bfc7e146d9ecb
   - enabled: 1
     path: Assets/Examples/SyncParam/SyncParam.unity

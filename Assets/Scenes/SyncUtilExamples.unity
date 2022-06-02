@@ -540,10 +540,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0ad8df0583e2df428a57f9390a5db9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _autoUnloadOnline: 1
-  _autoUnloadOffline: 1
-  _autoLoadOnline: 0
-  _autoLoadOffline: 0
+  autoUnloadOnline: 1
+  autoUnloadOffline: 1
+  autoLoadOnline: 0
+  autoLoadOffline: 0
 --- !u!4 &1884591838
 Transform:
   m_ObjectHideFlags: 0

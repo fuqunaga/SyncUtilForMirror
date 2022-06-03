@@ -1,5 +1,5 @@
 [
-  plugins: [
+  "plugins": [
     "@semantic-release/changelog",
     "@semantic-release/git"
   ]

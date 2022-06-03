@@ -1,20 +1,20 @@
 {
   "name": "ga.fuquna.syncutilformirror",
+  "version": "1.0.0",
   "displayName": "SyncUtil For Mirror",
-  "version": "0.0.0",
-  "unity": "2021.3",
   "description": "Sync Utilities For Mirror",
+  "unity": "2021.3",
+  "documentationUrl": "https://github.com/fuqunaga/SyncUtilForMirror#readme",
+  "license": "MIT",
   "keywords": [
     "unity",
     "sync",
     "mirror"
   ],
-  "category": "Network",
   "author": {
     "name": "fuqunaga",
     "email": "fukhid@gmail.com",
     "url": "https://fuquna.ga"
   },
-  "repository": "github:fuqunaga/SyncUtilForMirror",
-  "license": "MIT"
+  "repository": "github:fuqunaga/SyncUtilForMirror"
 }

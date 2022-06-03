@@ -20,7 +20,9 @@ jobs:
       uses: cycjimmy/semantic-release-action@v3
       with:
         dry_run: true
-        working_directory: ${{ matrix.pkg_root }}
+        working_directory: ${{ matrix.pkg_root }}  
+        extra_plugins: |
+            @semantic-release/changelog@3.0.0
+            @semantic-release/git
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

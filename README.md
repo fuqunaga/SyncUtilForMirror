@@ -1,11 +1,13 @@
 # SyncUtil For Mirror
 Sync Utilities For [Mirror](https://github.com/vis2k/Mirror)  
   
+# Installation
 
 ## Install Dependency
  - [Mirror via AssetStore](https://assetstore.unity.com/packages/tools/network/mirror-129321)
 
-## Installation
+
+## Install package via scoped registory
 
 **Edit > ProjectSettings... > Package Manager > Scoped Registries**
 
@@ -28,10 +30,10 @@ Select `MyRegistries` in `Packages:`
 Select `SyncUtil For Mirror` and click the Install button
 <!-- ![](Documentation~/2022-04-12-18-04-29.png) -->
 
-## How to run Examples
+# How to run Examples
 
 1. Add all scene files(*.unity) to `Scenes In Build` of Build Settings.
-1. Open and run SyncUtilExamples scene. this is an example scene launcher.
+1. Open and run *SyncUtilExamples.unity* scene. this is an example scene launcher.
 
 ## Syncing Parameters
 

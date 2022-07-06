@@ -333,6 +333,7 @@ MonoBehaviour:
   - {fileID: 4821599465430878823, guid: ac8ddd79c5e3dda49b018efa57e9ab5a, type: 3}
   - {fileID: 568494151280685619, guid: 83e0a5bdf6020bc4497d1f429dc1c895, type: 3}
   - {fileID: 1506407616398718, guid: fb059f27c16c79545a74652269b3d2ff, type: 3}
+  - {fileID: 0}
   enableLogServer: 1
   enableLogClient: 1
   checkPlayerPrefab: 1
@@ -408,6 +409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onlineScenes:
   - {fileID: 102900000, guid: e6b021ddd1437804d884f68c8f1ff0f6, type: 3}
+  - {fileID: 102900000, guid: 91d5ddbfb7977a1488bc26a7f58eb6d3, type: 3}
   - {fileID: 102900000, guid: bb61093fc25965247973d8306acc5f7b, type: 3}
   - {fileID: 102900000, guid: 2d6f7bda8f5661545bd19ad02e978a1e, type: 3}
   - {fileID: 102900000, guid: 32e288e16873fec4cb5ec41a0123946f, type: 3}
@@ -418,6 +420,7 @@ MonoBehaviour:
   idx: 0
   onlineSceneNames:
   - SyncParam
+  - SyncParamPerformanceTest
   - SyncBehaviourEnable,SyncGameObjectActive
   - Spawner,ServerOrStandAlone
   - InstanceRandom

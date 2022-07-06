@@ -7,17 +7,25 @@ namespace SyncUtil.Example
     {
         public Vector2 windowPosition;
 
-        private void Start()
+        private Element _window;
+        
+        private void OnEnable()
         {
-            var window = UI.Window(
-                UI.Label(nameof(SyncParamExample)),
+            _window = UI.Window(
+                UI.Label(gameObject.scene.name),
                 UI.Page(
+                    UI.FieldIfObjectFound<SyncParamPerformanceTest>(),
                     UI.FieldIfObjectFound<SyncParamExample>()
                     )
             ).SetPosition(windowPosition).Open();
 
             var root = FindObjectOfType<RosettaUIRoot>();
-            root.Build(window);
+            root.Build(_window);
+        }
+
+        private void OnDisable()
+        {
+            _window.Destroy();
         }
     }
 }

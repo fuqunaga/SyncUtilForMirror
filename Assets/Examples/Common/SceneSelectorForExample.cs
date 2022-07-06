@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using RosettaUI;
 using UnityEngine;
 using UnityEngine.Serialization;
 #if UNITY_EDITOR
@@ -9,10 +10,9 @@ using UnityEditor;
 
 namespace SyncUtil.Example
 {
-    public class SceneSelectorForExample : MonoBehaviour
+    public class SceneSelectorForExample : MonoBehaviour, IElementCreator
     {
 #if UNITY_EDITOR
-        [FormerlySerializedAs("_onlineScenes")]
         public List<SceneAsset> onlineScenes = new();
 #endif
 
@@ -62,6 +62,14 @@ namespace SyncUtil.Example
                 var nm = FindObjectOfType<NetworkManager>();
                 nm.onlineScene = onlineSceneNames[Mathf.Min(onlineSceneNames.Length - 1, idx)];
             }
+        }
+
+        public Element CreateElement(LabelElement label)
+        {
+            return UI.Dropdown(label,
+                () => idx,
+                onlineSceneNames
+            ).RegisterValueChangeCallback(UpdateOnlineScene);
         }
     }
 }

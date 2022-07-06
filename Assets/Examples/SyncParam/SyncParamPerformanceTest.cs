@@ -1,62 +1,47 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using RosettaUI;
 using UnityEngine;
 
 namespace SyncUtil.Example
 {
-    public class SyncParamPerformanceTest : NetworkBehaviour
+    public class SyncParamPerformanceTest : NetworkBehaviour, IElementCreator
     {
         public GameObject prefab;
         public int objectCount = 100;
         private readonly List<SyncParamExample> _exampleUnits = new();
-        private int _showGuiUnitIdx;
+        private int _displayObjectIdx;
         
-        private void OnEnable()
+        public Element CreateElement(LabelElement label)
+        {
+            return UI.Column(
+                UI.Field(() => objectCount),
+                UI.Button("Spawn", GenerateObjectAndDisplayFirstObject),
+                UI.Space().SetHeight(20f),
+                UI.DynamicElementOnStatusChanged(
+                    () => _exampleUnits.Count(),
+                    count => UI.Slider("Display Object Index", 
+                        readValue: () => _displayObjectIdx,
+                        writeValue: ChangeShowGuiUnitIndex,
+                        max: count-1)
+                ),
+                UI.Space().SetHeight(20f)
+            );
+        }
+
+        void GenerateObjectAndDisplayFirstObject()
         {
             if (SyncNet.IsServer)
             {
-                DebugMenuForExample.Instance.onGUI += DebugMenu;
-            }
-        }
-
-        private void OnDisable()
-        {
-            if (SyncNet.IsServer)
-            {
-                var menu = DebugMenuForExample.Instance;
-                if (menu != null)
-                {
-                    menu.onGUI -= DebugMenu;
-                }
+                GenerateObjects(objectCount);
+                ChangeShowGuiUnitIndex(0);
             }
         }
         
-        public void DebugMenu()
-        {
-            GUILayout.Label(nameof(SyncParamPerformanceTest));
-            GUIUtil.Indent(() =>
-            {
-                objectCount = GUIUtil.Field(objectCount, nameof(objectCount));
-                if (GUILayout.Button("Spawn"))
-                {
-                    SpawnObjects(objectCount);
-                    ChangeShowGuiUnitIndex(0);
-                }
-
-                if (_exampleUnits.Any())
-                {
-                    var idx = GUIUtil.Slider(_showGuiUnitIdx, 0, _exampleUnits.Count-1, nameof(_showGuiUnitIdx));
-                    if (idx != _showGuiUnitIdx)
-                    {
-                        ChangeShowGuiUnitIndex(idx);
-                    }
-                }
-            });
-        }
 
         [ClientRpc]
-        private void SpawnObjects(int count)
+        private void GenerateObjects(int count)
         {
             foreach (var unit in _exampleUnits)
             {
@@ -79,13 +64,13 @@ namespace SyncUtil.Example
         [ClientRpc]
         void ChangeShowGuiUnitIndex(int index)
         {
-            if (_showGuiUnitIdx < _exampleUnits.Count)
+            if (_displayObjectIdx < _exampleUnits.Count)
             {
-                _exampleUnits[_showGuiUnitIdx].enabled = false;
+                _exampleUnits[_displayObjectIdx].enabled = false;
             }
 
             _exampleUnits[index].enabled = true;
-            _showGuiUnitIdx = index;
+            _displayObjectIdx = index;
         }
     }
 }

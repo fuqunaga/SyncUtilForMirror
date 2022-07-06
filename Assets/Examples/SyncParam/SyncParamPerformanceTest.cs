@@ -10,7 +10,7 @@ namespace SyncUtil.Example
         public GameObject prefab;
         public int objectCount = 100;
         private readonly List<SyncParamExample> _exampleUnits = new();
-        private int showGuiUnitIdx;
+        private int _showGuiUnitIdx;
         
         private void OnEnable()
         {
@@ -46,8 +46,8 @@ namespace SyncUtil.Example
 
                 if (_exampleUnits.Any())
                 {
-                    var idx = GUIUtil.Slider(showGuiUnitIdx, 0, _exampleUnits.Count-1, nameof(showGuiUnitIdx));
-                    if (idx != showGuiUnitIdx)
+                    var idx = GUIUtil.Slider(_showGuiUnitIdx, 0, _exampleUnits.Count-1, nameof(_showGuiUnitIdx));
+                    if (idx != _showGuiUnitIdx)
                     {
                         ChangeShowGuiUnitIndex(idx);
                     }
@@ -79,13 +79,13 @@ namespace SyncUtil.Example
         [ClientRpc]
         void ChangeShowGuiUnitIndex(int index)
         {
-            if (showGuiUnitIdx < _exampleUnits.Count)
+            if (_showGuiUnitIdx < _exampleUnits.Count)
             {
-                _exampleUnits[showGuiUnitIdx].enabled = false;
+                _exampleUnits[_showGuiUnitIdx].enabled = false;
             }
 
             _exampleUnits[index].enabled = true;
-            showGuiUnitIdx = index;
+            _showGuiUnitIdx = index;
         }
     }
 }

@@ -22,38 +22,37 @@ namespace SyncUtil
         
         #endregion
 
-        public virtual string NetworkAddress { get; } = "localhost";
-        public virtual int NetworkPort { get; } = 7777;
-        public virtual BootType Boot { get; } = BootType.Manual;
-        public virtual bool AutoConnect { get; } = true;
-        public virtual float AutoConnectInterval { get; } = 10f;
+        public virtual string NetworkAddress => "localhost";
+        public virtual int NetworkPort => 7777;
+        public virtual BootType Boot => BootType.Manual;
+        public virtual bool AutoConnect => true;
+        public virtual float AutoConnectInterval => 10f;
 
 
-        public ClientHeartBeat clientHeartBeat;
-        
-        SyncNetworkManager _networkManager;
+        public bool showManualBootMenu = true;
+       
+        protected SyncNetworkManager networkManager;
         private KcpTransport _kcp;
         
 
         public virtual void Start()
         {
-            _networkManager = GetComponent<SyncNetworkManager>();
+            networkManager = GetComponent<SyncNetworkManager>();
             _kcp = GetComponent<KcpTransport>();
-            clientHeartBeat ??= GetComponent<ClientHeartBeat>();
 
             if (Boot != BootType.Manual) StartNetwork(Boot);
         }
 
-        void StartNetwork(BootType bootType)
+        public void StartNetwork(BootType bootType)
         {
             Assert.IsFalse(bootType == BootType.Manual);
             StopAllCoroutines();
 
             IEnumerator routine = bootType switch
             {
-                BootType.Host => StartConnectLoop(() => NetworkClient.active, () => _networkManager.StartHost()),
+                BootType.Host => StartConnectLoop(() => NetworkClient.active, () => networkManager.StartHost()),
                 BootType.Client => StartConnectLoop(() => NetworkClient.active, StartClient),
-                BootType.Server => StartConnectLoop(() => NetworkServer.active, () => _networkManager.StartServer()),
+                BootType.Server => StartConnectLoop(() => NetworkServer.active, () => networkManager.StartServer()),
                 _ => null
             };
 
@@ -62,15 +61,15 @@ namespace SyncUtil
 
         void StartClient()
         {
-            _networkManager.onClientError -= OnClientError;
-            _networkManager.onClientError += OnClientError;
+            networkManager.onClientError -= OnClientError;
+            networkManager.onClientError += OnClientError;
 
-            _networkManager.StartClient();
+            networkManager.StartClient();
         }
 
         void OnClientError(Exception _)
         {
-            _networkManager.StopClient();
+            networkManager.StopClient();
         }
 
 
@@ -89,56 +88,50 @@ namespace SyncUtil
                 yield return new WaitWhile(isActiveFunc);
                 yield return new WaitForSeconds(AutoConnectInterval);
             }
+            // ReSharper disable once IteratorNeverReturns
         }
 
         public virtual void OnGUI()
         {
-            if (_networkManager != null && !_networkManager.isNetworkActive)
+            if (showManualBootMenu && networkManager != null && !networkManager.isNetworkActive)
             {
-                GUILayout.Label("SyncUtil Manual Boot");
-
-                OnGUINetworkSetting();
-
-#if false
-                var mgr = _networkManager;
-
-                mgr.useSimulator = GUILayout.Toggle(mgr.useSimulator, "Use Network Simulator");
-                if (mgr.useSimulator)
-                {
-                    mgr.simulatedLatency = GUIUtil.Slider(mgr.simulatedLatency, 1, 400, "Latency[msec]");
-                    mgr.packetLossPercentage = GUIUtil.Slider(mgr.packetLossPercentage, 0f, 20f, "PacketLoss[%]");
-                }
-                
-                GUILayout.Space(16f);
-#endif
-
-                GUILayout.Label("Boot Type (Manual. once only):");
-                if (GUILayout.Button("Host (client & server)"))
-                {
-                    OnNetworkStartByManual();
-                    StartNetwork(BootType.Host);
-                }
-
-                if (GUILayout.Button("Client"))
-                {
-                    OnNetworkStartByManual();
-                    StartNetwork(BootType.Client);
-                }
-
-                if (GUILayout.Button("Server"))
-                {
-                    OnNetworkStartByManual();
-                    StartNetwork(BootType.Server);
-                }
+                ManualBootGUI();
             }
         }
+
+        public void ManualBootGUI()
+        {
+            GUILayout.Label("SyncUtil Manual Boot");
+
+            OnGUINetworkSetting();
+
+            GUILayout.Label("Boot Type (Manual. once only):");
+            if (GUILayout.Button("Host (client & server)"))
+            {
+                OnNetworkStartByManual();
+                StartNetwork(BootType.Host);
+            }
+
+            if (GUILayout.Button("Client"))
+            {
+                OnNetworkStartByManual();
+                StartNetwork(BootType.Client);
+            }
+
+            if (GUILayout.Button("Server"))
+            {
+                OnNetworkStartByManual();
+                StartNetwork(BootType.Server);
+            }
+        }
+        
 
         protected virtual void OnGUINetworkSetting() { }
         protected virtual void OnNetworkStartByManual() { }
 
         protected void UpdateManager()
         {
-            _networkManager.networkAddress = NetworkAddress;
+            networkManager.networkAddress = NetworkAddress;
             UpdateNetworkPort(NetworkPort);
         }
 
@@ -149,55 +142,5 @@ namespace SyncUtil
                 _kcp.Port = (ushort)port;
             }
         }
-
-        GUIUtil.Fold _fold;
-        public void DebugMenu()
-        {
-            using (new GUILayout.HorizontalScope())
-            {
-                GUILayout.Label("NetworkManagerController");
-                GUILayout.Label(SyncNet.IsHost ? "Host" : (SyncNet.IsServer ? "Server" : (SyncNet.IsClient ? "Client" : "StandAlone")));
-                if (SyncNet.IsActive)
-                {
-                    if (GUILayout.Button("Disconnect"))
-                    {
-                        NetworkManager.singleton.StopHost();
-                    }
-                }
-            }
-
-            GUIUtil.Indent(() =>
-            {
-
-                DebugMenuInternal();
-
-                if (_fold == null)
-                {
-                    _fold = new GUIUtil.Fold("Time Debug", () =>
-                    {
-                        GUILayout.Label($"{nameof(SyncNet)}.{nameof(SyncNet.Time)}: {SyncNet.Time:0.000}");
-                        GUILayout.Label($"{nameof(SyncNet)}.{nameof(SyncNet.NetworkTime)}: {SyncNet.NetworkTime:0.000}");
-
-
-                        if (SyncNet.IsServer && clientHeartBeat != null)
-                        {
-                            foreach (var connectionId in NetworkServer.connections.Keys)
-                            {
-                                var info = clientHeartBeat.GetHeartBeatInfo(connectionId);
-                                if (info != null)
-                                {
-                                    GUILayout.Label($"ConnId: {connectionId}  {info}");
-                                }
-                            }
-                        }
-                    });
-                }
-
-                _fold.OnGUI();
-            });
-        }
-
-
-        protected virtual void DebugMenuInternal() { }
     }
 }

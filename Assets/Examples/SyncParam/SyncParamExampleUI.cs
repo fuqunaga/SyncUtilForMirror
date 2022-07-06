@@ -5,7 +5,6 @@ namespace SyncUtil.Example
 {
     public class SyncParamExampleUI : MonoBehaviour
     {
-        public RosettaUIRoot root;
         public Vector2 windowPosition;
 
         private void Start()
@@ -17,6 +16,7 @@ namespace SyncUtil.Example
                     )
             ).SetPosition(windowPosition).Open();
 
+            var root = FindObjectOfType<RosettaUIRoot>();
             root.Build(window);
         }
     }

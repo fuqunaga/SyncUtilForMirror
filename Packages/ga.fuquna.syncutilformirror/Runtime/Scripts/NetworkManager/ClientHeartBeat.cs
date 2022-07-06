@@ -6,7 +6,6 @@ using Mirror;
 
 namespace SyncUtil
 {
-
     /// <summary>
     /// Information sent from the client to the server every frame
     /// </summary>

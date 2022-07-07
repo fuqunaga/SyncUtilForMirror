@@ -11,7 +11,7 @@ namespace SyncUtil.Example
         public GameObject prefab;
         public int objectCount = 100;
         private readonly List<SyncParamExample> _exampleUnits = new();
-        private int _displayObjectIdx;
+        private int _displayItemIdx;
         
         public Element CreateElement(LabelElement label)
         {
@@ -21,12 +21,21 @@ namespace SyncUtil.Example
                 UI.Space().SetHeight(20f),
                 UI.DynamicElementOnStatusChanged(
                     () => _exampleUnits.Count(),
-                    count => UI.Slider("Display Object Index", 
-                        readValue: () => _displayObjectIdx,
+                    count => UI.Slider("Display Item Index", 
+                        readValue: () => _displayItemIdx,
                         writeValue: ChangeShowGuiUnitIndex,
                         max: count-1)
                 ),
-                UI.Space().SetHeight(20f)
+                UI.Space().SetHeight(20f),
+                UI.DynamicElementIf(
+                    () => 0 <= _displayItemIdx && _displayItemIdx < _exampleUnits.Count,
+                    () => UI.Column(
+                        UI.Label(() => $"Item {_displayItemIdx}"),
+                        UI.Indent(
+                            UI.Field(null, () => _exampleUnits[_displayItemIdx])
+                        )
+                    )
+                )
             );
         }
 
@@ -64,13 +73,7 @@ namespace SyncUtil.Example
         [ClientRpc]
         void ChangeShowGuiUnitIndex(int index)
         {
-            if (_displayObjectIdx < _exampleUnits.Count)
-            {
-                _exampleUnits[_displayObjectIdx].enabled = false;
-            }
-
-            _exampleUnits[index].enabled = true;
-            _displayObjectIdx = index;
+            _displayItemIdx = index;
         }
     }
 }

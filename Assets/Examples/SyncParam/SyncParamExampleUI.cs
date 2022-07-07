@@ -1,31 +1,24 @@
-using RosettaUI;
-using UnityEngine;
+﻿using RosettaUI;
 
 namespace SyncUtil.Example
 {
-    public class SyncParamExampleUI : MonoBehaviour
+    public class SyncParamExampleUI : ExampleUIBase
     {
-        public Vector2 windowPosition;
-
-        private Element _window;
-        
-        private void OnEnable()
+        public SyncParamExample syncParamExample;
+        protected override Element CreateElement()
         {
-            _window = UI.Window(
-                UI.Label(gameObject.scene.name),
-                UI.Page(
-                    UI.FieldIfObjectFound<SyncParamPerformanceTest>(),
-                    UI.FieldIfObjectFound<SyncParamExample>()
+            return UI.Page(
+                UI.Box(
+                    UI.Label(@"Sync non-NetworkBehaviour parameters.
+
+1. Put SyncParamManager at the scene.
+2. Attach SyncParam component to a GameObject.
+3. Set target parameters at the SyncParam on the Inspector.
+"
                     )
-            ).SetPosition(windowPosition).Open();
-
-            var root = FindObjectOfType<RosettaUIRoot>();
-            root.Build(_window);
-        }
-
-        private void OnDisable()
-        {
-            _window.Destroy();
+                    ),
+                UI.Field(null, () => syncParamExample)
+            );
         }
     }
 }

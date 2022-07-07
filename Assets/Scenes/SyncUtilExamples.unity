@@ -317,7 +317,7 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 0
   serverTickRate: 30
-  offlineScene: 
+  offlineScene: Assets/Scenes/SyncUtilExamples.unity
   onlineScene: Assets/Examples/SyncParam/SyncParam.unity
   transport: {fileID: 645329946}
   networkAddress: localhost

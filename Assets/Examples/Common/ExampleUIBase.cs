@@ -1,3 +1,4 @@
+using System.Linq;
 using RosettaUI;
 using UnityEngine;
 
@@ -31,6 +32,17 @@ namespace SyncUtil.Example
         protected virtual Element CreateElement()
         {
             return null;
+        }
+
+        protected static Element ExampleTemplate(string description, params Element[] elements)
+        {
+            return UI.Page(
+                elements.Prepend(
+                    UI.Box(
+                        UI.Label(description)
+                    )
+                )
+            );
         }
     }
 }

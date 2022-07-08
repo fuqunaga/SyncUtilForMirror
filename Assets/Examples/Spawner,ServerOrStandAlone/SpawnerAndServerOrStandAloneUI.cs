@@ -7,7 +7,8 @@ namespace SyncUtil.Example
         protected override Element CreateElement()
         {
             return ExampleTemplate(
-                    @"<b>Spawner</b>
+                    @"
+<b>Spawner</b>
 
 Register prefabs to NetworkManager's spawn prefabs.
 Spawn prefabs when the server is started.
@@ -15,7 +16,8 @@ Spawn prefabs when the server is started.
 
 <b>ServerOrStandAlone</b>
 
-Deactivate child GameObjects when server or standalone."
+Deactivate child GameObjects when server or standalone.
+"
             );
         }
     }

@@ -10,7 +10,8 @@ namespace SyncUtil.Example
         protected override Element CreateElement()
         {
             return ExampleTemplate(
-                    @"Sync Behaviour.enabled, GameObject.active.
+                    @"
+Sync Behaviour.enabled, GameObject.active.
 
 1. Put SyncParamManager at the scene.
 2. Attach SyncBehaviourEnabled/SyncGameObjectActive component to a GameObject.

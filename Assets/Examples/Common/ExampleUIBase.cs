@@ -39,7 +39,9 @@ namespace SyncUtil.Example
             return UI.Page(
                 elements.Prepend(
                     UI.Box(
-                        UI.Label(description)
+                        UI.Page(
+                            UI.Label(description)
+                        )
                     )
                 )
             );

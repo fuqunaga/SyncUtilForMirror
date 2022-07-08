@@ -8,7 +8,8 @@ namespace SyncUtil.Example
         protected override Element CreateElement()
         {
             return ExampleTemplate(
-                    @"Sync non-NetworkBehaviour parameters.
+                    @"
+Sync non-NetworkBehaviour parameters.
 
 1. Put SyncParamManager at the scene.
 2. Attach SyncParam component to a GameObject.

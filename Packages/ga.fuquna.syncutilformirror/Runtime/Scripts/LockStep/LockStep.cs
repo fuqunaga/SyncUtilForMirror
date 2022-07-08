@@ -149,13 +149,10 @@ namespace SyncUtil
                 {
                     var initData = new InitData() { sent = true };
 
-                    if (getInitDataFunc != null)
+                    var initMsg = getInitDataFunc?.Invoke();
+                    if (initMsg != null)
                     {
-                        var initMsg = getInitDataFunc();
-                        if (initMsg != null)
-                        {
-                            initData.bytes = initMsg.ToBytes();
-                        }
+                        initData.bytes = initMsg.ToBytes();
                     }
                     _initData = initData;
                     _sentInit = true;
@@ -203,7 +200,9 @@ namespace SyncUtil
                                 // InitData is NOT reach to this client yet
                                 return;
                             }
-                            _initialized = initFunc(new NetworkReader(_initData.bytes));
+
+                            using var reader = NetworkReaderPool.Get(_initData.bytes);
+                            _initialized = initFunc(reader);
                         }
                         else
                         {
@@ -218,8 +217,9 @@ namespace SyncUtil
                         {
                             var data = _dataList[idx];
                             Assert.IsTrue(StepCountClient == data.stepCount, $"stepCountClient[{StepCountClient}] data.stepCount[{data.stepCount}]");
-                            
-                            var isStepEnable = stepFunc(data.stepCount, new NetworkReader(data.bytes));
+
+                            using var reader = NetworkReaderPool.Get(data.bytes);
+                            var isStepEnable = stepFunc(data.stepCount, reader);
                             if (!isStepEnable) break;
 
                             _consistencyChecker.Update(StepCountClient, getHashFunc);

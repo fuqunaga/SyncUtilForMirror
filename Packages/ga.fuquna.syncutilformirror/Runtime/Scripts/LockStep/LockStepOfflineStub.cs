@@ -36,18 +36,15 @@ namespace SyncUtil
                     if ( getInitDataFunc !=null)
                     {
                         var initMsg = getInitDataFunc();
-                        var w = new NetworkWriter();
-                        w.Write(initMsg);
-                        initFunc(new NetworkReader(w.ToArraySegment()));
+                        using var initReader = NetworkReaderPool.Get(initMsg.ToBytes());
+                        initFunc(initReader);
                     }
 
                 }
 
                 var msg = getDataFunc();
-
-                var writer = new NetworkWriter();
-                writer.Write(msg);
-                if (stepFunc(stepCount, new NetworkReader(writer.ToArraySegment())))
+                using var reader = NetworkReaderPool.Get(msg.ToBytes());
+                if (stepFunc(stepCount, reader))
                 {
                     stepCount++;
                 }

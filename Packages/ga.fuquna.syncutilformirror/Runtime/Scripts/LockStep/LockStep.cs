@@ -76,7 +76,7 @@ namespace SyncUtil
         bool _sentInit;
         bool _initialized;
 
-        private ConsistencyChecker _consistencyChecker = new();
+        private readonly ConsistencyChecker _consistencyChecker = new();
 
 
         #region Unity
@@ -220,11 +220,10 @@ namespace SyncUtil
                             Assert.IsTrue(StepCountClient == data.stepCount, $"stepCountClient[{StepCountClient}] data.stepCount[{data.stepCount}]");
                             
                             var isStepEnable = stepFunc(data.stepCount, new NetworkReader(data.bytes));
-                            if (isStepEnable)
-                            {
-                                _consistencyChecker.Update(StepCountClient, getHashFunc);
-                                ++StepCountClient;
-                            }
+                            if (!isStepEnable) break;
+
+                            _consistencyChecker.Update(StepCountClient, getHashFunc);
+                            StepCountClient++;
                         }
                     }
                 }

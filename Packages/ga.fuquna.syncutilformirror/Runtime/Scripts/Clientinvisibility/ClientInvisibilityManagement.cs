@@ -7,17 +7,17 @@ namespace SyncUtil
     /// <summary>
     /// Client 単位で可視判定.
     /// </summary>
-    [RequireComponent(typeof(ClientNameManagerBase))]
+    [RequireComponent(typeof(ClientNameBase))]
     public class ClientInvisibilityManagement : InterestManagement
     {
-        private ClientNameManagerBase _clientNameManagerBase;
+        private ClientNameBase _clientNameBase;
 
-        protected ClientNameManagerBase ClientNameManager => _clientNameManagerBase ??= GetComponent<ClientNameManagerBase>();
+        protected ClientNameBase ClientName => _clientNameBase ??= GetComponent<ClientNameBase>();
 
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver) => true;
         public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnectionToClient> newObservers)
         {
-            var manager = ClientNameManager;
+            var manager = ClientName;
             var invisibleClientNameList = identity.GetComponent<ClientInvisibility>()?.invisibleClientNameList;
 
             foreach (var conn in NetworkServer.connections.Values)

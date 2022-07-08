@@ -9,14 +9,14 @@ namespace SyncUtil
     /// Client側からの自己申告性
     /// 区別するにはClientごとにNameの値を変える必要があるので注意
     /// </summary>
-    public class ClientNameManager : ClientNameManagerBase
+    public class ClientName : ClientNameBase
     {
         public string myName;
         protected override string Name => myName;
     }
 
 
-    public abstract class ClientNameManagerBase : MonoBehaviour
+    public abstract class ClientNameBase : MonoBehaviour
     {
         #region Type Define
 
@@ -30,9 +30,9 @@ namespace SyncUtil
 
         #region Static
 
-        static ClientNameManagerBase _instance;
+        static ClientNameBase _instance;
 
-        public static ClientNameManagerBase Instance => _instance != null ? _instance : _instance = FindObjectOfType<ClientNameManagerBase>();
+        public static ClientNameBase Instance => _instance != null ? _instance : _instance = FindObjectOfType<ClientNameBase>();
 
         #endregion
 

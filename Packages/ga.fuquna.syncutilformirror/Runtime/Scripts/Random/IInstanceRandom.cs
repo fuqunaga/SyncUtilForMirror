@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using Mirror;
-
-namespace SyncUtil
+﻿namespace SyncUtil
 {
     public interface IInstanceRandom
     {

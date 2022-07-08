@@ -7,28 +7,24 @@ using UnityEngine.Serialization;
 namespace SyncUtil
 {
     /// <summary>
-    /// SyncNet.Time, SyncNet.NetworkTime を直線の位置で表し、複数PCでの差異を視覚的に比べる表示
+    /// SyncNet.Time, SyncNet.NetworkTime を直線の位置で表し、クライアント間の差異を視覚的に比べる表示
     /// </summary>
     [RequireComponent(typeof(Camera))]
     public class LatencyCheckerLine : MonoBehaviour
     {
-        [FormerlySerializedAs("_timeColor")]
-        public Color timeColor = Color.white;
+        #region Type Define
         
-        [FormerlySerializedAs("_networkTimeColor")] 
-        public Color networkTimeColor = Color.gray;
-
         public enum Mode
         {
             Horizontal,
             Vertical
         }
-
+        
         public class CameraData
         {
             public Camera camera;
-            public bool enable;
-            public Mode mode;
+            public bool enable = true;
+            public Mode mode = default;
 
             private DebugDraw _debugDraw;
 
@@ -36,15 +32,27 @@ namespace SyncUtil
             public DebugDraw DebugDraw => _debugDraw ??= (camera.GetComponent<DebugDraw>() ?? camera.gameObject.AddComponent<DebugDraw>());
         }
 
+        #endregion
+        
+        
+
+        [Range(0f, 20f)]
+        public float width = 5f;
+        [Range(0.1f, 10f)]
+        public float timeStride = 5f;
+        
+        public bool timeEnable = true;
+        public Color timeColor = Color.white;
+
+        public bool networkTimeEnable = true;
+        public Color networkTimeColor = Color.gray;
+        
+
         public List<CameraData> DataList { get; } = new();
-
-        float _width = 5f;
-        bool _networkTimeEnable = true;
-        float _networkTimeStride = 5f;
-
-        bool _timeEnable = true;
-        float _timeStride = 5f;
-
+        
+        
+        #region Unity
+        
         protected virtual void Start()
         {
             DataList.Add(new CameraData() { camera = GetComponent<Camera>() });
@@ -54,10 +62,13 @@ namespace SyncUtil
         {
             foreach(var data in DataList.Where(data => data.enable))
             {
-                if (_timeEnable) DrawLine(data, SyncNet.Time, _timeStride, timeColor);
-                if (_networkTimeEnable) DrawLine(data, (float)SyncNet.NetworkTime, _networkTimeStride, networkTimeColor);
+                if (timeEnable) DrawLine(data, SyncNet.Time, timeStride, timeColor);
+                if (networkTimeEnable) DrawLine(data, (float)SyncNet.NetworkTime, timeStride, networkTimeColor);
             }
         }
+        
+        #endregion
+        
 
         protected void DrawLine(CameraData data, float val, float stride, Color col)
         {
@@ -70,58 +81,8 @@ namespace SyncUtil
 
                 lb[idx] = rt[idx] = rate;
 
-                data.DebugDraw.LineOn2D(lb, rt, col, _width);
+                data.DebugDraw.LineOn2D(lb, rt, col, width);
             }
         }
-
-
-        
-        
-        public virtual void DebugMenu()
-        {
-            enabled = GUILayout.Toggle(enabled, "LatencyCheckerLine");
-
-            if (enabled)
-            {
-                GUIUtil.Indent(() =>
-                {
-                    _width = GUIUtil.Slider(_width, 0f, 20f, "width");
-
-                    using (new GUILayout.HorizontalScope())
-                    {
-                        _timeEnable = GUILayout.Toggle(_timeEnable, "Time");
-                        using(new GUIUtil.ColorScope(timeColor))
-                        {
-                            GUILayout.Label("■");
-                        }
-                        _timeStride = GUIUtil.Slider(_timeStride, 0.1f, 10f, "Stride");
-                    }
-
-                    using (new GUILayout.HorizontalScope())
-                    {
-                        _networkTimeEnable = GUILayout.Toggle(_networkTimeEnable, "NetworkTime");
-                        using(new GUIUtil.ColorScope(networkTimeColor))
-                        {
-                            GUILayout.Label("■");
-                        }
-
-                        _networkTimeStride = GUIUtil.Slider(_networkTimeStride, 0.1f, 10f, "Stride");
-                    }
-
-                    DebugMenuInternal();
-
-                    foreach(var data in DataList)
-                    {
-                        using (new GUILayout.HorizontalScope())
-                        {
-                            data.enable = GUILayout.Toggle(data.enable, data.Name);
-                            data.mode = GUIUtil.Field(data.mode);
-                        }
-                    }
-                });
-            }
-        }
-
-        protected virtual void DebugMenuInternal() { }
     }
 }

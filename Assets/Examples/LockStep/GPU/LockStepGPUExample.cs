@@ -1,8 +1,6 @@
 ﻿using Mirror;
 using UnityEngine;
 
-#pragma warning disable 0618
-
 namespace SyncUtil.Example
 {
     [RequireComponent(typeof(LockStep), typeof(LifeGame))]
@@ -12,13 +10,12 @@ namespace SyncUtil.Example
         {
             public LifeGame.StepData data;
         }
-
-        public float _resolutionScale = 0.5f;
+        
+        public float resolutionScale = 0.5f;
         LifeGame _lifeGame;
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             _lifeGame = GetComponent<LifeGame>();
             LifeGameUpdater.Reset();
 
@@ -29,22 +26,19 @@ namespace SyncUtil.Example
         void InitLockStepCallbacks()
         {
             var lockStep = GetComponent<LockStep>();
-            lockStep.GetDataFunc = () =>
+            lockStep.GetDataFunc = () => new Msg()
             {
-                return new Msg()
-                {
-                    data = LifeGameUpdater.CreateStepData(_resolutionScale)
-                };
+                data = LifeGameUpdater.CreateStepData(resolutionScale)
             };
 
             lockStep.StepFunc = (stepCount, reader) =>
             {
-                if (_stepEnable)
+                if (stepEnable)
                 {
                     var msg = reader.Read<Msg>();
                     _lifeGame.Step(msg.data);
                 }
-                return _stepEnable;
+                return stepEnable;
             };
 
             lockStep.OnMissingCatchUpServer = () =>

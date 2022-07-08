@@ -10,16 +10,15 @@ namespace SyncUtil.Example
         {
             public Vector3 force;
         }
-
-        GameObject _sphere;
-        Vector3 _velocity;
+        
         public float damping = 0.9f;
         public float forceMax = 0.1f;
 
-        protected override void Start()
-        {
-            base.Start();
+        GameObject _sphere;
+        Vector3 _velocity;
 
+        protected void Start()
+        {
             _sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             _sphere.transform.SetParent(transform);
 
@@ -36,12 +35,12 @@ namespace SyncUtil.Example
 
             lockStep.StepFunc = (_, reader) =>
             {
-                if (_stepEnable)
+                if (stepEnable)
                 {
                     var msg = reader.Read<Msg>();
                     Step(msg.force);
                 }
-                return _stepEnable;
+                return stepEnable;
             };
 
             lockStep.OnMissingCatchUpServer = () =>

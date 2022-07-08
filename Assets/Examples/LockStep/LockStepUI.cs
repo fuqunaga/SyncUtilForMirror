@@ -1,11 +1,11 @@
-﻿using System;
-using Mirror;
+﻿using Mirror;
 using RosettaUI;
 
 namespace SyncUtil.Example
 {
     public class LockStepUI : ExampleUIBase
     {
+        public LockStepExampleBase lockStepExample;
         public LockStep lockStep;
         
         protected override Element CreateElement()
@@ -18,9 +18,9 @@ namespace SyncUtil.Example
     GetDataFunc will call on the server. Returns a message required for step.
     SetFunc will call on the client. Step based on message.
 3. Spawn the GameObject because LockStep inherits NetworkBehaviour.",
+                    UI.Field(() => lockStepExample.stepEnable),
                     SyncNet.IsServer
-                        ? new[]
-                        {
+                        ? UI.Column(
                             UI.FieldReadOnly("Connection Count", () => NetworkServer.connections.Count),
                             UI.DynamicElementIf(
                                 () => NetworkServer.connections.Count >= 2,
@@ -32,8 +32,8 @@ namespace SyncUtil.Example
                                     )
                                 )
                             )
-                        }
-                        : Array.Empty<Element>()
+                        )
+                        : null
             );
         }
     }

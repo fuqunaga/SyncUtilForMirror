@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 114441101367718786}
   - component: {fileID: 20128152627474846}
   - component: {fileID: 114552089498324732}
-  - component: {fileID: 114735197881843552}
   - component: {fileID: 5322775441857718951}
   m_Layer: 0
   m_Name: LockStepGPUExample
@@ -33,7 +32,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4128090013127608160}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,8 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  _dataNumMax: 100000
-  _stepNumMaxPerFrame: 10
+  dataNumMax: 100000
+  stepNumMaxPerFrame: 10
 --- !u!114 &114441101367718786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +65,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef10f32bedc1af42a6b3c11ec39f84c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resolutionScale: 0.5
+  stepEnable: 1
+  resolutionScale: 0.5
 --- !u!20 &20128152627474846
 Camera:
   m_ObjectHideFlags: 0
@@ -129,18 +130,6 @@ MonoBehaviour:
   _width: 0
   _height: 0
   _seed: 0
---- !u!114 &114735197881843552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1475985329153236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a58064f61a35fa4eafd5c23060678c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5322775441857718951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,3 +147,50 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 2f5309d8516a3a7498fd8bcab44e154a
   hasSpawned: 0
+--- !u!1 &5360589521908241015
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4128090013127608160}
+  - component: {fileID: 4493154328414015384}
+  m_Layer: 0
+  m_Name: UI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4128090013127608160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360589521908241015}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4757295374385322}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4493154328414015384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360589521908241015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 264bb8507e765f54c88cd9a97dfeb781, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windowPosition: {x: 0, y: 200}
+  lockStepExample: {fileID: 114441101367718786}
+  lockStep: {fileID: 114511124705147304}

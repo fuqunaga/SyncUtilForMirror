@@ -24,17 +24,11 @@ namespace SyncUtil.Example
             return UI.Window(nameof(SyncUtil),
                 UI.Page(
                     UI.DynamicElementOnStatusChanged(
-                        IsNetworkActive,
+                        () => SyncNet.IsActive,
                         active => active ? OnlineMenu() : OfflineMenu()
                     )
                 )
             );
-
-            static bool IsNetworkActive()
-            {
-                var manager = NetworkManager.singleton;
-                return manager != null & manager.isNetworkActive;
-            }
         }
 
 

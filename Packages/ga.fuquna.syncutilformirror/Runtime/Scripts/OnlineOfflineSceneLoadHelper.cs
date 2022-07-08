@@ -5,6 +5,7 @@ using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 #if UNITY_EDITOR
+using System.IO;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
@@ -52,10 +53,13 @@ namespace SyncUtil
             var nm = FindObjectOfType<NetworkManager>(); // singleton maybe not ready.
             Assert.IsNotNull(nm);
 
+            var onlineSceneName = Path.GetFileNameWithoutExtension(nm.onlineScene);
+            var offlineSceneName = Path.GetFileNameWithoutExtension(nm.offlineScene);
+
             var scenes = Enumerable.Range(0, SceneManager.sceneCount)
                 .Select(SceneManager.GetSceneAt)
-                .Where(s => (autoUnloadOnline && (s.name == nm.onlineScene)) ||
-                            (autoUnloadOffline && (s.name == nm.offlineScene)))
+                .Where(s => (autoUnloadOnline && (s.name == onlineSceneName)) ||
+                            (autoUnloadOffline && (s.name == offlineSceneName)))
                 .Where(s => s.isLoaded);
 
 

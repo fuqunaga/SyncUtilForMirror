@@ -1,8 +1,6 @@
 ﻿using Mirror;
 using UnityEngine;
 
-#pragma warning disable 0618
-
 namespace SyncUtil.Example
 {
     [RequireComponent(typeof(ILockStep))]
@@ -14,7 +12,7 @@ namespace SyncUtil.Example
         }
 
         GameObject _sphere;
-        Vector3 velocity;
+        Vector3 _velocity;
         public float damping = 0.9f;
         public float forceMax = 0.1f;
 
@@ -25,21 +23,18 @@ namespace SyncUtil.Example
             _sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             _sphere.transform.SetParent(transform);
 
-            IniteLockStepCallbacks();
+            InitLockStepCallbacks();
         }
 
-        void IniteLockStepCallbacks()
+        void InitLockStepCallbacks()
         {
             var lockStep = GetComponent<ILockStep>();
-            lockStep.GetDataFunc = () =>
+            lockStep.GetDataFunc = () => new Msg()
             {
-                return new Msg()
-                {
-                    force = Random.insideUnitSphere * forceMax
-                };
+                force = Random.insideUnitSphere * forceMax
             };
 
-            lockStep.StepFunc = (stepCount, reader) =>
+            lockStep.StepFunc = (_, reader) =>
             {
                 if (_stepEnable)
                 {
@@ -56,19 +51,16 @@ namespace SyncUtil.Example
             };
             lockStep.OnMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
 
-            lockStep.GetHashFunc = () =>
-            {
-                return _sphere.transform.position.ToString(".00000");
-            };
+            lockStep.GetHashFunc = () => _sphere.transform.position.ToString(".00000");
         }
 
 
         void Step(Vector3 force)
         {
-            velocity += force;
-            velocity *= damping;
+            _velocity += force;
+            _velocity *= damping;
             var trans = _sphere.transform;
-            trans.position = trans.position + velocity;
+            trans.position += _velocity;
         }
     }
 }

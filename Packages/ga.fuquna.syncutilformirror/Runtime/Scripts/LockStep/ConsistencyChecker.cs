@@ -12,7 +12,7 @@ namespace SyncUtil
     {
         #region Type Define
         
-        public class ConsistencyData
+        public struct ConsistencyData
         {
             public int stepCount;
             public LockStepConsistency consistency;
@@ -34,7 +34,7 @@ namespace SyncUtil
         
         #region Server
 
-        readonly ConsistencyData _lastConsistency = new()
+        ConsistencyData _lastConsistency = new()
         {
             stepCount = -1,
             consistency = LockStepConsistency.NotCheckYet

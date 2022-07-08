@@ -12,7 +12,9 @@ namespace SyncUtil
         [Serializable]
         public class FieldData
         {
-            [Tooltip("field name of target")] public string name;
+            [Tooltip("field name of target")] 
+            public string name;
+            [Tooltip("Sync: Always sync by the server value.\nTrigger: Only sync when the server value changed.")]
             public SyncParamMode mode;
         }
 

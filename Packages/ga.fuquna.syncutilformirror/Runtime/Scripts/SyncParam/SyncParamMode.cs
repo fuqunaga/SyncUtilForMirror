@@ -2,7 +2,7 @@
 {
     public enum SyncParamMode
     {
-        Sync,    // The client value is always overwritten by the server value
-        Trigger　// The client value is only overwritten when server values change
+        Sync,    // Always sync by the server value.
+        Trigger　// Only sync when the server value changed.
     }
 }

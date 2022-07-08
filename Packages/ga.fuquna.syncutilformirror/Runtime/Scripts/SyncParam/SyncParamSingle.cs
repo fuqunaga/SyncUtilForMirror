@@ -11,6 +11,7 @@ namespace SyncUtil
         [FormerlySerializedAs("_target")] 
         public TTarget target;
         
+        [Tooltip("Sync: Always sync by the server value.\nTrigger: Only sync when the server value changed.")]
         [FormerlySerializedAs("_mode")] 
         public SyncParamMode mode;
         

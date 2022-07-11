@@ -66,10 +66,14 @@ Deterministic LockStep framework.
 ![](Documentation~/lockstep_gpu.gif)
 *[Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implementation on GPU*
 
+
 ## Spawner
-Spawn prefabs when the server is started.
+
+Spawn prefabs when the server is started.  
 Register prefabs to NetworkManager's spawn prefabs.
+
 ![](Documentation~/2022-07-11-17-56-03.png)
+
 
 ## ServerOrStandAlone
 Deactivate child GameObjects when server or standalone.

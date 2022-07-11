@@ -60,8 +60,8 @@ Deterministic LockStep framework.
 - Chasing Playback
 - Consistency Checker(Check for client out-of-sync)
 
-![](Documentation~/lockstep.gif "title")
-<figcaption>*[Lorentz Attractor](https://en.wikipedia.org/wiki/Lorenz_system) implementation on CPU*</figcaption>  
+![](Documentation~/lockstep.gif)
+*[Lorentz Attractor](https://en.wikipedia.org/wiki/Lorenz_system) implementation on CPU*
 
 ![](Documentation~/lockstep_gpu.gif)
 *[Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implementation on GPU*

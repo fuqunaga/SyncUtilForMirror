@@ -15,7 +15,10 @@ Sync non-NetworkBehaviour parameters.
 2. Attach SyncParam component to a GameObject.
 3. Set target parameters at the SyncParam on the Inspector.
 ",
-                    UI.Field(null, () => syncParamExample)
+                    UI.Label(nameof(SyncParamExample)),
+                    UI.Indent(
+                        UI.Field(null, () => syncParamExample)
+                    )
             );
         }
     }

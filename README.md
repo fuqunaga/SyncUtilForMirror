@@ -35,10 +35,13 @@ Select `SyncUtil For Mirror` and click the Install button
 1. Add all scene files(*.unity) to `Scenes In Build` of Build Settings.
 1. Open and run *SyncUtilExamples.unity* scene. this is an example scene launcher.
 
-## Syncing Parameters
+# Functions
 
-### Primitive Members
-[![](http://img.youtube.com/vi/RoescKd70Fs/0.jpg)](https://www.youtube.com/watch?v=RoescKd70Fs)
+## SyncParam
+Synchronization of member variables outside NetworkBeheivour.
+
+![](Documentation~/syncparam.gif)
+
 
 ### Behaviour.enabled, GameObject active
 [![](http://img.youtube.com/vi/C39lSQUmYyY/0.jpg)](https://www.youtube.com/watch?v=C39lSQUmYyY)

@@ -76,7 +76,9 @@ Register prefabs to NetworkManager's spawn prefabs.
 
 
 ## ServerOrStandAlone
+
 Deactivate child GameObjects when server or standalone.
+
   
 ## ClientInvisibility
 
@@ -84,7 +86,8 @@ Specify the invisibility per Client to a GameObject.
 ![](Documentation~/clientinvisibility.gif)
   
 ## OnlineOfflineSceneLoadHelper
-unload online/offline scene on hierarchy when application play  
+
+Load/Unload online/offline scene on hierarchy when application play.  
 ![](Documentation~/onlineofflinesceneloadhelper.gif)
 
 

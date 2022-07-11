@@ -192,5 +192,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   windowPosition: {x: 0, y: 200}
-  lockStepExample: {fileID: 114441101367718786}
+  lockStepExampleBase: {fileID: 114441101367718786}
   lockStep: {fileID: 114511124705147304}

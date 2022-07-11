@@ -54,25 +54,38 @@ Deterministic random per instance.
 
 ![](Documentation~/instancerandom.gif)
 
-## Spawner, ServerOrStandAlone
-[![](http://img.youtube.com/vi/_fBlCKlia4A/0.jpg)](https://www.youtube.com/watch?v=_fBlCKlia4A)  
-auto register spawnable prefab  
+## LockStep
+
+Deterministic LockStep framework.
+- Chasing Playback
+- Consistency Checker(Check for client out-of-sync)
+
+![](Documentation~/lockstep.gif)
+*[Lorentz Attractor](https://en.wikipedia.org/wiki/Lorenz_system) implementation on CPU*
+
+![](Documentation~/lockstep_gpu.gif)
+*[Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implementation on GPU*
+
+## Spawner
+Spawn prefabs when the server is started.
+Register prefabs to NetworkManager's spawn prefabs.
+![](Documentation~/2022-07-11-17-56-03.png)
+
+## ServerOrStandAlone
+Deactivate child GameObjects when server or standalone.
   
-[![](http://img.youtube.com/vi/2qMK0PuPIHY/0.jpg)](https://www.youtube.com/watch?v=2qMK0PuPIHY)  
-Spawner: spawn prefabs  
-ServerOrStandAlone: disable children on the client  
+## ClientInvisibility
+
+Specify the invisibility per Client to a GameObject.
+![](Documentation~/clientinvisibility.gif)
   
-## Scene Load Helper
-[![](http://img.youtube.com/vi/RQmx5Dr5_MQ/0.jpg)](https://www.youtube.com/watch?v=RQmx5Dr5_MQ)  
+## OnlineOfflineSceneLoadHelper
 unload online/offline scene on hierarchy when application play  
+![](Documentation~/onlineofflinesceneloadhelper.gif)
 
-## Latency Check, Delay Rendering
-[![](http://img.youtube.com/vi/WXi7Jfautpw/0.jpg)](https://www.youtube.com/watch?v=WXi7Jfautpw)  
-dynamic delay rendering according to network latency 
-
-## LockStep, LockStepGPU
-[![](http://img.youtube.com/vi/NmddY56bRPk/0.jpg)](https://www.youtube.com/watch?v=NmddY56bRPk)  
 
 
 # References
- - https://github.com/fuqunaga/PrefsGUISyncForMirror
+- [RosettaUI](https://github.com/fuqunaga/RosettaUI) - Code-based GUI library for development menus for Unity
+- [PrefsGUI](https://github.com/fuqunaga/PrefsGUI) - Accessors and GUIs for persistent preference values using a JSON file
+- [PrefsGUISyncForMirror](https://github.com/fuqunaga/PrefsGUISyncForMirror) - Sync subset for PrefsGUI over Mirror

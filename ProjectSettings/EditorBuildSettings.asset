@@ -35,7 +35,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Examples/ClientInvisibility/ClientInvisibility.unity
     guid: f11f3e84c154cd14ba2e06b6d9b41562
-  - enabled: 1
-    path: Assets/Examples/Common/Offline.unity
-    guid: a80a9c1f76f2363498c1d08ad0928430
   m_configObjects: {}

@@ -48,8 +48,11 @@ Synchronization of member variables outside NetworkBeheivour.
 ![](Documentation~/syncbehaviourenabled.gif)
 
 
-## Random Per Instance
-[![](http://img.youtube.com/vi/Jml_K5ipCZI/0.jpg)](https://www.youtube.com/watch?v=Jml_K5ipCZI)
+## InstanceRandom
+
+Deterministic random per instance.
+
+![](Documentation~/instancerandom.gif)
 
 ## Spawner, ServerOrStandAlone
 [![](http://img.youtube.com/vi/_fBlCKlia4A/0.jpg)](https://www.youtube.com/watch?v=_fBlCKlia4A)  

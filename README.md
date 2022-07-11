@@ -43,8 +43,10 @@ Synchronization of member variables outside NetworkBeheivour.
 ![](Documentation~/syncparam.gif)
 
 
-### Behaviour.enabled, GameObject active
-[![](http://img.youtube.com/vi/C39lSQUmYyY/0.jpg)](https://www.youtube.com/watch?v=C39lSQUmYyY)
+## SyncBehaviourEnabled, SyncGameObjectActive
+
+![](Documentation~/syncbehaviourenabled.gif)
+
 
 ## Random Per Instance
 [![](http://img.youtube.com/vi/Jml_K5ipCZI/0.jpg)](https://www.youtube.com/watch?v=Jml_K5ipCZI)

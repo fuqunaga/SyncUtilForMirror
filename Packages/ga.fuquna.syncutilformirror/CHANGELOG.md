@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.0.1...v1.0.2) (2022-07-13)
+
+
+### Bug Fixes
+
+* NetworkManagerController doesn't RequireComponent NetworkManager now ([38fc91b](https://github.com/fuqunaga/SyncUtilForMirror/commit/38fc91b49635fea7e2611ff5c6766ce5cafb3601))
+
 ## [1.0.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.0.0...v1.0.1) (2022-07-11)
 
 

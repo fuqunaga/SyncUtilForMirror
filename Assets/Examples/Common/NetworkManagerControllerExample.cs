@@ -1,9 +1,7 @@
 ﻿using RosettaUI;
-using UnityEngine;
 
 namespace SyncUtil.Example
 {
-    [RequireComponent(typeof(SceneSelectorForExample))]
     public class NetworkManagerControllerExample : NetworkManagerController, IElementCreator
     {
         public string networkAddress = "localhost";

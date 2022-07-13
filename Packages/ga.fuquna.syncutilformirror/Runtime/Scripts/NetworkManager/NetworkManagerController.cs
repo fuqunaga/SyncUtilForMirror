@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using kcp2k;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Debug = UnityEngine.Debug;
 
 namespace SyncUtil
 {
-    [RequireComponent(typeof(SyncNetworkManager))]
     public class NetworkManagerController : MonoBehaviour
     {
         #region Type Define
@@ -30,17 +31,51 @@ namespace SyncUtil
 
 
         public bool showManualBootMenu = true;
-       
-        protected SyncNetworkManager networkManager;
-        private KcpTransport _kcp;
+        public bool dontDestroyOnLoad = true;
+
+        static SyncNetworkManager NetworkManager => SyncNetworkManager.Singleton;
         
 
         public virtual void Start()
         {
-            networkManager = GetComponent<SyncNetworkManager>();
-            _kcp = GetComponent<KcpTransport>();
+            CheckWarningAutoConnect();
+            
+            if (dontDestroyOnLoad)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
 
             if (Boot != BootType.Manual) StartNetwork(Boot);
+        }
+
+        /// <summary>
+        /// For AutoConnect to work
+        /// Check NetworkManagerController and NetworkManager are attached different GameObject.
+        /// NetworkManager will be destroyed when network is offline even if dontDestroyOnLoad==true
+        /// https://github.com/vis2k/Mirror/pull/2582
+        /// </summary>
+        [Conditional("UNITY_EDITOR")]
+        private void CheckWarningAutoConnect()
+        {
+            var networkManager = Mirror.NetworkManager.singleton; 
+            if (!AutoConnect || networkManager == null) return;
+
+            if (!string.IsNullOrEmpty(networkManager.offlineScene))
+            {
+                if (networkManager.gameObject == gameObject)
+                {
+                    Debug.LogWarning(
+                        $"For AutoConnect to work, attach {nameof(NetworkManagerController)} to a different GameObject than the one {nameof(NetworkManager)} attached.\n" +
+                        $"{nameof(NetworkManager)} will be destroyed when the network goes offline even if dontDestroyOnLoad==true");
+                }
+
+                if (!dontDestroyOnLoad)
+                {
+                    Debug.LogWarning(
+                        $"For AutoConnect to work, set {nameof(NetworkManagerController)}.{nameof(dontDestroyOnLoad)}==true");
+                }
+                
+            }
         }
 
         public void StartNetwork(BootType bootType)
@@ -50,9 +85,9 @@ namespace SyncUtil
 
             IEnumerator routine = bootType switch
             {
-                BootType.Host => StartConnectLoop(() => NetworkClient.active, () => networkManager.StartHost()),
+                BootType.Host => StartConnectLoop(() => NetworkClient.active, () => NetworkManager.StartHost()),
                 BootType.Client => StartConnectLoop(() => NetworkClient.active, StartClient),
-                BootType.Server => StartConnectLoop(() => NetworkServer.active, () => networkManager.StartServer()),
+                BootType.Server => StartConnectLoop(() => NetworkServer.active, () => NetworkManager.StartServer()),
                 _ => null
             };
 
@@ -61,15 +96,15 @@ namespace SyncUtil
 
         void StartClient()
         {
-            networkManager.onClientError -= OnClientError;
-            networkManager.onClientError += OnClientError;
+            NetworkManager.onClientError -= OnClientError;
+            NetworkManager.onClientError += OnClientError;
 
-            networkManager.StartClient();
+            NetworkManager.StartClient();
         }
 
         void OnClientError(Exception _)
         {
-            networkManager.StopClient();
+            NetworkManager.StopClient();
         }
 
 
@@ -93,7 +128,7 @@ namespace SyncUtil
 
         public virtual void OnGUI()
         {
-            if (showManualBootMenu && networkManager != null && !networkManager.isNetworkActive)
+            if (showManualBootMenu && NetworkManager != null && !NetworkManager.isNetworkActive)
             {
                 ManualBootGUI();
             }
@@ -131,15 +166,16 @@ namespace SyncUtil
 
         protected void UpdateManager()
         {
-            networkManager.networkAddress = NetworkAddress;
+            NetworkManager.networkAddress = NetworkAddress;
             UpdateNetworkPort(NetworkPort);
         }
 
         protected virtual void UpdateNetworkPort(int port)
         {
-            if (_kcp != null)
+            var kcpTransport = Transport.activeTransport as KcpTransport;
+            if (kcpTransport != null)
             {
-                _kcp.Port = (ushort)port;
+                kcpTransport.Port = (ushort)port;
             }
         }
     }

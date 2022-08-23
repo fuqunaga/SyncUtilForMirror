@@ -16,17 +16,17 @@ namespace SyncUtil
         public bool enableLogServer = false;
         public bool enableLogClient = true;
 
-        public override void OnValidate()
-        {
-            base.OnValidate();
-            CheckPlayerPrefab();
-        }
-        
 #if UNITY_EDITOR
         [HideInInspector] public bool checkPlayerPrefab = true;
 
         [ContextMenu("Enable CheckPlayerPrefab")]
         void EnableCheckPlayerPrefab() => checkPlayerPrefab = true;
+        
+        public override void OnValidate()
+        {
+            base.OnValidate();
+            CheckPlayerPrefab();
+        }
         
         void CheckPlayerPrefab()
         {

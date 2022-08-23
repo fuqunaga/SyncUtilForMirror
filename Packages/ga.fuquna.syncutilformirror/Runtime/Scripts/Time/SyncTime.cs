@@ -15,7 +15,7 @@ namespace SyncUtil
         #region Singleton
         
         protected static SyncTime instance;
-        public static SyncTime Instance => instance ? instance : (instance = (FindObjectOfType<SyncTime>() ?? (new GameObject("SyncTimeManager", typeof(SyncTime))).GetComponent<SyncTime>()));
+        public static SyncTime Instance => instance ? instance : (instance = (FindObjectOfType<SyncTime>() ?? (new GameObject(nameof(SyncTime), typeof(SyncTime))).GetComponent<SyncTime>()));
 
         #endregion
 
@@ -41,6 +41,7 @@ namespace SyncUtil
 			if(SyncNetworkManager.Singleton == null)
 			{
 				Debug.LogWarning("SyncNetworkManager is not in scene");
+                Destroy(this);
 				return;
 			}
 			// when a client starts

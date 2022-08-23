@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.0.2...v1.1.0) (2022-08-23)
+
+
+### Bug Fixes
+
+*  error that appears after Play on editor. ([3ae0ced](https://github.com/fuqunaga/SyncUtilForMirror/commit/3ae0ced6820c5c3c39f92fc7da99f7ae1a228c36))
+
+
+### Features
+
+* SyncTime will be destroyed when SyncNetworkManager doesn't exist ([cde27ff](https://github.com/fuqunaga/SyncUtilForMirror/commit/cde27ffacc4393181c7638324a1708fe545b4647))
+
 ## [1.0.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.0.1...v1.0.2) (2022-07-13)
 
 

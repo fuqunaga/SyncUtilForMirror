@@ -4,11 +4,11 @@ using System.Linq;
 using Mirror;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SyncUtil
 {
     [Serializable]
-    [ExecuteAlways]
     public class SyncNetworkManager : NetworkManagerWithHookAction
     {
         public static SyncNetworkManager Singleton => singleton as SyncNetworkManager;
@@ -16,69 +16,82 @@ namespace SyncUtil
         public bool enableLogServer = false;
         public bool enableLogClient = true;
 
+        public override void OnValidate()
+        {
+            base.OnValidate();
+            CheckPlayerPrefab();
+        }
         
 #if UNITY_EDITOR
         [HideInInspector] public bool checkPlayerPrefab = true;
 
-
-        public override void Start()
-        {
-            base.Start();
-            CheckPlayerPrefab();
-        }
-
-
+        [ContextMenu("Enable CheckPlayerPrefab")]
+        void EnableCheckPlayerPrefab() => checkPlayerPrefab = true;
+        
         void CheckPlayerPrefab()
         {
             if (Application.isPlaying) return;
             
-            StartCoroutine(CheckPlayerPrefabCoroutine());
-        }
-        
-        IEnumerator CheckPlayerPrefabCoroutine()
-        {
             if (playerPrefab == null && checkPlayerPrefab)
             {
-                // EditorGUIUtility.PingObject(this);
-                Selection.activeObject = this;
-
-                yield return null;
+                EditorGUIUtility.PingObject(this);
                 
-                var response = EditorUtility.DisplayDialogComplex(
-                    $"{nameof(SyncNetworkManager)} scene:[{gameObject.scene.name}]",
-                    "Mirror requires a PlayerPrefab to spawn objects.\n\nDo you want to set the SyncUtil's default PlayerPrefab to the SyncNetworkManager\nand turn on AutoCreatePlayer?",
-                    "Ok",
-                    "Cancel",
-                    "Don't ask again"
-                );
+                // いきなりダイアログが出ると何きっかけで出てきてるのかわかりにくいので少し時間を置く
+                // yield return new WaitForSeconds(3f);
+                var delayCount = 3 * 60;
 
-                switch (response)
+                EditorApplication.update += DelayShowDialog;
+
+                void DelayShowDialog()
                 {
-                    case 0:
-                        var guids = AssetDatabase.FindAssets("EmptyPlayer", new[] {"Packages/ga.fuquna.syncutilformirror"});
-                
-                        foreach (var path in guids.Select(AssetDatabase.GUIDToAssetPath))
-                        {
-                            var go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-                            if (go != null)
-                            {
-                                playerPrefab = go;
-                                autoCreatePlayer = true;
-                                
-                                EditorUtility.SetDirty(this);
-                                break;
-                            }
-                        }
-                        break;
+                    if (Application.isPlaying || this == null)
+                    {
+                        EditorApplication.update -= DelayShowDialog;
+                        return;
+                    }
                     
-                    case 2:
-                        checkPlayerPrefab = false;
-                        break;
+                    delayCount--;
+                    if (delayCount >= 0) return;
+                    EditorApplication.update -= DelayShowDialog;
+
+                    var response = EditorUtility.DisplayDialogComplex(
+                        $"{nameof(SyncNetworkManager)} scene:[{gameObject.scene.name}]",
+                        "Mirror requires a PlayerPrefab to spawn objects.\n\nDo you want to set the SyncUtil's default PlayerPrefab to the SyncNetworkManager\nand turn on AutoCreatePlayer?",
+                        "Ok",
+                        "Cancel",
+                        "Don't ask again"
+                    );
+
+                    switch (response)
+                    {
+                        case 0:
+                            var guids = AssetDatabase.FindAssets("EmptyPlayer",
+                                new[] {"Packages/ga.fuquna.syncutilformirror"});
+
+                            foreach (var path in guids.Select(AssetDatabase.GUIDToAssetPath))
+                            {
+                                var go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                                if (go != null)
+                                {
+                                    playerPrefab = go;
+                                    autoCreatePlayer = true;
+
+                                    EditorUtility.SetDirty(this);
+                                    break;
+                                }
+                            }
+
+                            break;
+
+                        case 2:
+                            checkPlayerPrefab = false;
+                            break;
+                    }
                 }
             }
         }
 #endif
-        
+
 
         #region Server side
 
@@ -96,7 +109,7 @@ namespace SyncUtil
 
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            if (enableLogServer) Log($"Server Disconeect  connection ID {conn.connectionId}");
+            if (enableLogServer) Log($"Server Disconnect  connection ID {conn.connectionId}");
             base.OnServerDisconnect(conn);
         }
 

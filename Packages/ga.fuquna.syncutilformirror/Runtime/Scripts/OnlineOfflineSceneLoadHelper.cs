@@ -80,9 +80,6 @@ namespace SyncUtil
             var nm = FindObjectOfType<NetworkManager>();
             Assert.IsNotNull(nm);
 
-
-            Debug.Log(string.Join("\n", EditorBuildSettings.scenes.Select(s => s.path)));
-
             var scenePaths = new[]
                 {
                     autoLoadOnline ? nm.onlineScene : "",

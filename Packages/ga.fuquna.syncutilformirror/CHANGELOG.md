@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.1.1...v1.1.2) (2022-08-23)
+
+
+### Bug Fixes
+
+* build error SyncNetworkManager.OnValidate() move inside UNITY_EDITOR ([f2758ff](https://github.com/fuqunaga/SyncUtilForMirror/commit/f2758ff478a6081c0e97095526bfda12d3771cbb))
+
 ## [1.1.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.1.0...v1.1.1) (2022-08-23)
 
 

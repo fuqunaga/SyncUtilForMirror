@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.1.2...v1.2.0) (2022-08-24)
+
+
+### Features
+
+* SyncNet.Spawn() can now specify space. ([ab702fd](https://github.com/fuqunaga/SyncUtilForMirror/commit/ab702fdb65bc0ed91f8ec3247b19948540673108))
+
 ## [1.1.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.1.1...v1.1.2) (2022-08-23)
 
 

@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.2.0...v1.2.1) (2022-10-10)
+
+
+### Bug Fixes
+
+* warning that appeared when ConsistencyChecker was generated multiple times. ([b7ec7cb](https://github.com/fuqunaga/SyncUtilForMirror/commit/b7ec7cbf16c7988ad2aa66ce66d77e6d89140a40))
+
 # [1.2.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.1.2...v1.2.0) (2022-08-24)
 
 

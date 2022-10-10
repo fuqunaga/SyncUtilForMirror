@@ -47,7 +47,7 @@ namespace SyncUtil
         [Server]
         public void OnStartServer()
         {
-            NetworkServer.RegisterHandler<HashMessage>((conn, msg) =>
+            NetworkServer.ReplaceHandler<HashMessage>((conn, msg) =>
             {
                 ConnectionIdToHash[conn.connectionId] = msg.value;
             });
@@ -82,8 +82,7 @@ namespace SyncUtil
             }
         }
         #endregion
-
-
+        
 
         #region Client
         
@@ -91,7 +90,7 @@ namespace SyncUtil
         
         public void OnStartClient()
         {
-            NetworkClient.RegisterHandler<RequestHashMessage>((msg) =>
+            NetworkClient.ReplaceHandler<RequestHashMessage>((msg) =>
             {
                 checkConsistencyStepCount = msg.value;
             });

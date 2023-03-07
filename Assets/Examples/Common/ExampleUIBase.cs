@@ -14,11 +14,11 @@ namespace SyncUtil.Example
         {
             var element = CreateElement();
             if (element == null) return;
-            
+
             _window = UI.Window(
                 UI.Label(gameObject.scene.name),
                 element
-            ).SetPosition(windowPosition).Open();
+            ).SetPosition(windowPosition);
 
             var root = FindObjectOfType<RosettaUIRoot>();
             root.Build(_window);
@@ -26,7 +26,7 @@ namespace SyncUtil.Example
 
         private void OnDisable()
         {
-            _window?.Destroy();
+            _window?.DetachView();
         }
 
         protected virtual Element CreateElement()

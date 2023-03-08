@@ -16,15 +16,18 @@ namespace SyncUtil.Example
         public Element CreateElement(LabelElement label)
         {
             return UI.Column(
-                UI.Field(() => objectCount),
-                UI.Button("Spawn", GenerateObjectAndDisplayFirstObject),
+                UI.Row(
+                    UI.Field(() => objectCount),
+                    UI.Button("Spawn", GenerateObjectAndDisplayFirstObject)
+                ).SetInteractable(SyncNet.IsServerOrStandAlone),
                 UI.Space().SetHeight(20f),
+                UI.Field("Spawned object count", () => transform.childCount),
                 UI.DynamicElementOnStatusChanged(
                     () => _exampleUnits.Count(),
                     count => UI.Slider("Display Item Index", 
                         readValue: () => _displayItemIdx,
                         writeValue: ChangeShowGuiUnitIndex,
-                        max: count-1)
+                        max: count-1).SetInteractable(SyncNet.IsServerOrStandAlone)
                 ),
                 UI.Space().SetHeight(20f),
                 UI.DynamicElementIf(
@@ -39,7 +42,7 @@ namespace SyncUtil.Example
             );
         }
 
-        void GenerateObjectAndDisplayFirstObject()
+        private void GenerateObjectAndDisplayFirstObject()
         {
             if (SyncNet.IsServer)
             {
@@ -71,7 +74,7 @@ namespace SyncUtil.Example
         }
 
         [ClientRpc]
-        void ChangeShowGuiUnitIndex(int index)
+        private void ChangeShowGuiUnitIndex(int index)
         {
             _displayItemIdx = index;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace SyncUtil.Example
@@ -32,6 +33,10 @@ namespace SyncUtil.Example
         public Vector2 vector2Val;
         public Vector3 vector3Val;
         public Vector4 vector4Val;
+        public int[] arrayVal;
+        public List<int> listVal;
         public MyClass classVal;
+        public MyClass[] classArrayVal;
+        public List<MyClass> classListVal;
     }
 }

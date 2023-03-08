@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Mirror;
-using UnityEngine;
 
 namespace SyncUtil
 {
@@ -49,7 +48,7 @@ namespace SyncUtil
             }
             else
             {
-                var str = JsonUtility.ToJson(value);
+                var str = JsonUtilityEx.ToJson(value);
                 writer.Write(str);
             }
 
@@ -85,7 +84,7 @@ namespace SyncUtil
             else
             {
                 var str = reader.Read<string>();
-                value = JsonUtility.FromJson<T>(str);
+                value = JsonUtilityEx.FromJson<T>(str);
             }
 
             return true;

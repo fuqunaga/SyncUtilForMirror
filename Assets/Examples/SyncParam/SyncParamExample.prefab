@@ -54,9 +54,13 @@ MonoBehaviour:
   vector2Val: {x: 0, y: 0}
   vector3Val: {x: 0, y: 0, z: 0}
   vector4Val: {x: 0, y: 0, z: 0, w: 0}
+  arrayVal: 
+  listVal: 
   classVal:
     intVal: 0
     floatVal: 0
+  classArrayVal: []
+  classListVal: []
 --- !u!114 &3933406548832676853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,5 +93,13 @@ MonoBehaviour:
     mode: 0
   - name: vector4Val
     mode: 0
+  - name: arrayVal
+    mode: 0
+  - name: listVal
+    mode: 0
   - name: classVal
+    mode: 0
+  - name: classArrayVal
+    mode: 0
+  - name: classListVal
     mode: 0

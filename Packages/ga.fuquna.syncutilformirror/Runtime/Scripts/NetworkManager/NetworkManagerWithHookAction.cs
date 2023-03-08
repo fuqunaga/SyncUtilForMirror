@@ -48,11 +48,11 @@ namespace SyncUtil
         }
 
 
-        public event Action<Exception> onClientError;
-        public override void OnClientError(Exception exception)
+        public event Action<TransportError, string> onClientError;
+        public override void OnClientError(TransportError error, string reason)
         {
-            base.OnClientError(exception);
-            onClientError?.Invoke(exception);
+            base.OnClientError(error, reason);
+            onClientError?.Invoke(error, reason);
         }
 
         public event Action onClientDisconnect;

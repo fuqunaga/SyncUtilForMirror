@@ -3,7 +3,7 @@
     "rootNamespace": "",
     "references": [
         "Mirror",
-        "kcp2k"
+        "Mirror.Transports"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

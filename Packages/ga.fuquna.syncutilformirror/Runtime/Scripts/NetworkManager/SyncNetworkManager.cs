@@ -131,10 +131,10 @@ namespace SyncUtil
         }
 
 
-        public override void OnClientError(Exception exception)
+        public override void OnClientError(TransportError error, string reason)
         {
-            if (enableLogClient) LogError($"Client Error: {exception.Message}");
-            base.OnClientError(exception);
+            if (enableLogClient) LogError($"Client Error: {nameof(TransportError)}({error}) {nameof(reason)}({reason})");
+            base.OnClientError(error, reason);
         }
 
         public override void OnClientDisconnect()

@@ -102,7 +102,7 @@ namespace SyncUtil
             NetworkManager.StartClient();
         }
 
-        void OnClientError(Exception _)
+        void OnClientError(TransportError error, string reason)
         {
             NetworkManager.StopClient();
         }
@@ -172,7 +172,7 @@ namespace SyncUtil
 
         protected virtual void UpdateNetworkPort(int port)
         {
-            var kcpTransport = Transport.activeTransport as KcpTransport;
+            var kcpTransport = Transport.active as KcpTransport;
             if (kcpTransport != null)
             {
                 kcpTransport.Port = (ushort)port;

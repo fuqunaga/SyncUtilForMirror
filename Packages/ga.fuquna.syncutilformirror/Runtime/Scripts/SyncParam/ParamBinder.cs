@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
@@ -35,7 +36,7 @@ namespace SyncUtil
         {
             var value = _getValueFunc();
 
-            if (!IsEquatable || !Equals(value, _prevValue) || _firstSend)
+            if (!IsEquatable || !EqualityComparer<T>.Default.Equals(value, _prevValue) || _firstSend)
             {
                 var mgr = SyncParamManager.Instance;
                 if (mgr != null)

@@ -2,7 +2,8 @@
     "name": "SyncUtil For Mirror",
     "rootNamespace": "",
     "references": [
-        "Mirror"
+        "Mirror",
+        "kcp2k"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

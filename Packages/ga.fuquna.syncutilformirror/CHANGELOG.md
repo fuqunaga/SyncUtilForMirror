@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.2.1...v1.3.0) (2023-03-10)
+
+
+### Bug Fixes
+
+* SyncParam supports Array/List [#2](https://github.com/fuqunaga/SyncUtilForMirror/issues/2) ([c74c6a2](https://github.com/fuqunaga/SyncUtilForMirror/commit/c74c6a25f8a01e99e1ba02c6c62e9b93b45f5a24))
+
+
+### Features
+
+* **upgrade:** Mirror73 ([c53772b](https://github.com/fuqunaga/SyncUtilForMirror/commit/c53772b625d61095bf2f42b88cb16b7248b2ae52))
+
 ## [1.2.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.2.0...v1.2.1) (2022-10-10)
 
 

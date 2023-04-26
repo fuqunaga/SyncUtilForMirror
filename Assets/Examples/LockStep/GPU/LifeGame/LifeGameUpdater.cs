@@ -1,17 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace SyncUtil.Example
 {
-
     [RequireComponent(typeof(LifeGame))]
     public class LifeGameUpdater : MonoBehaviour
     {
-        public float _resolutionScale = 0.5f;
-        static int _lastWidth;
-        static int _lastHeight;
-        LifeGame _lifeGame;
+        private static int _lastWidth;
+        private static int _lastHeight;
+        
+        [FormerlySerializedAs("_resolutionScale")] public float resolutionScale = 0.5f;
+        private LifeGame _lifeGame;
 
         private void Start()
         {
@@ -19,9 +18,9 @@ namespace SyncUtil.Example
         }
 
 
-        void Update()
+        private void Update()
         {
-            _lifeGame.Step(CreateStepData(_resolutionScale));
+            _lifeGame.Step(CreateStepData(resolutionScale));
         }
 
         public static void Reset()

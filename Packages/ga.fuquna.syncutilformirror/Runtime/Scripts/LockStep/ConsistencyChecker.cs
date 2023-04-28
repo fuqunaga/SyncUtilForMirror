@@ -2,9 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Pool;
 
 namespace SyncUtil
 {
@@ -21,27 +24,28 @@ namespace SyncUtil
                 
         public struct HashMessage : NetworkMessage
         {
-            public string value;
+            public int stepCount;
+            public string hash;
         }
         
         public struct RequestHashMessage : NetworkMessage
         {
-            public int value;
+            public int stepCount;
         }
         
         #endregion
         
         
+        private readonly Dictionary<int, Dictionary<int, string>> _connectionIdToHashOfStepCount = new();
+
+
         #region Server
 
-        ConsistencyData _lastConsistency = new()
+        private ConsistencyData _lastConsistency = new()
         {
             stepCount = -1,
             consistency = LockStepConsistency.NotCheckYet
         };
-
-        public Dictionary<int, string> ConnectionIdToHash { get; } = new();
-        protected bool IsCompleteConnectionIdToHash => ConnectionIdToHash.Count == NetworkServer.connections.Count;
 
         
         [Server]
@@ -49,7 +53,13 @@ namespace SyncUtil
         {
             NetworkServer.ReplaceHandler<HashMessage>((conn, msg) =>
             {
-                ConnectionIdToHash[conn.connectionId] = msg.value;
+                if ( !_connectionIdToHashOfStepCount.TryGetValue(msg.stepCount, out var connectionIdToHash))
+                {
+                    Debug.LogWarning($"Invalid hash message received. connectionId:{conn.connectionId} stepCount:{msg.stepCount}");
+                    return;
+                }
+                
+                connectionIdToHash[conn.connectionId] = msg.hash;
             });
         }
 
@@ -57,30 +67,40 @@ namespace SyncUtil
         public ConsistencyData GetLastConsistencyData() => _lastConsistency;
 
         [Server]
-        public void StartCheckConsistency(MonoBehaviour behaviour, int targetStepCount, float timeOut = 10f) => behaviour.StartCoroutine(CheckConsistencyCoroutine(targetStepCount, timeOut));
+        public void StartCheckConsistency(MonoBehaviour behaviour, int targetStepCount, float timeOut = 10f)
+        {
+            if (_connectionIdToHashOfStepCount.ContainsKey(targetStepCount)) return;
+            behaviour.StartCoroutine(CheckConsistencyCoroutine(targetStepCount, timeOut));
+        }
 
         protected IEnumerator CheckConsistencyCoroutine(int targetStepCount, float timeOut)
         {
-            ConnectionIdToHash.Clear();
+            using var _ = DictionaryPool<int, string>.Get(out var connectionIdToHash);
+            _connectionIdToHashOfStepCount[targetStepCount] = connectionIdToHash;
             
             _lastConsistency.stepCount = targetStepCount;
             _lastConsistency.consistency = LockStepConsistency.Checking;
 
-            NetworkServer.SendToAll(new RequestHashMessage() {value = targetStepCount});
+            NetworkServer.SendToAll(new RequestHashMessage() { stepCount = targetStepCount });
             var time = Time.time;
 
-            yield return new WaitUntil(() => ((Time.time - time) > timeOut) || IsCompleteConnectionIdToHash);
+            yield return new WaitUntil(() => ((Time.time - time) > timeOut) || IsReplyMessagesComplete());
 
 
-            if (IsCompleteConnectionIdToHash)
+            if (IsReplyMessagesComplete())
             {
-                _lastConsistency.consistency = (ConnectionIdToHash.Values.Distinct().Count() == 1) ? LockStepConsistency.Match : LockStepConsistency.NotMatch;
+                _lastConsistency.consistency = (connectionIdToHash.Values.Distinct().Count() == 1) ? LockStepConsistency.Match : LockStepConsistency.NotMatch;
             }
             else
             {
                 _lastConsistency.consistency = LockStepConsistency.TimeOut;
             }
+            
+            _connectionIdToHashOfStepCount.Remove(targetStepCount);
+
+            bool IsReplyMessagesComplete() => connectionIdToHash.Count == NetworkServer.connections.Count;
         }
+        
         #endregion
         
 
@@ -92,28 +112,41 @@ namespace SyncUtil
         {
             NetworkClient.ReplaceHandler<RequestHashMessage>((msg) =>
             {
-                checkConsistencyStepCount = msg.value;
+                checkConsistencyStepCount = msg.stepCount;
             });
         }
 
 
         [Client]
-        protected void ReturnCheckConsistency(string hash)
+        private static void ReturnCheckConsistency(int stepCount, string hash)
         {
-            NetworkClient.Send(new HashMessage() { value = hash });
+            NetworkClient.Send(new HashMessage()
+            {
+                stepCount = stepCount,
+                hash = hash
+            });
         }
         #endregion
 
-        public void Update(int stepCountClient, Func<string> getHashFunc)
+   
+        public void Step(int stepCountClient, Func<Task<string>> getHashFuncAsync)
         {
             if (checkConsistencyStepCount < 0) return;
-            Assert.IsTrue(stepCountClient <= checkConsistencyStepCount);
+            
+            Assert.IsTrue(stepCountClient <= checkConsistencyStepCount, $"{stepCountClient} <= {checkConsistencyStepCount}");
             
             if (stepCountClient == checkConsistencyStepCount)
             {
-                ReturnCheckConsistency(getHashFunc());
                 checkConsistencyStepCount = -1;
+                Assert.IsNotNull(getHashFuncAsync, $"{nameof(ILockStep)}.{nameof(ILockStep.GetHashFuncAsync)} must be set.");
+                CheckHash(stepCountClient, getHashFuncAsync);
             }
+        }
+
+        private static async void CheckHash(int stepCount, Func<Task<string>> getHashFuncAsync)
+        {
+            var hash = await getHashFuncAsync();
+            ReturnCheckConsistency(stepCount, hash);
         }
     }
 }

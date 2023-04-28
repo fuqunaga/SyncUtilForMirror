@@ -398,6 +398,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5592615654213564017, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+      propertyPath: idx
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5592615654213564026, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
       propertyPath: m_Name
       value: SyncNetworkManager

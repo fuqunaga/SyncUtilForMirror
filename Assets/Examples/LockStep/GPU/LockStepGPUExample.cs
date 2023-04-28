@@ -1,4 +1,6 @@
-﻿using Mirror;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Mirror;
 using UnityEngine;
 
 namespace SyncUtil.Example
@@ -6,13 +8,16 @@ namespace SyncUtil.Example
     [RequireComponent(typeof(LockStep), typeof(LifeGame))]
     public class LockStepGPUExample : LockStepExampleBase
     {
+        // `public` for code generation. 
+        // ReSharper disable once MemberCanBePrivate.Global
         public class Msg : NetworkMessage
         {
             public LifeGame.StepData data;
         }
         
+        
         public float resolutionScale = 0.5f;
-        LifeGame _lifeGame;
+        private LifeGame _lifeGame;
 
         protected void Start()
         {
@@ -23,7 +28,7 @@ namespace SyncUtil.Example
         }
 
 
-        void InitLockStepCallbacks()
+        private void InitLockStepCallbacks()
         {
             var lockStep = GetComponent<LockStep>();
             lockStep.GetDataFunc = () => new Msg()
@@ -31,13 +36,12 @@ namespace SyncUtil.Example
                 data = LifeGameUpdater.CreateStepData(resolutionScale)
             };
 
-            lockStep.StepFunc = (stepCount, reader) =>
+            lockStep.StepFunc = (_, reader) =>
             {
-                if (stepEnable)
-                {
-                    var msg = reader.Read<Msg>();
-                    _lifeGame.Step(msg.data);
-                }
+                if (!stepEnable) return stepEnable;
+                
+                var msg = reader.Read<Msg>();
+                _lifeGame.Step(msg.data);
                 return stepEnable;
             };
 
@@ -48,7 +52,7 @@ namespace SyncUtil.Example
             };
             lockStep.OnMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
 
-            lockStep.GetHashFunc = () => LockStepHelper.GenerateBufferHash<LifeGame.Data>(_lifeGame.readBufs);
+            lockStep.GetHashFuncAsync = () => LockStepHelper.GenerateBufferHashAsync(_lifeGame.ReadBuffer);
         }
     }
 }

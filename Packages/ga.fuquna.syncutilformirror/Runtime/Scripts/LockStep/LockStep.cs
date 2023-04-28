@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Mirror;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -9,7 +10,6 @@ namespace SyncUtil
 {
     public class LockStep : NetworkBehaviour, ILockStep
     {
-                
         #region Type Define
         
         public struct Data
@@ -38,7 +38,9 @@ namespace SyncUtil
 
         public Func<bool> OnMissingCatchUpServer { set => onMissingCatchUpServer = value; }
         public Action OnMissingCatchUpClient { set => onMissingCatchUpClient = value; }
-        public Func<string> GetHashFunc { set => getHashFunc = value; }
+        
+        
+        public Func<Task<string>> GetHashFuncAsync { set => getHashFuncAsync = value; }
 
         public ConsistencyChecker.ConsistencyData GetLastConsistencyData() => _consistencyChecker.GetLastConsistencyData();
         public void StartCheckConsistency() => _consistencyChecker.StartCheckConsistency(this, StepCountServer + 10);
@@ -57,8 +59,7 @@ namespace SyncUtil
 
         protected Func<bool> onMissingCatchUpServer; 
         protected Action onMissingCatchUpClient;
-        protected Func<string> getHashFunc;
-
+        protected Func<Task<string>> getHashFuncAsync;
 
 
         [FormerlySerializedAs("_dataNumMax")] 
@@ -67,14 +68,12 @@ namespace SyncUtil
         [FormerlySerializedAs("_stepNumMaxPerFrame")] 
         public int stepNumMaxPerFrame = 10;
 
- 
-        readonly SyncList<Data> _dataList = new();
 
-        [SyncVar]
-        InitData _initData;
+        private readonly SyncList<Data> _dataList = new();
+        [SyncVar] private InitData _initData;
 
-        bool _sentInit;
-        bool _initialized;
+        private bool _sentInit;
+        private bool _initialized;
 
         private readonly ConsistencyChecker _consistencyChecker = new();
 
@@ -117,14 +116,13 @@ namespace SyncUtil
         protected virtual void OnServerConnect(NetworkConnection conn)
         {
             var isMissingFirstData = _dataList.Any() && _dataList.First().stepCount > 0;
-            if (isMissingFirstData)
+            if (!isMissingFirstData) return;
+            
+            var list = onMissingCatchUpServer.GetInvocationList();
+            var doStopHost = !list.Any() || list.Aggregate(false, (result, d) => result || ((Func<bool>)d)());
+            if (doStopHost)
             {
-                var list = onMissingCatchUpServer.GetInvocationList();
-                var doStopHost = !list.Any() || list.Aggregate(false, (result, d) => result || ((Func<bool>)d)());
-                if (doStopHost)
-                {
-                    NetworkManager.singleton.StopHost();
-                }
+                NetworkManager.singleton.StopHost();
             }
         }
 
@@ -143,33 +141,31 @@ namespace SyncUtil
         
         protected virtual void SendLockStep()
         {
-            if (getDataFunc != null)
+            if (getDataFunc == null) return;
+            
+            if (!_sentInit)
             {
-                if (!_sentInit)
-                {
-                    var initData = new InitData() { sent = true };
+                var initData = new InitData() { sent = true };
 
-                    var initMsg = getInitDataFunc?.Invoke();
-                    if (initMsg != null)
-                    {
-                        initData.bytes = initMsg.ToBytes();
-                    }
-                    _initData = initData;
-                    _sentInit = true;
-                }
-
-                var msg = getDataFunc();
-                if (msg != null)
+                var initMsg = getInitDataFunc?.Invoke();
+                if (initMsg != null)
                 {
-                    _dataList.Add(new Data() { stepCount = StepCountServer, bytes = msg.ToBytes() });
-                    if (_dataList.Count > dataNumMax) _dataList.RemoveAt(0);
-                    ++StepCountServer;
+                    initData.bytes = initMsg.ToBytes();
                 }
+                _initData = initData;
+                _sentInit = true;
             }
+
+            var msg = getDataFunc();
+            if (msg == null) return;
+            
+            _dataList.Add(new Data() { stepCount = StepCountServer, bytes = msg.ToBytes() });
+            if (_dataList.Count > dataNumMax) _dataList.RemoveAt(0);
+            ++StepCountServer;
         }
 
 
-        void Step()
+        private void Step()
         {
             if (!_dataList.Any() || stepFunc == null) return;
 
@@ -177,11 +173,11 @@ namespace SyncUtil
             for (; idx>=0; --idx)
             {
                 var step = _dataList[idx].stepCount;
-                if ( step == StepCountClient) break;
+                if (step == StepCountClient) break;
                 if (step < StepCountClient) return;
             }
 
-            if ( idx>=0 )
+            if (idx >= 0)
             { 
                 var firstStepCount = _dataList[idx].stepCount;
                 if (firstStepCount > StepCountClient)
@@ -222,7 +218,7 @@ namespace SyncUtil
                             var isStepEnable = stepFunc(data.stepCount, reader);
                             if (!isStepEnable) break;
 
-                            _consistencyChecker.Update(StepCountClient, getHashFunc);
+                            _consistencyChecker.Step(StepCountClient, getHashFuncAsync);
                             StepCountClient++;
                         }
                     }

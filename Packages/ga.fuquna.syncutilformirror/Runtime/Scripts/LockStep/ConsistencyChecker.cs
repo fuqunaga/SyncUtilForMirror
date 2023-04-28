@@ -138,6 +138,7 @@ namespace SyncUtil
             if (stepCountClient == checkConsistencyStepCount)
             {
                 checkConsistencyStepCount = -1;
+                Assert.IsNotNull(getHashFuncAsync, $"{nameof(ILockStep)}.{nameof(ILockStep.GetHashFuncAsync)} must be set.");
                 CheckHash(stepCountClient, getHashFuncAsync);
             }
         }

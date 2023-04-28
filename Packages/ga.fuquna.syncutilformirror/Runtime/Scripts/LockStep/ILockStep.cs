@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Mirror;
 
 namespace SyncUtil
@@ -19,7 +20,8 @@ namespace SyncUtil
         Func<NetworkReader, bool> InitFunc { set; } // if return false, skip current step and call initFunc at next frame.
         Func<bool> OnMissingCatchUpServer { set; } // if return true, StopHost() will be called.
         Action OnMissingCatchUpClient { set; }
-        Func<string> GetHashFunc { set; } // for CheckConsistency
+        Func<Task<string>> GetHashFuncAsync { set; } // for CheckConsistency
+        Func<string> GetHashFunc { set => GetHashFuncAsync = () => Task.FromResult(value()); } // for CheckConsistency
 
         #endregion
 

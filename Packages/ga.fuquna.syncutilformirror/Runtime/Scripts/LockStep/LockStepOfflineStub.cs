@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Mirror;
 using UnityEngine;
 
@@ -63,7 +64,7 @@ namespace SyncUtil
 
         public Func<bool> OnMissingCatchUpServer { set { } }
         public Action OnMissingCatchUpClient { set { } }
-        public Func<string> GetHashFunc { set { } }
+        public Func<Task<string>> GetHashFuncAsync { set { } }
 
         public ConsistencyChecker.ConsistencyData GetLastConsistencyData()
         {

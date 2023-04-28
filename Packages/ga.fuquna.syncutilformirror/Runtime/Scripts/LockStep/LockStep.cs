@@ -38,7 +38,8 @@ namespace SyncUtil
 
         public Func<bool> OnMissingCatchUpServer { set => onMissingCatchUpServer = value; }
         public Action OnMissingCatchUpClient { set => onMissingCatchUpClient = value; }
-        public Func<string> GetHashFunc { set => getHashFunc = value; }
+        
+        
         public Func<Task<string>> GetHashFuncAsync { set => getHashFuncAsync = value; }
 
         public ConsistencyChecker.ConsistencyData GetLastConsistencyData() => _consistencyChecker.GetLastConsistencyData();
@@ -58,7 +59,6 @@ namespace SyncUtil
 
         protected Func<bool> onMissingCatchUpServer; 
         protected Action onMissingCatchUpClient;
-        protected Func<string> getHashFunc;
         protected Func<Task<string>> getHashFuncAsync;
 
 
@@ -219,7 +219,6 @@ namespace SyncUtil
                             if (!isStepEnable) break;
 
                             _consistencyChecker.Step(StepCountClient, getHashFuncAsync);
-                            // _consistencyChecker.Update(StepCountClient, getHashFunc);
                             StepCountClient++;
                         }
                     }

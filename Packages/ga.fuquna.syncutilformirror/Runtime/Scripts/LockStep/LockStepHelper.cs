@@ -2,7 +2,6 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Unity.Collections;
@@ -70,9 +69,6 @@ namespace SyncUtil
         #endregion
         
         
-        private static HashAlgorithm _algorithm;
-
-
         public static Task<string> GenerateBufferHashAsync(params GraphicsBuffer[] buffers) =>
             GenerateBufferHashAsync(buffers.AsEnumerable());
         
@@ -142,45 +138,21 @@ namespace SyncUtil
             return hashString;
         }
    
+        [Obsolete("Use GenerateBufferHashAsync")]
         public static string GenerateBufferHash<T>(GraphicsBuffer buffer) where T : struct
         {
-            var count = buffer.count;
-            var datas = new T[count];
-            buffer.GetData(datas);
-
-            return GenerateBufferHash(count, datas);
+            var task = GenerateBufferHashAsync(buffer);
+            task.Wait();
+            return task.Result;
         }
 
 
+        [Obsolete("Use GenerateBufferHashAsync")]
         public static string GenerateBufferHash<T>(ComputeBuffer buffer) where T : struct
         {
-            var count = buffer.count;
-            var datas = new T[count];
-            buffer.GetData(datas);
-
-            return GenerateBufferHash(count, datas);
-        }
-
-
-        private static string GenerateBufferHash<T>(int count, T[] datas) where T : struct
-        {
-            var size = Marshal.SizeOf(typeof(T));
-
-            var ptr = Marshal.AllocHGlobal(size);
-            var bytes = new byte[size * count];
-            for (var i = 0; i < datas.Length; ++i)
-            {
-                Marshal.StructureToPtr(datas[i], ptr, false);
-                Marshal.Copy(ptr, bytes, i * size, size);
-            }
-            Marshal.FreeHGlobal(ptr);
-
-            var algorithm = HashAlgorithm.Create("SHA256");
-
-            var hash = algorithm.ComputeHash(bytes);
-            algorithm.Clear();
-
-            return hash.Aggregate("", (result, b) => result + b.ToString("X2"));
+            var task = GenerateBufferHashAsync(buffer);
+            task.Wait();
+            return task.Result;
         }
     }
 }

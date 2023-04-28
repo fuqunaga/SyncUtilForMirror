@@ -52,17 +52,7 @@ namespace SyncUtil.Example
             };
             lockStep.OnMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
 
-            var mainThread = Thread.CurrentThread;
-            
-            // lockStep.GetHashFunc = () => LockStepHelper.GenerateBufferHash<LifeGame.Data>(_lifeGame.readBufs);
-            // lockStep.GetHashFuncAsync = async () =>
-            // {
-            //     await Task.Delay(100);
-            //     Debug.Log(mainThread == Thread.CurrentThread);
-            //     return "hoge";
-            // };
-            
-            lockStep.GetHashFuncAsync = async () => await LockStepHelper.GenerateBufferHash(_lifeGame.ReadBuffer);
+            lockStep.GetHashFuncAsync = () => LockStepHelper.GenerateBufferHashAsync(_lifeGame.ReadBuffer);
         }
     }
 }

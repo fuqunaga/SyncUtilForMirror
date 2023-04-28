@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.3.0...v1.4.0) (2023-04-28)
+
+
+### Features
+
+* **LockStep:** The function to generate buffer hashes is now async ([119d470](https://github.com/fuqunaga/SyncUtilForMirror/commit/119d4701c010cabcae49bbeb092fbbd88be80a39))
+
 # [1.3.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.2.1...v1.3.0) (2023-03-10)
 
 

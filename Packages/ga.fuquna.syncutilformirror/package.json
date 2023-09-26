@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "displayName": "SyncUtil For Mirror",
   "description": "Sync Utilities For Mirror",
-  "unity": "2021.3",
+  "unity": "2022.3",
   "documentationUrl": "https://github.com/fuqunaga/SyncUtilForMirror#readme",
   "license": "MIT",
   "keywords": [

@@ -31,19 +31,34 @@ that are received before ClientInvisibilityManagement.Awake().
                         HelpBoxType.Warning),
                     SyncNet.IsServerOrStandAlone
                         ? UI.Column(
-                            prefabs.Select((prefab, i) => UI.Row(
-                                UI.Label(prefab.name, LabelType.Prefix),
-                                UI.Button("Spawn", () => SpawnObject(prefab, i)),
-                                UI.Button("Destroy", () => DestroyObject(prefab))
-                                    .RegisterUpdateCallback(e => e.SetInteractable(GetInstanceStack(prefab).Any()))
-                                )
-                            )
+                            prefabs.Select((prefab, i) =>
+                            {
+                                var clientInvisibility = prefab.GetComponent<ClientInvisibility>();
+                                var label = prefab.name;
+                                
+                                if (clientInvisibility != null)
+                                {
+                                    var invisibleClientNames = clientInvisibility.invisibleClientNameList.Aggregate((a, b) => $"{a}, {b}");
+                                    label += $" (invisible:{invisibleClientNames})";
+                                }
+                                else
+                                {
+                                    label += " (has no ClientInvisibility component)";
+                                }
+
+                                return UI.Row(
+                                    UI.Label(label, LabelType.Prefix),
+                                    UI.Button("Spawn", () => SpawnObject(prefab, i * 2f)),
+                                    UI.Button("Destroy", () => DestroyObject(prefab))
+                                        .RegisterUpdateCallback(e => e.SetInteractable(GetInstanceStack(prefab).Any()))
+                                );
+                            })
                         )
                         : UI.DynamicElementIfObjectFound<ClientName>(clientName => UI.Field(() => clientName.myName))
             );
         }
 
-        Stack<NetworkIdentity> GetInstanceStack(NetworkIdentity prefab)
+        private Stack<NetworkIdentity> GetInstanceStack(NetworkIdentity prefab)
         {
             if (!_instances.TryGetValue(prefab, out var stack))
             {
@@ -53,7 +68,7 @@ that are received before ClientInvisibilityManagement.Awake().
             return stack;
         }
 
-        void SpawnObject(NetworkIdentity prefab, float y)
+        private void SpawnObject(NetworkIdentity prefab, float y)
         {
             var stack = GetInstanceStack(prefab);
             var ni = Instantiate(prefab);
@@ -69,7 +84,7 @@ that are received before ClientInvisibilityManagement.Awake().
             stack.Push(ni);
         }
 
-        void DestroyObject(NetworkIdentity prefab)
+        private void DestroyObject(NetworkIdentity prefab)
         {
             var stack = GetInstanceStack(prefab);
             if (stack.TryPop(out var ni))

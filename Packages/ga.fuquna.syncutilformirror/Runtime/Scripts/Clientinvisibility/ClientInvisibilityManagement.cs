@@ -23,7 +23,7 @@ namespace SyncUtil
             foreach (var conn in NetworkServer.connections.Values)
             {
                 var clientName = manager.GetClientName(conn);
-                if (invisibleClientNameList != null && !invisibleClientNameList.Contains(clientName))
+                if (invisibleClientNameList == null || !invisibleClientNameList.Contains(clientName))
                 {
                     newObservers.Add(conn);
                 }

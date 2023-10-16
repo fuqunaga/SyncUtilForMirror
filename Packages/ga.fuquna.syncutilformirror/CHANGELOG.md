@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.0...v1.4.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* ClientInvisibility-attached objects were not displayed in scenes with ClientInvisibilityManagement. ([f168400](https://github.com/fuqunaga/SyncUtilForMirror/commit/f16840035654988100948a0a07ba6e77d74cb900))
+
 # [1.4.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.3.0...v1.4.0) (2023-04-28)
 
 

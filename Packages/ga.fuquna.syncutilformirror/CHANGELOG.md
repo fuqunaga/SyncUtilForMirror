@@ -1,3 +1,11 @@
+## [1.4.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.1...v1.4.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* ClientHeartBeat shows last recieved frame ([ac84f54](https://github.com/fuqunaga/SyncUtilForMirror/commit/ac84f540a7f80dfedf1f542d309af02eea49cc6f))
+* Shortened ClientHeatBeat.ToString() ([074134e](https://github.com/fuqunaga/SyncUtilForMirror/commit/074134e2bd52c4629d117e18b939c9e4835dec0d))
+
 ## [1.4.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.0...v1.4.1) (2023-10-16)
 
 

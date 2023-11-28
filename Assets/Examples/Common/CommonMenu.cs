@@ -10,8 +10,8 @@ namespace SyncUtil.Example
     public class CommonMenu : MonoBehaviour
     {
         private ClientHeartBeat _clientHeartBeat;
-        
-        void Start()
+
+        private void Start()
         {
             _clientHeartBeat = FindObjectOfType<ClientHeartBeat>();
             
@@ -32,7 +32,7 @@ namespace SyncUtil.Example
         }
 
 
-        Element OnlineMenu()
+        private Element OnlineMenu()
         {
             return UI.Column(
                 UI.FieldReadOnly("Status",
@@ -59,7 +59,11 @@ namespace SyncUtil.Example
                     if (!SyncNet.IsServer || _clientHeartBeat == null) return null;
 
                     return UI.Column(
-                        UI.Label("Clients"),
+                        UI.Row(
+                            UI.Label("Clients"),
+                            UI.Space(),
+                            UI.Field("currentFrame", () => Time.frameCount)
+                        ),
                         UI.Box(
                             UI.DynamicElementOnStatusChanged(
                                 () => GetConnectionIdsWithoutHost().Count(),
@@ -71,7 +75,7 @@ namespace SyncUtil.Example
                                             return $"ConnId: {connectionId} {info}";
                                         }))
                                 )
-                            ).SetWidth(500f)
+                            ).SetMinWidth(500f)
                         )
                     );
 
@@ -81,7 +85,7 @@ namespace SyncUtil.Example
             }
         }
 
-        static Element OfflineMenu()
+        private static Element OfflineMenu()
         {
             return UI.Column(
                 UI.FieldIfObjectFound<SceneSelectorForExample>(),

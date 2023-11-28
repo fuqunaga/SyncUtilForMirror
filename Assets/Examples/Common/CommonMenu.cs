@@ -69,10 +69,14 @@ namespace SyncUtil.Example
                                 () => GetConnectionIdsWithoutHost().Count(),
                                 _ => UI.Column(
                                     GetConnectionIdsWithoutHost()
-                                        .Select(connectionId => UI.Label(() =>
+                                        .Select((connectionId, idx) => UI.Label(() =>
                                         {
+                                            var address = NetworkServer.connections.TryGetValue(connectionId, out var conn)
+                                                ? conn.address
+                                                : "No connection";
+                                            
                                             var info = _clientHeartBeat.GetHeartBeatInfo(connectionId);
-                                            return $"ConnId: {connectionId} {info}";
+                                            return $"{idx} Addr:{address} ConnId:{connectionId} {info}";
                                         }))
                                 )
                             ).SetMinWidth(500f)

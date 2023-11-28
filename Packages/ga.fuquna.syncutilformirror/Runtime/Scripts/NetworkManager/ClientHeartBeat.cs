@@ -42,7 +42,7 @@ namespace SyncUtil
             
             public override string ToString()
             {
-                return $"rtt:{Rtt:0.000} rttAverage:{RttAverage:0.000} receivedFrame:{ReceivedFrameCount}";
+                return $"rtt:{Rtt:0.000} rttAve:{RttAverage:0.000} lastFrame:{ReceivedFrameCount}";
             }
         }
 

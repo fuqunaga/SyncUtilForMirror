@@ -117,9 +117,8 @@ namespace SyncUtil
         {
             var isMissingFirstData = _dataList.Any() && _dataList.First().stepCount > 0;
             if (!isMissingFirstData) return;
-            
-            var list = onMissingCatchUpServer.GetInvocationList();
-            var doStopHost = !list.Any() || list.Aggregate(false, (result, d) => result || ((Func<bool>)d)());
+
+            var doStopHost = onMissingCatchUpServer?.Invoke() ?? false;
             if (doStopHost)
             {
                 NetworkManager.singleton.StopHost();

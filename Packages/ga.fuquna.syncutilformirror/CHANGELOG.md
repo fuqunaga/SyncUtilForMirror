@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.2...v1.4.3) (2023-12-22)
+
+
+### Bug Fixes
+
+* error when LockStep.OnMissingCatchUpServer is not registered ([64e8f8d](https://github.com/fuqunaga/SyncUtilForMirror/commit/64e8f8df8b4cdc3929b78a160afc3615cc5cd6a8))
+
 ## [1.4.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.1...v1.4.2) (2023-11-28)
 
 

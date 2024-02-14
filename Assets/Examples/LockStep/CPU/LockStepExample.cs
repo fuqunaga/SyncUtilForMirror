@@ -71,7 +71,7 @@ namespace SyncUtil.Example
             lockStep.OnMissingCatchUpServer = () =>
             {
                 Debug.Log("OnMissingCatchUp at Server. NetworkManager.Shutdown() will be called.");
-                return true;
+                return false;
             };
             lockStep.OnMissingCatchUpClient = () => Debug.Log("OnMissingCatchUp at Client. Server will disconnect.");
 

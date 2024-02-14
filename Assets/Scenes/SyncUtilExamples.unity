@@ -415,6 +415,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: SyncNetworkManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5592615654213564026, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5592615654213564027, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+      propertyPath: sendRate
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 5592615654213564027, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+      propertyPath: transport
+      value: 
+      objectReference: {fileID: 2054765692}
+    - target: {fileID: 5592615654213564027, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+      propertyPath: enableLogClient
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5592615654213564027, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+      propertyPath: enableLogServer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5592615654213564027, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
       propertyPath: spawnPrefabs.Array.size
       value: 7
@@ -474,8 +494,46 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5592615654213564026, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2054765692}
   m_SourcePrefab: {fileID: 100100000, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+--- !u!1 &2054765690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5592615654213564026, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+  m_PrefabInstance: {fileID: 2054765689}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2054765691 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5592615654213564018, guid: eed5721344abc3d41a6b21d4ae971fd9, type: 3}
+  m_PrefabInstance: {fileID: 2054765689}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054765690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2054765692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054765690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96b149f511061407fb54895c057b7736, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wrap: {fileID: 2054765691}
+  jitter: 0
+  jitterSpeed: 1
+  reliableLatency: 0
+  unreliableLoss: 0
+  unreliableLatency: 0
+  unreliableScramble: 0
 --- !u!850595691 &2099343271
 LightingSettings:
   m_ObjectHideFlags: 0

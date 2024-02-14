@@ -93,12 +93,18 @@ namespace SyncUtil
         [FormerlySerializedAs("_stepNumMaxPerFrame")]
         public int stepNumMaxPerFrame = 10;
 
+        [Tooltip("遅延ステップ数\nクライアント側でこのステップ数の実行を遅らせる。最新のStepDataが来なくてもバッファがある限りステップ動作させることで画面の停止をある程度防ぐ")]
+        public int delayStep;
+
+        [Tooltip("遅延ステップを消費していい間隔。遅延ステップを常に進めるとサーバーが処理落ちしていた場合など補充されない場合がありバッファがすぐに枯渇してしまう。ゆっくりステップ実行を進める")]
+        public float processDelayStepInterval = 0.1f;
 
         private readonly SyncList<Data> _dataList = new();
         [SyncVar] private InitData _initData;
 
         private bool _sentInit;
         private bool _initialized;
+        private float _lastProcessDelayStepTime;
 
         private readonly ConsistencyChecker _consistencyChecker = new();
 
@@ -193,17 +199,27 @@ namespace SyncUtil
         private void Step()
         {
             var dataListCount = _dataList.Count;
-            if (dataListCount <= 0 || stepFunc == null) return;
+            if (dataListCount <= delayStep || stepFunc == null) return;
+
+            // まだ新しいステップのデータが届いていないので終了
+            if (_dataList.Last().stepCount < StepCountClient) return;
 
             // _dataListを後ろから検索してStepCountClientと一致するステップ数のインデックスを求める
             var idx = dataListCount - 1;
             for (; idx >= 0; --idx)
             {
                 var step = _dataList[idx].stepCount;
+                
+                // 一致するステップ数のデータが見つかった
                 if (step == StepCountClient) break;
-
-                // まだ次のステップのデータが届いていない
-                if (step < StepCountClient) return;
+                
+                // 一致するステップ数のデータが見つかる前にStepCountClientより小さいステップ数のデータが見つかった
+                if (step < StepCountClient)
+                {
+                    Debug.LogWarning($"A smaller step count[{step}] than StepCountClient[{StepCountClient}] was found before data with a matching step count was found.");
+                    onMissingCatchUpClient?.Invoke();
+                    return;
+                }
             }
 
             // _dataListの中にStepCountClientより先のデータしかない
@@ -235,11 +251,19 @@ namespace SyncUtil
                 }
             }
 
+
             if (!_initialized) return;
-
-
+            
             // Step実行
-            var limit = Mathf.Min(idx + stepNumMaxPerFrame, _dataList.Count);
+            // delayStep分は残して最大stepNumMaxPerFrame回実行してよい
+            // 一回も実行できないならdelayStepを無視して１回実行できる
+            var limit = Mathf.Min(idx + stepNumMaxPerFrame, _dataList.Count - delayStep);
+            if ( limit <= idx && Time.time - _lastProcessDelayStepTime > processDelayStepInterval)
+            {
+                limit = Mathf.Min(idx + 1, _dataList.Count);
+                _lastProcessDelayStepTime = Time.time;
+            }
+            
             for (; idx < limit; idx++)
             {
                 var data = _dataList[idx];

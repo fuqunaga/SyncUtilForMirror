@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
 namespace SyncUtil.Example

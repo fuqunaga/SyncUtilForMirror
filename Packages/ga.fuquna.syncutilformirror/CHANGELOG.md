@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.3...v1.5.0) (2024-02-14)
+
+
+### Bug Fixes
+
+* LifeGame warning ([ff8316d](https://github.com/fuqunaga/SyncUtilForMirror/commit/ff8316dda1ae413b0540f3ae6cbaf8319a80affa))
+
+
+### Features
+
+* **LockStep:** add delayStep, processDelayStepInterval ([7ec4273](https://github.com/fuqunaga/SyncUtilForMirror/commit/7ec42731e3979e87ca25561b36ed2b0033052684))
+
 ## [1.4.3](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.2...v1.4.3) (2023-12-22)
 
 

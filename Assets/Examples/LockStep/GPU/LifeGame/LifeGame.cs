@@ -164,7 +164,11 @@ namespace SyncUtil.Example
 
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
-            if (_readBuffer == null) return;
+            if (_readBuffer == null)
+            {
+                Graphics.Blit(source, destination);
+                return;
+            }
             _mat.SetInt(CommonParam.Width, width);
             _mat.SetInt(CommonParam.Height, height);
             _mat.SetBuffer(ShaderParam.Buf, ReadBuffer);

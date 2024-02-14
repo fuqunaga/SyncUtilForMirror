@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = System.Random;
 
 namespace SyncUtil.Example
 {
@@ -19,12 +18,12 @@ namespace SyncUtil.Example
         private static class CsParam
         {
             public const string KernelStep = "Step";
-            public const string WriteBuf = "_WriteBuf";
-            public const string ReadBuf = "_ReadBuf";
+            public static readonly int WriteBuf = Shader.PropertyToID("_WriteBuf");
+            public static readonly int ReadBuf = Shader.PropertyToID("_ReadBuf");
 
             public const string KernelInput = "Input";
-            public const string InputPos = "_InputPos";
-            public const string InputRadius = "_InputRadius";
+            public static readonly int InputPos = Shader.PropertyToID("_InputPos");
+            public static readonly int InputRadius = Shader.PropertyToID("_InputRadius");
         }
 
         private static class ShaderParam
@@ -68,6 +67,7 @@ namespace SyncUtil.Example
         private float _interval = 0f;
         private GraphicsBuffer _writeBuffer;
         private GraphicsBuffer _readBuffer;
+        
 
 
         public GraphicsBuffer ReadBuffer => _readBuffer;
@@ -122,7 +122,7 @@ namespace SyncUtil.Example
             DestroyBuffers();
 
             seed = (seed <= 0) ? data.randSeed : seed;
-            var rand = new System.Random(seed);
+            var rand = new Random(seed);
             var gridNum = width * height;
 
             _readBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, gridNum, Marshal.SizeOf(typeof(Data)));
@@ -173,10 +173,8 @@ namespace SyncUtil.Example
 
         private static void Dispatch(ComputeShader cs, int kernel, Vector3 threadNum)
         {
-            uint x, y, z;
-            cs.GetKernelThreadGroupSizes(kernel, out x, out y, out z);
+            cs.GetKernelThreadGroupSizes(kernel, out var x, out var y, out var z);
             cs.Dispatch(kernel, Mathf.CeilToInt(threadNum.x / x), Mathf.CeilToInt(threadNum.y / y), Mathf.CeilToInt(threadNum.z / z));
         }
-
     }
 }

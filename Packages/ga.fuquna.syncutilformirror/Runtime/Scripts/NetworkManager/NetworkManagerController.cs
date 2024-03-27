@@ -33,7 +33,9 @@ namespace SyncUtil
         public bool showManualBootMenu = true;
         public bool dontDestroyOnLoad = true;
 
-        static SyncNetworkManager NetworkManager => SyncNetworkManager.Singleton;
+        public BootType? StartedBootType { get; private set; }
+        
+        private static SyncNetworkManager NetworkManager => SyncNetworkManager.Singleton;
         
 
         public virtual void Start()
@@ -83,7 +85,7 @@ namespace SyncUtil
             Assert.IsFalse(bootType == BootType.Manual);
             StopAllCoroutines();
 
-            IEnumerator routine = bootType switch
+            var routine = bootType switch
             {
                 BootType.Host => StartConnectLoop(() => NetworkClient.active, () => NetworkManager.StartHost()),
                 BootType.Client => StartConnectLoop(() => NetworkClient.active, StartClient),
@@ -92,23 +94,25 @@ namespace SyncUtil
             };
 
             StartCoroutine(routine);
+
+            StartedBootType = bootType;
         }
 
-        void StartClient()
+        private static void StartClient()
         {
             NetworkManager.onClientError -= OnClientError;
             NetworkManager.onClientError += OnClientError;
 
             NetworkManager.StartClient();
+            
+            void OnClientError(TransportError error, string reason)
+            {
+                NetworkManager.StopClient();
+            }
         }
 
-        void OnClientError(TransportError error, string reason)
-        {
-            NetworkManager.StopClient();
-        }
 
-
-        IEnumerator StartConnectLoop(Func<bool> isActiveFunc, Action startFunc)
+        private IEnumerator StartConnectLoop(Func<bool> isActiveFunc, Action startFunc)
         {
             while (true)
             {

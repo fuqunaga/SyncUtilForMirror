@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.5.0...v1.6.0) (2024-03-27)
+
+
+### Features
+
+* add NetworkManagerController.StartedBootType ([218d463](https://github.com/fuqunaga/SyncUtilForMirror/commit/218d46320337ca74bffb8020ab8de4d05f692fd7))
+
 # [1.5.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.4.3...v1.5.0) (2024-02-14)
 
 

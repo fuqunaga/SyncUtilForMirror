@@ -14,15 +14,11 @@ namespace Mirror
         readonly NetworkWriter reliableRpcs = new NetworkWriter();
         readonly NetworkWriter unreliableRpcs = new NetworkWriter();
 
-        public virtual string address => Transport.active.ServerGetClientAddress(connectionId);
+        public virtual string address { get; private set; }
 
         /// <summary>NetworkIdentities that this connection can see</summary>
         // TODO move to server's NetworkConnectionToClient?
         public readonly HashSet<NetworkIdentity> observing = new HashSet<NetworkIdentity>();
-
-        // Deprecated 2022-10-13
-        [Obsolete(".clientOwnedObjects was renamed to .owned :)")]
-        public HashSet<NetworkIdentity> clientOwnedObjects => owned;
 
         // unbatcher
         public Unbatcher unbatcher = new Unbatcher();
@@ -54,9 +50,11 @@ namespace Mirror
         /// <summary>Round trip time (in seconds) that it takes a message to go server->client->server.</summary>
         public double rtt => _rtt.Value;
 
-        public NetworkConnectionToClient(int networkConnectionId)
+        public NetworkConnectionToClient(int networkConnectionId, string clientAddress = "localhost")
             : base(networkConnectionId)
         {
+            address = clientAddress;
+
             // initialize EMA with 'emaDuration' seconds worth of history.
             // 1 second holds 'sendRate' worth of values.
             // multiplied by emaDuration gives n-seconds.
@@ -132,7 +130,8 @@ namespace Mirror
                 // TODO it would be safer for the server to store the last N
                 // messages' timestamp and only send a message number.
                 // This way client's can't just modify the timestamp.
-                NetworkPingMessage pingMessage = new NetworkPingMessage(NetworkTime.localTime);
+                // predictedTime parameter is 0 because the server doesn't predict.
+                NetworkPingMessage pingMessage = new NetworkPingMessage(NetworkTime.localTime, 0);
                 Send(pingMessage, Channels.Unreliable);
                 lastPingTime = NetworkTime.localTime;
             }
@@ -207,10 +206,9 @@ namespace Mirror
             {
                 if (netIdentity != null)
                 {
-                    // unspawn scene objects, destroy instantiated objects.
-                    // fixes: https://github.com/MirrorNetworking/Mirror/issues/3538
+                    // disown scene objects, destroy instantiated objects.
                     if (netIdentity.sceneId != 0)
-                        NetworkServer.UnSpawn(netIdentity.gameObject);
+                        NetworkServer.RemovePlayerForConnection(this, RemovePlayerOptions.KeepActive);
                     else
                         NetworkServer.Destroy(netIdentity.gameObject);
                 }

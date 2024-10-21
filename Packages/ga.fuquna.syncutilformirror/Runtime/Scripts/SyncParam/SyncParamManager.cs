@@ -30,7 +30,7 @@ namespace SyncUtil
         {
             base.OnStartClient();
             _triggeredKey = new(_syncDictionary.Keys);
-            _syncDictionary.Callback += (_, key, _) =>  _triggeredKey.Add(key);
+            _syncDictionary.OnChange += (_, key, _) =>  _triggeredKey.Add(key);
         }
 
         #endregion

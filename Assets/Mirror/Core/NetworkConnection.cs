@@ -122,6 +122,7 @@ namespace Mirror
         // Send stage two: serialized NetworkMessage as ArraySegment<byte>
         // internal because no one except Mirror should send bytes directly to
         // the client. they would be detected as a message. send messages instead.
+        // => make sure to validate message<T> size before calling Send<byte>!
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal virtual void Send(ArraySegment<byte> segment, int channelId = Channels.Reliable)
         {
@@ -200,6 +201,18 @@ namespace Mirror
         // it simply asks the transport to disconnect.
         // then later the transport events will do the clean up.
         public abstract void Disconnect();
+
+        // cleanup is called before the connection is removed.
+        // return any batches' pooled writers before the connection disappears.
+        // otherwise if a connection disappears before flushing, writers would
+        // never be returned to the pool.
+        public virtual void Cleanup()
+        {
+            foreach (Batcher batcher in batches.Values)
+            {
+                batcher.Clear();
+            }
+        }
 
         public override string ToString() => $"connection({connectionId})";
     }

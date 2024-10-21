@@ -30,7 +30,11 @@ namespace SyncUtil
         {
             base.OnStartClient();
             _triggeredKey = new(_syncDictionary.Keys);
-            _syncDictionary.OnChange += (_, key, _) =>  _triggeredKey.Add(key);
+#if MIRROR_90_OR_NEWER
+            _syncDictionary.OnChange += (_, key, _) => _triggeredKey.Add(key);
+#else
+            _syncDictionary.Callback += (_, key, _) => _triggeredKey.Add(key);
+#endif
         }
 
         #endregion

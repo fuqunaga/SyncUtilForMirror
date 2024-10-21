@@ -1,3 +1,10 @@
+## [1.6.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.6.0...v1.6.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* Build error after Mirror90 in SyncParamManager ([300eae7](https://github.com/fuqunaga/SyncUtilForMirror/commit/300eae70f0e72ee73d58d3bf219d3e794ee4a36a))
+
 # [1.6.0](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.5.0...v1.6.0) (2024-03-27)
 
 

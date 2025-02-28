@@ -36,7 +36,7 @@ namespace Mirror
         /// <summary>Is this transport available in the current platform?</summary>
         public abstract bool Available();
 
-        /// <summary>Is this transported encrypted for secure communication?</summary>
+        /// <summary>Is this transport encrypted for secure communication?</summary>
         public virtual bool IsEncrypted => false;
 
         /// <summary>If encrypted, which cipher is used?</summary>
@@ -197,6 +197,7 @@ namespace Mirror
         public abstract void Shutdown();
 
         /// <summary>Called by Unity when quitting. Inheriting Transports should call base for proper Shutdown.</summary>
+        // (this can't be in OnDestroy: https://github.com/MirrorNetworking/Mirror/issues/3952)
         public virtual void OnApplicationQuit()
         {
             // stop transport (e.g. to shut down threads)

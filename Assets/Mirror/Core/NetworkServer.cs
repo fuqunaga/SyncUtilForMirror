@@ -70,9 +70,16 @@ namespace Mirror
         public static readonly Dictionary<uint, NetworkIdentity> spawned =
             new Dictionary<uint, NetworkIdentity>();
 
-        /// <summary>Single player mode can use dontListen to not accept incoming connections</summary>
-        // see also: https://github.com/vis2k/Mirror/pull/2595
-        public static bool dontListen;
+        /// <summary>Single player mode can set listen=false to not accept incoming connections.</summary>
+        public static bool listen;
+
+        // DEPRECATED 2024-10-14
+        [Obsolete("NetworkServer.dontListen was replaced with NetworkServer.listen. The new value is the opposite, and avoids double negatives like 'dontListen=false'")]
+        public static bool dontListen
+        {
+            get => !listen;
+            set => listen = !value;
+        }
 
         /// <summary>active checks if the server has been started either has standalone or as host server.</summary>
         public static bool active { get; internal set; }
@@ -137,7 +144,7 @@ namespace Mirror
             maxConnections = maxConns;
 
             // only start server if we want to listen
-            if (!dontListen)
+            if (listen)
             {
                 Transport.active.ServerStart();
 
@@ -241,7 +248,7 @@ namespace Mirror
             }
 
             // Reset all statics here....
-            dontListen = false;
+            listen = true;
             isLoadingScene = false;
             lastSendTime = 0;
             actualTickRate = 0;
@@ -343,7 +350,13 @@ namespace Mirror
                                 return;
                             }
 
-                    Debug.LogWarning("Command received while client is not ready.\nThis may be ignored if client intentionally set NotReady.");
+                    if (RemoteProcedureCalls.GetFunctionMethodName(msg.functionHash, out string method))
+                    {
+                        Debug.LogWarning($"Command {method} received from {conn} when client was not ready.\nThis may be ignored if client intentionally set NotReady.");
+                        return;
+                    }
+
+                    Debug.LogWarning($"Command received from {conn} while client is not ready.\nThis may be ignored if client intentionally set NotReady.");
                 }
                 return;
             }
@@ -658,7 +671,7 @@ namespace Mirror
 
         static void OnTransportConnectedWithAddress(int connectionId, string clientAddress)
         {
-            if (IsConnectionAllowed(connectionId))
+            if (IsConnectionAllowed(connectionId, clientAddress))
             {
                 // create a connection
                 NetworkConnectionToClient conn = new NetworkConnectionToClient(connectionId, clientAddress);
@@ -671,21 +684,28 @@ namespace Mirror
             }
         }
 
-        static bool IsConnectionAllowed(int connectionId)
+        static bool IsConnectionAllowed(int connectionId, string address)
         {
+            // only accept connections while listening
+            if (!listen)
+            {
+                Debug.Log($"Server not listening, rejecting connectionId={connectionId} with address={address}");
+                return false;
+            }
+
             // connectionId needs to be != 0 because 0 is reserved for local player
             // note that some transports like kcp generate connectionId by
             // hashing which can be < 0 as well, so we need to allow < 0!
             if (connectionId == 0)
             {
-                Debug.LogError($"Server.HandleConnect: invalid connectionId: {connectionId} . Needs to be != 0, because 0 is reserved for local player.");
+                Debug.LogError($"Server.HandleConnect: invalid connectionId={connectionId}. Needs to be != 0, because 0 is reserved for local player.");
                 return false;
             }
 
             // connectionId not in use yet?
             if (connections.ContainsKey(connectionId))
             {
-                Debug.LogError($"Server connectionId {connectionId} already in use...client will be kicked");
+                Debug.LogError($"Server connectionId={connectionId} already in use. Client with address={address} will be kicked");
                 return false;
             }
 
@@ -696,7 +716,7 @@ namespace Mirror
             //  Transport can't do that)
             if (connections.Count >= maxConnections)
             {
-                Debug.LogError($"Server full, client {connectionId} will be kicked");
+                Debug.LogError($"Server full, client connectionId={connectionId} with address={address} will be kicked");
                 return false;
             }
 
@@ -1351,13 +1371,13 @@ namespace Mirror
         }
 
         // show / hide for connection //////////////////////////////////////////
-        internal static void ShowForConnection(NetworkIdentity identity, NetworkConnection conn)
+        internal static void ShowForConnection(NetworkIdentity identity, NetworkConnectionToClient conn)
         {
             if (conn.isReady)
                 SendSpawnMessage(identity, conn);
         }
 
-        internal static void HideForConnection(NetworkIdentity identity, NetworkConnection conn)
+        internal static void HideForConnection(NetworkIdentity identity, NetworkConnectionToClient conn)
         {
             ObjectHideMessage msg = new ObjectHideMessage
             {
@@ -1367,7 +1387,7 @@ namespace Mirror
         }
 
         // spawning ////////////////////////////////////////////////////////////
-        internal static void SendSpawnMessage(NetworkIdentity identity, NetworkConnection conn)
+        internal static void SendSpawnMessage(NetworkIdentity identity, NetworkConnectionToClient conn)
         {
             if (identity.serverOnly) return;
 
@@ -1538,14 +1558,14 @@ namespace Mirror
         /// <summary>Spawn the given game object on all clients which are ready.</summary>
         // This will cause a new object to be instantiated from the registered
         // prefab, or from a custom spawn function.
-        public static void Spawn(GameObject obj, NetworkConnection ownerConnection = null)
+        public static void Spawn(GameObject obj, NetworkConnectionToClient ownerConnection = null)
         {
             SpawnObject(obj, ownerConnection);
         }
 
         /// <summary>Spawns an object and also assigns Client Authority to the specified client.</summary>
         // This is the same as calling NetworkIdentity.AssignClientAuthority on the spawned object.
-        public static void Spawn(GameObject obj, uint assetId, NetworkConnection ownerConnection = null)
+        public static void Spawn(GameObject obj, uint assetId, NetworkConnectionToClient ownerConnection = null)
         {
             if (GetNetworkIdentity(obj, out NetworkIdentity identity))
             {
@@ -1554,7 +1574,7 @@ namespace Mirror
             SpawnObject(obj, ownerConnection);
         }
 
-        static void SpawnObject(GameObject obj, NetworkConnection ownerConnection)
+        static void SpawnObject(GameObject obj, NetworkConnectionToClient ownerConnection)
         {
             // verify if we can spawn this
             if (Utils.IsPrefab(obj))
@@ -1700,6 +1720,9 @@ namespace Mirror
             // in host mode, call OnStopClient/OnStopLocalPlayer manually
             if (NetworkClient.active && activeHost)
             {
+                // fix: #3962 custom unspawn handler for this prefab (for prefab pools etc.)
+                NetworkClient.InvokeUnSpawnHandler(identity.assetId, identity.gameObject);
+
                 if (identity.isLocalPlayer)
                     identity.OnStopLocalPlayer();
 

@@ -1036,7 +1036,6 @@ GameObject:
   - component: {fileID: 343546206307382570}
   - component: {fileID: 343546206307382580}
   - component: {fileID: 343546206307382581}
-  - component: {fileID: 343546206307382583}
   m_Layer: 5
   m_Name: GraphContent
   m_TagString: Untagged
@@ -1100,33 +1099,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &343546206307382583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 343546206307382571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73bc3b929ec94537a8dbd67eb9d0c2c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Material: {fileID: 2100000, guid: 5f77111e39fad6240bbf2a93d735b648, type: 2}
-  Renderer: {fileID: 343546206307382581}
-  Points: 16
-  SecondsPerPoint: 0.5
-  CategoryColors:
-  - {r: 0, g: 1, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0, g: 1, b: 0, a: 1}
-  IsStacked: 0
-  LegendTexts:
-  - {fileID: 343546205394542242}
-  - {fileID: 343546204850636256}
-  - {fileID: 343546206440079828}
-  - {fileID: 343546206326199853}
-  - {fileID: 343546205136049351}
 --- !u!1 &343546206326199843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1214,6 +1186,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 343546206339761112}
+  - component: {fileID: 4901013733809370033}
   m_Layer: 5
   m_Name: FPSMinMaxAvg
   m_TagString: Untagged
@@ -1242,6 +1215,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4901013733809370033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343546206339761113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73bc3b929ec94537a8dbd67eb9d0c2c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Material: {fileID: 2100000, guid: 5f77111e39fad6240bbf2a93d735b648, type: 2}
+  Renderer: {fileID: 343546206307382581}
+  Points: 16
+  SecondsPerPoint: 0.5
+  CategoryColors:
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  IsStacked: 0
+  LegendTexts:
+  - {fileID: 343546205394542242}
+  - {fileID: 343546204850636256}
+  - {fileID: 343546206440079828}
+  - {fileID: 343546206326199853}
+  - {fileID: 343546205136049351}
+  runtimeMaterial: {fileID: 0}
 --- !u!1 &343546206359818247
 GameObject:
   m_ObjectHideFlags: 0

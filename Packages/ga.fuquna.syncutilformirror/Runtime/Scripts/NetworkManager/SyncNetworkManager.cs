@@ -103,13 +103,13 @@ namespace SyncUtil
 
         public override void OnServerConnect(NetworkConnectionToClient conn)
         {
-            if (enableLogServer) Log($"Server connection ID: {conn.connectionId}  has connected to the server");
+            if (enableLogServer) Log($"Server connection ID: {conn.connectionId} has connected to client");
             base.OnServerConnect(conn);
         }
 
         public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            if (enableLogServer) Log($"Server Disconnect  connection ID {conn.connectionId}");
+            if (enableLogServer) Log($"Server Disconnect connection ID {conn.connectionId}");
             base.OnServerDisconnect(conn);
         }
 
@@ -126,7 +126,7 @@ namespace SyncUtil
 
         public override void OnClientConnect()
         {
-            if (enableLogClient) Log($"Client connection ID: {NetworkClient.connection.connectionId}  has connected to the server");
+            if (enableLogClient) Log("Client connected to server");
             base.OnClientConnect();
         }
 
@@ -139,7 +139,7 @@ namespace SyncUtil
 
         public override void OnClientDisconnect()
         {
-            if (enableLogClient) Log($"Client Disconnect  connection ID {NetworkClient.connection.connectionId}");
+            if (enableLogClient) Log("Client disconnected from server");
             base.OnClientDisconnect();
         }
 

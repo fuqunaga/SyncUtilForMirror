@@ -632,16 +632,12 @@ namespace Mirror
             //     NetworkClient.OnTransportDisconnect
             //   NetworkManager.OnClientDisconnect
             NetworkClient.Disconnect();
-
-            // UNET invoked OnDisconnected cleanup immediately.
-            // let's keep it for now, in case any projects depend on it.
-            // TODO simply remove this in the future.
-            OnClientDisconnectInternal();
         }
 
         // called when quitting the application by closing the window / pressing
         // stop in the editor. virtual so that inheriting classes'
         // OnApplicationQuit() can call base.OnApplicationQuit() too
+        // (this can't be in OnDestroy: https://github.com/MirrorNetworking/Mirror/issues/3952)
         public virtual void OnApplicationQuit()
         {
             // stop client first

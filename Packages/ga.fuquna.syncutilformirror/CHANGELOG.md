@@ -1,3 +1,11 @@
+## [1.6.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.6.1...v1.6.2) (2025-02-28)
+
+
+### Bug Fixes
+
+* Missing script ([558635d](https://github.com/fuqunaga/SyncUtilForMirror/commit/558635de9036187be5a014c4277567e7e24169f0))
+* Unity6 warnings ([ccff929](https://github.com/fuqunaga/SyncUtilForMirror/commit/ccff9298ba08cdca4bbdd62913bf9bba26cac514))
+
 ## [1.6.1](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.6.0...v1.6.1) (2024-10-21)
 
 

@@ -13,7 +13,7 @@ namespace SyncUtil.Example
 
         private void Start()
         {
-            _clientHeartBeat = FindObjectOfType<ClientHeartBeat>();
+            _clientHeartBeat = FindFirstObjectByType<ClientHeartBeat>();
             
             var root = GetComponent<RosettaUIRoot>();
             root.Build(CreateElement());

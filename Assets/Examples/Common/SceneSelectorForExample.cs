@@ -59,7 +59,7 @@ namespace SyncUtil.Example
         {
             if (onlineSceneNames != null && onlineSceneNames.Any())
             {
-                var nm = FindObjectOfType<NetworkManager>();
+                var nm = FindFirstObjectByType<NetworkManager>();
                 nm.onlineScene = onlineSceneNames[Mathf.Min(onlineSceneNames.Length - 1, idx)];
             }
         }

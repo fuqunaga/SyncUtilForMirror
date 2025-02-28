@@ -20,7 +20,7 @@ namespace SyncUtil.Example
                 element
             ).SetPosition(windowPosition);
 
-            var root = FindObjectOfType<RosettaUIRoot>();
+            var root = FindFirstObjectByType<RosettaUIRoot>();
             root.Build(_window);
         }
 

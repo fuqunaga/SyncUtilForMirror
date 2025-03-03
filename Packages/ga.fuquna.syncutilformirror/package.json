@@ -8,8 +8,10 @@
   "license": "MIT",
   "keywords": [
     "unity",
+    "network"
     "sync",
-    "mirror"
+    "mirror",
+    "ga.fuquna"
   ],
   "author": {
     "name": "fuqunaga",

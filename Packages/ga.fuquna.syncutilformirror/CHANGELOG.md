@@ -1,3 +1,10 @@
+## [1.6.3](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.6.2...v1.6.3) (2025-03-03)
+
+
+### Bug Fixes
+
+* Add keywords to package.json to get hits in npmjs search ([7013170](https://github.com/fuqunaga/SyncUtilForMirror/commit/701317020137c6b91b100ef8222e7f507d39e80f))
+
 ## [1.6.2](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.6.1...v1.6.2) (2025-02-28)
 
 

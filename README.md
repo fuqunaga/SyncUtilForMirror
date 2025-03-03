@@ -1,4 +1,8 @@
 # SyncUtil For Mirror
+
+[![npm version](https://badge.fury.io/js/ga.fuquna.syncutilformirror.svg)](https://badge.fury.io/js/ga.fuquna.syncutilformirror)
+[![openupm](https://img.shields.io/npm/v/ga.fuquna.syncutilformirror?label=openupm&registry_uri=https://package.openupm.com)](https://openupm.com/packages/ga.fuquna.syncutilformirror/)
+
 Sync Utilities For [Mirror](https://github.com/vis2k/Mirror)  
   
 # Installation

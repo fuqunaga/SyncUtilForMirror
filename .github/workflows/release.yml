@@ -4,8 +4,16 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:    
-    
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        required: true
+        type: boolean
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -28,6 +36,6 @@ jobs:
         extra_plugins: |
             @semantic-release/changelog@6
             @semantic-release/git
+        dry_run: ${{ inputs.dry_run }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

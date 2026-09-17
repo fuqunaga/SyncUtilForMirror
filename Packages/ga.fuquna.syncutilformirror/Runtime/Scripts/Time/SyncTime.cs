@@ -15,7 +15,7 @@ namespace SyncUtil
         #region Singleton
         
         protected static SyncTime instance;
-        public static SyncTime Instance => instance ? instance : (instance = (FindObjectOfType<SyncTime>() ?? (new GameObject(nameof(SyncTime), typeof(SyncTime))).GetComponent<SyncTime>()));
+        public static SyncTime Instance => instance ? instance : (instance = (FindFirstObjectByType<SyncTime>() ?? (new GameObject(nameof(SyncTime), typeof(SyncTime))).GetComponent<SyncTime>()));
 
         #endregion
 

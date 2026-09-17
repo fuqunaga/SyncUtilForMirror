@@ -32,7 +32,7 @@ namespace SyncUtil
 
         static ClientNameBase _instance;
 
-        public static ClientNameBase Instance => _instance != null ? _instance : _instance = FindObjectOfType<ClientNameBase>();
+        public static ClientNameBase Instance => _instance != null ? _instance : _instance = FindFirstObjectByType<ClientNameBase>();
 
         #endregion
 

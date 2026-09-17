@@ -32,7 +32,7 @@ namespace SyncUtil
 
         static OnlineOfflineSceneLoadHelper Instance => (_instance != null)
             ? _instance
-            : (_instance = FindObjectOfType<OnlineOfflineSceneLoadHelper>());
+            : (_instance = FindFirstObjectByType<OnlineOfflineSceneLoadHelper>());
 
         [InitializeOnLoadMethod]
         public static void Init()
@@ -50,7 +50,7 @@ namespace SyncUtil
 
         void UnloadScenes()
         {
-            var nm = FindObjectOfType<NetworkManager>(); // singleton maybe not ready.
+            var nm = FindFirstObjectByType<NetworkManager>(); // singleton maybe not ready.
             Assert.IsNotNull(nm);
 
             var onlineSceneName = Path.GetFileNameWithoutExtension(nm.onlineScene);
@@ -77,7 +77,7 @@ namespace SyncUtil
         void Start()
         {
             if (Application.isPlaying) return;
-            var nm = FindObjectOfType<NetworkManager>();
+            var nm = FindFirstObjectByType<NetworkManager>();
             Assert.IsNotNull(nm);
 
             var scenePaths = new[]

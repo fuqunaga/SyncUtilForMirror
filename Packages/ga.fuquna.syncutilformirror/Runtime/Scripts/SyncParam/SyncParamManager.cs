@@ -8,7 +8,7 @@ namespace SyncUtil
         #region Singleton
         
         static SyncParamManager _instance;
-        public static SyncParamManager Instance => (_instance != null) ? _instance : (_instance = FindObjectOfType<SyncParamManager>());
+        public static SyncParamManager Instance => (_instance != null) ? _instance : (_instance = FindFirstObjectByType<SyncParamManager>());
 
         #endregion
 

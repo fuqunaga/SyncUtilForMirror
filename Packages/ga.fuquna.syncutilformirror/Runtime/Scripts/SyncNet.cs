@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Mirror;
 using UnityEngine;
-using Mirror;
 using Object = UnityEngine.Object;
 
 namespace SyncUtil
@@ -62,6 +61,14 @@ namespace SyncUtil
                 transformCache?.Revert();
             }
         }
+        
+        public static void UnSpawn(GameObject go)
+        {
+            if (IsServer)
+            {
+                NetworkServer.UnSpawn(go);
+            }
+        }
 
         public static void Destroy(GameObject go)
         {
@@ -74,7 +81,7 @@ namespace SyncUtil
         public static double NetworkTime => Mirror.NetworkTime.time;
 
 
-        struct TransformCache
+        private readonly struct TransformCache
         {
             private readonly Transform _transform;
             readonly Vector3 _localPosition;

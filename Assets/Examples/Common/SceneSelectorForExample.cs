@@ -40,27 +40,15 @@ namespace SyncUtil.Example
         }
 #endif
 
-        public void DebugMenu()
-        {
-            using (new GUILayout.HorizontalScope())
-            {
-                GUILayout.Label("Scene: ");
-
-                var newIdx = GUILayout.SelectionGrid(idx, onlineSceneNames, 1);
-                if (newIdx != idx)
-                {
-                    idx = newIdx;
-                    UpdateOnlineScene();
-                }
-            }
-        }
-
-        void UpdateOnlineScene()
+        private void UpdateOnlineScene()
         {
             if (onlineSceneNames != null && onlineSceneNames.Any())
             {
                 var nm = FindFirstObjectByType<NetworkManager>();
-                nm.onlineScene = onlineSceneNames[Mathf.Min(onlineSceneNames.Length - 1, idx)];
+                if (nm != null)
+                {
+                    nm.onlineScene = onlineSceneNames[Mathf.Min(onlineSceneNames.Length - 1, idx)];
+                }
             }
         }
 

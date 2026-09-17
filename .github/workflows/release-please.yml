@@ -47,7 +47,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
 
       # `release-please`の出力からリリースされたパッケージを特定し、npm publishを実行
       - name: Publish to npm
@@ -82,7 +81,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Publish to NPM
         working-directory: ${{ github.event.inputs.package_folder }}

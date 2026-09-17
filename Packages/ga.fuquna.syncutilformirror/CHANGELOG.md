@@ -1,3 +1,12 @@
+## 1.7.0 (2026-09-17)
+
+
+### Features
+
+* add EnableDisableSpawnSync component for automatic spawning and unspawning ([0e055fa](https://github.com/fuqunaga/SyncUtilForMirror/commit/0e055fa52e5bde3e473461b14cd1a37fcb57445e))
+
+
+
 ## [1.6.3](https://github.com/fuqunaga/SyncUtilForMirror/compare/v1.6.2...v1.6.3) (2025-03-03)
 
 
